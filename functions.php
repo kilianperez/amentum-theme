@@ -852,12 +852,14 @@ function amentum_get_svg_dimensions($svg_path) {
 }
 
 /**
+ * Suprimir algunos warnings de WordPress
  */
-    add_filter('doing_it_wrong_trigger_error', function($trigger, $function, $message, $version) {
-            return false;
-        }
+if (!function_exists('amentum_suppress_doing_it_wrong')) {
+    function amentum_suppress_doing_it_wrong($trigger, $function, $message, $version) {
+        // Suprimir algunos warnings específicos si es necesario
         return $trigger;
-    }, 10, 4);
+    }
+    add_filter('doing_it_wrong_trigger_error', 'amentum_suppress_doing_it_wrong', 10, 4);
 }
 
 // CSS personalizado para iconos de post types
@@ -890,111 +892,8 @@ function custom_post_type_icons_css() {
     </style>';
 }
 
+
 /**
- * Pre-rellenar formulario de contacto automáticamente usando field keys
+ * INCLUIR SISTEMA DE BLOQUES INDEPENDIENTE
  */
-function amentum_prerellenar_formulario($value, $post_id, $field) {
-    if ($value === false || $value === null || (is_array($value) && empty($value))) {
-        $post_status = get_post_status($post_id);
-        if ($post_status === 'auto-draft' || $post_status === false || empty($value)) {
-            $value = array(
-                array(
-                    'field_amentum_form_tipo' => 'titulo_seccion',
-                    'field_amentum_form_nombre' => '¿CÓMO PODEMOS AYUDARTE?',
-                    'field_amentum_form_ancho' => '12',
-                    'field_amentum_form_requerido' => '1'
-                ),
-                array(
-                    'field_amentum_form_tipo' => 'tags',
-                    'field_amentum_form_nombre' => 'Servicios',
-                    'field_amentum_form_ancho' => '12',
-                    'field_amentum_form_requerido' => '1',
-                    'field_amentum_form_opciones' => array(
-                        array(
-                            'field_amentum_form_opciones_nombre' => 'Diseño',
-                            'field_amentum_form_opciones_valor' => 'diseno'
-                        ),
-                        array(
-                            'field_amentum_form_opciones_nombre' => 'Branding',
-                            'field_amentum_form_opciones_valor' => 'branding'
-                        ),
-                        array(
-                            'field_amentum_form_opciones_nombre' => 'Motion Design',
-                            'field_amentum_form_opciones_valor' => 'motion-design'
-                        ),
-                        array(
-                            'field_amentum_form_opciones_nombre' => 'Diseño Web',
-                            'field_amentum_form_opciones_valor' => 'diseno-web'
-                        ),
-                        array(
-                            'field_amentum_form_opciones_nombre' => 'Fotografía',
-                            'field_amentum_form_opciones_valor' => 'fotografia'
-                        ),
-                        array(
-                            'field_amentum_form_opciones_nombre' => 'Social Media',
-                            'field_amentum_form_opciones_valor' => 'social-media'
-                        )
-                    )
-                ),
-                array(
-                    'field_amentum_form_tipo' => 'titulo_seccion',
-                    'field_amentum_form_nombre' => 'TUS DATOS',
-                    'field_amentum_form_ancho' => '12',
-                    'field_amentum_form_requerido' => '1'
-                ),
-                array(
-                    'field_amentum_form_tipo' => 'text',
-                    'field_amentum_form_nombre' => 'Nombre',
-                    'field_amentum_form_ancho' => '6',
-                    'field_amentum_form_requerido' => '1'
-                ),
-                array(
-                    'field_amentum_form_tipo' => 'email',
-                    'field_amentum_form_nombre' => 'Email',
-                    'field_amentum_form_ancho' => '6',
-                    'field_amentum_form_requerido' => '1'
-                ),
-                array(
-                    'field_amentum_form_tipo' => 'titulo_seccion',
-                    'field_amentum_form_nombre' => 'CUÉNTANOS UN POCO SOBRE TU PROYECTO',
-                    'field_amentum_form_ancho' => '12',
-                    'field_amentum_form_requerido' => '1'
-                ),
-                array(
-                    'field_amentum_form_tipo' => 'textarea',
-                    'field_amentum_form_nombre' => 'Tu mensaje',
-                    'field_amentum_form_ancho' => '12',
-                    'field_amentum_form_requerido' => '1'
-                )
-            );
-        }
-    }
-    return $value;
-}
-
-// Pre-rellenar otros campos básicos usando field keys
-    if (($value === false || $value === null || $value === '') && get_post_status($post_id) === 'auto-draft') {
-        return '¡Comienza tu proyecto!';
-    }
-    return $value;
-}, 15, 3);
-
-    if (($value === false || $value === null || $value === '') && get_post_status($post_id) === 'auto-draft') {
-        return 'Ofrecemos una amplia gama de servicios como diseño, branding, motion design, diseño web, fotografía y servicios de social media. Llevamos más de 6 años trabajando en diferentes áreas creativas y ayudando a las marcas a comunicar su historia de forma impactante.';
-    }
-    return $value;
-}, 15, 3);
-
-    if (($value === false || $value === null || $value === '') && get_post_status($post_id) === 'auto-draft') {
-        return '1';
-    }
-    return $value;
-}, 15, 3);
-
-    if (($value === false || $value === null || $value === '') && get_post_status($post_id) === 'auto-draft') {
-        return 'Enviar';
-    }
-    return $value;
-}, 15, 3);
-
-
+require_once get_template_directory() . '/inc/blocks-loader.php';

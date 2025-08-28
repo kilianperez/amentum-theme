@@ -1,0 +1,92 @@
+/**
+ * HERO BLOCK - Estilos
+ * Bloque nativo para sección principal de la página
+ */
+
+/* Hero Block Container */
+.amentum-hero-block {
+	min-height: 80vh;
+	display: flex;
+	align-items: center;
+	position: relative;
+	margin: var(--amentum-spacing) 0;
+	padding: 0 20px;
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Hero Content Layout */
+.hero-content {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 60px;
+	align-items: center;
+	width: 100%;
+}
+
+/* Hero Typography */
+.hero-title {
+	font-size: 3.5rem;
+	font-weight: bold;
+	color: var(--amentum-text);
+	margin-bottom: 20px;
+	line-height: 1.2;
+}
+
+.hero-subtitle {
+	font-size: 1.3rem;
+	color: var(--amentum-text-light);
+	margin-bottom: 40px;
+	line-height: 1.6;
+}
+
+/* Hero Actions */
+.hero-actions {
+	display: flex;
+	gap: 20px;
+	flex-wrap: wrap;
+}
+
+/* Hero Visual */
+.hero-visual {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.hero-shape {
+	width: 300px;
+	height: 300px;
+}
+
+.shape-svg {
+	width: 100%;
+	height: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.hero-content {
+		grid-template-columns: 1fr;
+		text-align: center;
+	}
+
+	.hero-title {
+		font-size: 2.5rem;
+	}
+
+	.hero-actions {
+		justify-content: center;
+	}
+}
+
+@media (max-width: 480px) {
+	.amentum-hero-block {
+		padding: 0 15px;
+	}
+
+	.hero-title {
+		font-size: 2rem;
+	}
+}

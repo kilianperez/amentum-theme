@@ -1,0 +1,134 @@
+/**
+ * VARIABLES GLOBALES PARA BLOQUES AMENTUM
+ * Archivo compartido con todas las variables CSS utilizadas en los bloques
+ */
+
+/* Variables globales para los bloques */
+:root {
+	/* Colores primarios */
+	--amentum-primary: #007cba;
+	--amentum-secondary: #667eea;
+	--amentum-accent: #764ba2;
+
+	/* Colores de texto */
+	--amentum-text: #333;
+	--amentum-text-light: #666;
+
+	/* Colores de fondo */
+	--amentum-bg-light: #f8f9fa;
+
+	/* Espaciados */
+	--amentum-spacing: 100px;
+	--amentum-block-spacing: 60px;
+
+	/* Bordes y formas */
+	--amentum-radius: 12px;
+
+	/* Transiciones */
+	--amentum-transition: all 0.3s ease;
+}
+
+/* Estilos base compartidos */
+.block-header {
+	text-align: center;
+	margin-bottom: var(--amentum-block-spacing);
+}
+
+.block-title {
+	font-size: 2.5rem;
+	color: var(--amentum-text);
+	margin-bottom: 20px;
+	font-weight: bold;
+}
+
+.block-subtitle {
+	font-size: 1.2rem;
+	color: var(--amentum-text-light);
+	max-width: 600px;
+	margin: 0 auto;
+	line-height: 1.6;
+}
+
+/* Botones reutilizables */
+.btn {
+	display: inline-block;
+	padding: 15px 30px;
+	text-decoration: none;
+	border-radius: var(--amentum-radius);
+	font-weight: 600;
+	font-size: 1rem;
+	transition: var(--amentum-transition);
+	border: 2px solid transparent;
+	cursor: pointer;
+	text-align: center;
+}
+
+.btn-primary {
+	background: var(--amentum-primary);
+	color: white;
+}
+
+.btn-primary:hover {
+	background: #005a87;
+	transform: translateY(-2px);
+	box-shadow: 0 10px 25px rgba(0, 124, 186, 0.3);
+}
+
+.btn-outline {
+	background: transparent;
+	color: var(--amentum-primary);
+	border-color: var(--amentum-primary);
+}
+
+.btn-outline:hover {
+	background: var(--amentum-primary);
+	color: white;
+}
+
+.btn-large {
+	padding: 18px 40px;
+	font-size: 1.1rem;
+}
+
+/* Acciones de bloque */
+.block-actions {
+	text-align: center;
+	margin-top: 40px;
+}
+
+/* Estado sin contenido */
+.no-content {
+	text-align: center;
+	padding: 60px 40px;
+	background: var(--amentum-bg-light);
+	border-radius: var(--amentum-radius);
+}
+
+.no-content p {
+	color: var(--amentum-text-light);
+	margin-bottom: 30px;
+	font-size: 1.1rem;
+}
+
+/* Responsive global */
+@media (max-width: 768px) {
+	.block-title {
+		font-size: 2rem;
+	}
+
+	:root {
+		--amentum-spacing: 80px;
+		--amentum-block-spacing: 40px;
+	}
+}
+
+@media (max-width: 480px) {
+	.btn {
+		padding: 12px 24px;
+	}
+
+	:root {
+		--amentum-spacing: 60px;
+		--amentum-block-spacing: 30px;
+	}
+}

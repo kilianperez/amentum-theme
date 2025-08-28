@@ -1,34 +1,57 @@
-<?php 
-/** 
- * Template Name: Home
- * 
- * @package WordPress
- * 
+<?php
+/**
+ * The template for displaying the blog index page
+ *
+ * This is the template that displays all posts by default.
+ * Please note that this is the WordPress construct of pages
+ * and that other 'pages' on your WordPress site may use a
+ * different template.
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ *
+ * @package Amentum
  */
+
 get_header();
 ?>
-	<h1>PAGINA HOME</h1>
-	<main id="primary" class="site-main">
-    <?php 
-    echo '<pre>';
-    var_dump(get_page_template());
-    echo '<pre>'; ?>
+
+	<main id="primary" class="site-main" data-barba="container" data-barba-namespace="home">
+
 		<?php
-		while ( have_posts() ) :
-			the_post();
+		if ( have_posts() ) :
 
-			get_template_part( 'template-parts/content', 'page' );
-
-			// If comments are open or we have at least one comment, load up the comment template.
-			if ( comments_open() || get_comments_number() ) :
-				comments_template();
+			if ( is_home() && ! is_front_page() ) :
+				?>
+				<header>
+					<h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1>
+				</header>
+				<?php
 			endif;
 
-		endwhile; // End of the loop.
+			/* Start the Loop */
+			while ( have_posts() ) :
+				the_post();
+
+				/*
+				 * Include the Post-Type-specific template for the content.
+				 * If you want to override this in a child theme, then include a file
+				 * called content-___.php (where ___ is the Post Type name) and that will be used instead.
+				 */
+				get_template_part( 'template-parts/content', get_post_type() );
+
+			endwhile;
+
+			the_posts_navigation();
+
+		else :
+
+			get_template_part( 'template-parts/content', 'none' );
+
+		endif;
 		?>
 
 	</main><!-- #main -->
 
 <?php
-// get_sidebar();
+get_sidebar();
 get_footer();

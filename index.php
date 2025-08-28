@@ -1,35 +1,34 @@
 <?php
 /**
- * Archivo de plantilla principal
+ * The main template file
  *
- * Este es el archivo de plantilla genérico en los temas de WordPress.
- * Es uno de los dos archivos requeridos para un tema (el otro es style.css).
- * Se utiliza para mostrar una página cuando no coincide con una consulta específica.
- * Por ejemplo, se usa para construir la página principal "home" cuando no existe el archivo home.php.
+ * This is the most generic template file in a WordPress theme
+ * and one of the two required files for a theme (the other being style.css).
+ * It is used to display a page when nothing more specific matches a query.
+ * E.g., it puts together the home page when no home.php file exists.
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
  * @package Amentum
  */
 
-// Incluir el header de la página (navegación, barra lateral, etc.)
 get_header();
 ?>
 
 	<main id="primary" class="site-main" data-barba="container" data-barba-namespace="index">
 
 		<?php
-		if ( have_posts() ) : // Si hay publicaciones disponibles
+		if ( have_posts() ) :
 
-			if ( is_home() && ! is_front_page() ) : // Si estamos en la página principal y no es la página inicial
+			if ( is_home() && ! is_front_page() ) :
 				?>
 				<header>
-					<h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1> <!-- El título de la publicación -->
+					<h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1>
 				</header>
 				<?php
 			endif;
 
-			/* Empieza el bucle */
+			/* Start the Loop */
 			while ( have_posts() ) :
 				the_post();
 
@@ -41,11 +40,11 @@ get_header();
 
 			endwhile;
 
-			the_posts_navigation(); // Mostrar la navegación de las publicaciones
+			the_posts_navigation();
 
-		else : // Si no hay publicaciones disponibles
+		else :
 
-			get_template_part( 'template-parts/content', 'none' ); // Incluye una plantilla para cuando no hay resultados
+			get_template_part( 'template-parts/content', 'none' );
 
 		endif;
 		?>
@@ -53,5 +52,5 @@ get_header();
 	</main><!-- #main -->
 
 <?php
-// get_sidebar();
-get_footer(); // Incluir el footer (pie de página)
+get_sidebar();
+get_footer();
