@@ -1,0 +1,176 @@
+/**
+ * Hero Full Block Styles - Pantalla Completa con Drop Cap
+ */
+
+.block-hero-full {
+	position: relative;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+	overflow: hidden;
+}
+
+.hero-full-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: linear-gradient(
+		45deg,
+		rgba(0, 0, 0, 0.7) 0%,
+		rgba(0, 0, 0, 0.4) 50%,
+		rgba(0, 0, 0, 0.6) 100%
+	);
+	z-index: 1;
+}
+
+.block-hero-full .container {
+	position: relative;
+	z-index: 2;
+	max-width: 800px;
+	text-align: center;
+}
+
+.hero-full-content {
+	animation: fadeInUp 1s ease-out;
+}
+
+.hero-full-super-title {
+	color: #f7f4f1;
+	text-align: center;
+	font-family: 'Adios Script Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	font-size: 64px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 120%;
+	margin: 0;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-full-title {
+	color: #f7f4f1;
+	text-align: center;
+	font-family: 'Adios Script Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	font-size: 64px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 120%;
+	margin: 0;
+	letter-spacing: -0.02em;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+	text-transform: uppercase;
+}
+
+.hero-full-subtitle {
+	color: #f7f4f1;
+	text-align: center;
+	font-family: 'Adios Script Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	font-size: 64px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 120%;
+	margin: 0;
+	max-width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Drop Cap - Primera letra con serifa (solo en super-title) */
+.hero-full-super-title .drop-cap {
+	font-family: 'Times New Roman', 'Georgia', 'Playfair Display', serif;
+	font-size: inherit; /* Mismo tamaño que el resto del texto */
+	font-weight: inherit; /* Mismo peso que el resto del texto */
+	line-height: inherit;
+	margin: 0;
+	padding: 0;
+	text-shadow: inherit;
+	color: inherit;
+	float: none; /* Sin float para mantener el flujo normal */
+	display: inline; /* Display inline normal */
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.block-hero-full {
+		min-height: 80vh;
+		background-attachment: scroll; /* Mejor performance en móvil */
+	}
+
+	.hero-full-super-title,
+	.hero-full-title,
+	.hero-full-subtitle {
+		font-size: 48px;
+	}
+
+	.hero-full-title {
+	}
+
+	.hero-full-text {
+	}
+
+	.drop-cap {
+		font-size: 48px;
+	}
+}
+
+@media (max-width: 480px) {
+	.block-hero-full .container {
+		padding: 0 15px;
+	}
+
+	.hero-full-super-title,
+	.hero-full-title,
+	.hero-full-subtitle {
+		font-size: 36px;
+	}
+
+	.drop-cap {
+		font-size: 36px;
+	}
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+	.block-hero-full {
+		background-attachment: scroll;
+	}
+
+	.hero-full-content {
+		animation: none;
+	}
+}
+
+/* Editor Styles */
+.wp-block-editor .block-hero-full {
+	min-height: 50vh; /* Menor altura en el editor para mejor UX */
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+	.hero-full-overlay {
+		background: linear-gradient(
+			45deg,
+			rgba(0, 0, 0, 0.8) 0%,
+			rgba(0, 0, 0, 0.5) 50%,
+			rgba(0, 0, 0, 0.7) 100%
+		);
+	}
+}
