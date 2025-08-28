@@ -1,0 +1,163 @@
+.footer {
+	mix-blend-mode: difference;
+	font-family: $cor-text;
+	padding: 0 1rem; // Padding lateral de 1rem en todos los dispositivos
+	
+	@include tabletXl {
+		@include margen();
+	}
+
+	p{
+		color: #fff;
+		margin: 0;
+	}
+
+	&__li {
+		display: block;
+		list-style: none;
+		text-transform: uppercase;
+		text-align: left; // Texto justificado a la izquierda en móvil
+		margin-bottom: 3rem; // 48px convertido a rem para espaciado entre elementos en móvil
+
+		// Remover margin-bottom del último elemento en móvil
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+		@include tabletXl {		
+			text-align: center;
+			flex: 1;
+			width: 25%;
+			margin: auto;
+			margin-bottom: 0; // Sin margin-bottom en desktop
+		}
+		ul {
+			width: max-content;
+			margin: 0; // Sin centrado automático en móvil para mantener alineación izquierda
+			text-align: left;
+			display: inline;
+			
+			@include tabletXl{
+				margin: 0 auto; // Centrado automático solo en desktop
+				display: inline-block;
+			}
+		}
+		li{
+			
+			display: inline;
+
+			
+
+		}
+		&.copyright {
+			@include tabletXl{
+				order: 1; // Primero en desktop
+				margin-left: 0;
+				text-align: left;
+			}
+		}
+		&.newsletter-item {
+			@include tabletXl{
+				order: 2; // Segundo en desktop
+			}
+			
+			ul {
+				display: inline;
+			}
+		}
+		&.legal {
+			text-align: left; // Alineación izquierda en móvil
+			margin-left: 0; // Sin centrado automático horizontal en móvil
+			margin-right: 0; // Sin centrado automático horizontal en móvil
+			
+			@include tabletXl{
+				order: 4; // Cuarto en desktop
+				text-align: right;
+				margin: auto; // Centrado automático solo en desktop
+			}
+			ul {
+				@include tabletXl {
+					text-align: right;
+					max-width: 23vw;
+				}
+			}
+		}
+		
+		&.social {
+			@include tabletXl {
+				order: 3; // Tercero en desktop
+			}
+		}
+		
+		&.social, &.legal{
+			li {
+				&:last-of-type a:after {
+					content: none;
+				}
+				a:after {
+					content: ",";
+				}
+				@include tabletXl {
+					display: inline-block;
+				}
+			}
+		}
+		&.news {
+			li {
+				@include tabletXl {
+					display: inline-block;
+				}
+			}
+		}
+		&.mobile-only {
+			margin-bottom: 1.875rem; // 30px convertido a rem (30px ÷ 16px = 1.875rem)
+			
+			@include tabletXl {
+				display: none !important; // Ocultar completamente en desktop
+			}
+			
+			&.footer__logo .footer__logo-img {
+				// Para SVG necesitamos dimensiones específicas
+				height: 2rem !important; // Altura fija para SVG
+				width: auto !important;
+				max-width: 8rem; // Ancho máximo por seguridad
+				filter: invert(1); // Invertir colores para que se vea blanco
+				display: block; // Asegurar que se muestre como bloque
+			}
+		}
+		a {
+			color: $cor-white;
+		}
+	}
+
+	&__nav {
+	}
+	&__ul {
+		padding-left: 0;
+		margin: 0;
+		text-align: left; // Alineación izquierda en móvil
+		padding-top: $separacion * 2;
+		padding-bottom: $separacion * 2;
+		display: flex; // Flex en todos los dispositivos para usar order
+		flex-direction: column; // Columna en móvil
+		
+		ul {
+			padding: 0;
+		}
+		@include tabletXl {
+			flex-direction: row; // Fila en desktop
+			justify-content: space-between;
+			align-items: center;
+			text-align: center; // Centrado solo en desktop
+		}
+	}
+}
+@media only screen and (max-width: 480px) {
+	.acf-flexible-content
+		.layout
+		.layout
+		.acf-fc-layout-controls
+		> .acf-fc-layout-order {
+		display: block !important;
+	}
+}

@@ -1,0 +1,67 @@
+.dis-none{
+    // display: none;
+    opacity: 0;
+}
+
+.tablet{
+    display: none;
+    @include tabletXl{
+        display: block;
+    }
+}
+.mobile{
+    @include tabletXl{
+        display: none;
+    }
+}
+
+// Asegurar que videos hereden estilos de imágenes
+video.tablet, video.mobile {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+// Evitar scroll horizontal en videos
+video {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+.d-none{
+    display: none;
+}
+
+.sr-only {
+	border: 0 !important;
+	clip: rect(1px, 1px, 1px, 1px) !important; /* 1 */
+	-webkit-clip-path: inset(50%) !important;
+	clip-path: inset(50%) !important; /* 2 */
+	height: 1px !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	padding: 0 !important;
+	position: absolute !important;
+	width: 1px !important;
+	white-space: nowrap !important; /* 3 */
+}
+
+.frm-message{
+    display: none;
+    color:white;
+    background-color:grey;
+    margin: 0;
+}
+
+.frm-message.success{
+    background-color:green;
+    padding:1rem 2rem;
+}
+
+.frm-message.error{
+    margin: 1rem 0;
+    display: block;
+    background-color:orangered;
+    padding:1rem 2rem;
+}

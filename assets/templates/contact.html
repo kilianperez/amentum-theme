@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="../dist/css/style.css" />
+		<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js" integrity="sha512-f8mwTB+Bs8a5c46DEm7HQLcJuHMBaH/UFlcgyetMqqkvTcYg4g5VXsYR71b3qC82lZytjNYvBj2pf0VekA9/FQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script defer src="../dist/js/all.js"></script>
+
+		<title>Document</title>
+	</head>
+
+	<body class="home">
+		<header class="header">
+			<div class="header__logo">
+				<a href="./home.html" class="header__a"><img src="../img/icons/logo.svg" alt="" class="header__svg" /></a>
+			</div>
+			<nav class="header__nav">
+				<ul class="header__ul">
+					<li class="header__li">
+						<a href="./works.html">WORKS</a>
+					</li>
+					<li class="header__li">
+						<a href="./about.html">ABOUT</a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+		<main>
+			<section class="contact container">
+				<div class="column">
+					<h1 class="title-h2">¡Comienza tu proyecto!</h1>
+					<p>Ofrecemos una amplia gama de servicios como diseño, branding, marketing, motion design, diseño web, fotografía y servicios de social media. Llevamos más de 6 años trabajando en diferentes áreas creativas y ayudando a las marcas a comunicar su historia de forma impactante.</p>
+				</div>
+				<div class="column">
+					<form>
+
+						<fieldset class="checkboxs">
+							<p>¿CÓMO PODEMOS AYUDARTE?<sup>*</sup></p>
+
+							<ul class="ks-cboxtags">
+								<li>
+									<input type="checkbox" id="checkbox1" value="Diseño" />
+									<label for="checkbox1">Diseño</label>
+								</li>
+								<li>
+									<input type="checkbox" id="checkbox2" value="Packaging" checked />
+									<label for="checkbox2">Packaging</label>
+								</li>
+								<li>
+									<input type="checkbox" id="checkbox3" value="Branding" checked />
+									<label for="checkbox3">Branding</label>
+								</li>
+								<li>
+									<input type="checkbox" id="checkbox4" value="Social Media" />
+									<label for="checkbox4">Social Media</label>
+								</li>
+								<li>
+									<input type="checkbox" id="checkbox5" value="Otro" />
+									<label for="checkbox5">Otro</label>
+								</li>
+							</ul>
+						</fieldset>
+
+						<fieldset>
+							<p>TUS DATOS<sup>*</sup></p>
+							<div class="form-group">
+								<p>
+									<label class="sr-only" for="nombre">Nombre</label>
+									<input id="nombre" type="text" name="nombre" placeholder="Nombre" />
+								</p>
+								<p>
+									<label class="sr-only" for="email">Email</label>
+									<input id="email" type="email" name="email" placeholder="Correo electrónico" />
+								</p>
+							</div>
+						</fieldset>
+
+						<fieldset>
+							<p>CUÉNTANOS UN POCO SOBRE TU PROYECTO<sup>*</sup></p>
+							<textarea id="w3review" name="w3review" rows="4" placeholder="Tu mensaje..."></textarea>
+						</fieldset>
+
+						<fieldset>
+							<p class="check">
+								<input type="checkbox" id="newsletter" name="newsletter" />
+								<label for="newsletter">Suscribirme a la Newsletter</label>
+							</p>
+							<p class="check">
+								<input type="checkbox" id="terms" name="terms" />
+								<label for="terms">He leído y acepto la <a href="#">política de privacidad y protección de datos</a></label>
+							</p>
+							<button type="submit">Submit form</button>
+						</fieldset>
+					</form>
+					<p>Si tiene problemas para enviar este formulario, envíe un correo electrónico regular.</p>
+				</div>
+			</section>
+		</main>
+		<footer class="footer">
+			<nav class="footer__nav">
+				<ul class="footer__ul">
+					<li class="footer__li">
+						<a href="#">contact</a>
+					</li>
+					<li class="footer__li">
+						<a href="#">Instagram</a>
+					</li>
+					<li class="footer__li">
+						<a href="#">Behance</a>
+					</li>
+					<li class="footer__li">
+						<a href="#">© 2022 AMENTUM</a>
+					</li>
+				</ul>
+			</nav>
+		</footer>
+	</body>
+</html>

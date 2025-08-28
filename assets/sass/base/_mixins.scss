@@ -1,0 +1,81 @@
+@use 'sass:math';
+
+/** Media Queries **/
+@mixin telefono {
+	@media (min-width: #{$telefono}) {
+		@content;
+	}
+}
+
+@mixin tablet {
+	@media (min-width: #{$tablet}) {
+		@content;
+	}
+}
+
+@mixin tabletXl {
+	@media (min-width: #{$tablet-xl}) {
+		@content;
+	}
+}
+
+@mixin desktop {
+	@media (min-width: #{$desktop}) {
+		@content;
+	}
+}
+
+@mixin desktopXl {
+	@media (min-width: #{$desktop-xl}) {
+		@content;
+	}
+}
+
+@mixin grid($columnas, $espaciado) {
+	display: grid;
+	gap: $espaciado * 1rem;
+	grid-template-columns: repeat($columnas, 1fr);
+}
+
+@mixin boton($bg-color, $display) {
+	background-color: $bg-color;
+	color: $blanco;
+	font-weight: $bold;
+	padding: 1rem 3rem;
+	text-align: center;
+	margin-top: $separacion / 2;
+	display: $display;
+	border: none;
+	&:hover {
+		background-color: lighten($bg-color, 5);
+		cursor: pointer;
+	}
+}
+
+@mixin margen() {
+	& {
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
+
+	@include tablet {
+		& {
+			padding-left: 1rem;
+			padding-right: 1rem;
+		}
+	}
+}
+
+@mixin margin($cantidad) {
+	margin-bottom: 1rem * $cantidad;
+}
+
+@mixin col($numero-col){
+	width: 100%;
+	max-width: calc($numero-col * 100 / 12 * 1%);
+}
+
+
+@function px-to-vw($font-size, $viewport-width: 390) {
+  @return math.div($font-size, $viewport-width) * 100;
+}

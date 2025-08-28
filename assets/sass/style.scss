@@ -1,0 +1,389 @@
+@import 'base/normalize';
+@import 'base/variables';
+@import 'base/mixins';
+@import 'base/globales';
+@import 'base/utilidades';
+// @import 'base/botones';
+// @import 'base/darkMode';
+@import 'base/_keyframes';
+
+@import 'node_modules/swiper/swiper';
+
+/* UI */
+@import 'layout/template-parts/footer';
+@import 'layout/template-parts/menu';
+
+@import 'layout/home';
+@import 'layout/home-hero';
+@import 'layout/project';
+@import 'layout/newsletter';
+@import 'layout/contacto';
+
+// @import 'layout/header';
+// @import 'layout/footer';
+// @import 'layout/navegacion';
+// @import 'layout/iconos';
+// @import 'layout/anuncios';
+// @import 'layout/contactar';
+// @import 'layout/inferior';
+// @import 'layout/testimoniales';
+// @import 'layout/formularios';
+
+@import 'animations/parpadeo';
+@import 'animations/intro-home';
+
+// Admin
+
+.merch {
+	margin-top: 0;
+	.proj-hero__h1 {
+		font-size: 9vw;
+		@include tabletXl {
+			margin-top: 1.5rem;
+			font-size: 4vw;
+		}
+	}
+
+	.proj-hero__small {
+	}
+	.proj-hero__container {
+		text-align: center;
+		padding-top: 2rem;
+
+		@include tabletXl {
+			padding-top: 0;
+
+			padding-bottom: 0;
+			min-height: 100vh;
+		}
+	}
+	.proj-hero__img {
+		order: -1;
+
+		@include tabletXl {
+			display: flex;
+			align-items: flex-end;
+		}
+
+		img,
+		video {
+			@include tabletXl {
+				min-height: auto;
+				max-height: calc(100vh - $menu - 1rem);
+				margin-bottom: 1rem;
+			}
+		}
+	}
+
+	// Imagen móvil fuera del contenedor
+	.proj-hero > img.mobile {
+		margin-bottom: 1rem;
+		border-radius: 0.5rem;
+	}
+	.proj-hero__intro {
+		align-self: center;
+		@include tabletXl {
+			margin-bottom: 5rem;
+		}
+	}
+	.proj-hero__copy {
+		@include tabletXl {
+			margin-right: 0;
+		}
+	}
+}
+
+body {
+	&:has(.merch) {
+		@include tabletXl {
+			margin-top: 0;
+		}
+	}
+}
+
+.merch-list {
+	&:not(:first-of-type) {
+		.projects__title--merch {
+			padding-top: 2rem;
+			@include tabletXl() {
+				padding-top: 6rem;
+			}
+		}
+	}
+	.projects__title--merch {
+		flex-flow: row;
+		margin-bottom: 1rem;
+		@include tabletXl() {
+			flex-flow: row;
+			margin-bottom: 2rem;
+		}
+
+		.title {
+			font-size: px-to-vw(34) * 1vw;
+			@include tabletXl() {
+				font-size: px-to-vw(64, 1200) * 1vw;
+			}
+		}
+	}
+	.projects__list {
+		@include tabletXl {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+	.proj-hero__copy {
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		line-clamp: 3;
+		-webkit-line-clamp: 3;
+		@include tabletXl {
+			margin-right: $col * 4;
+		}
+	}
+	.merch-arrow {
+		align-self: flex-end;
+	}
+
+	// Estilos específicos para las imágenes de merch-list
+	.project-card {
+		&__img {
+			img,
+			video {
+				border-radius: 0.5rem;
+				object-fit: cover;
+				width: 100%;
+				aspect-ratio: 366/290;
+
+				@include tabletXl {
+					aspect-ratio: 3/4;
+				}
+			}
+		}
+	}
+}
+
+// Estilos para Magazine (basado en merch-list)
+.magazine-list {
+	&:not(:first-of-type) {
+		.projects__title--magazine {
+			padding-top: 2rem;
+			@include tabletXl() {
+				padding-top: 6rem;
+			}
+		}
+	}
+	.projects__title--magazine {
+		flex-flow: row;
+		margin-bottom: 1rem;
+		@include tabletXl() {
+			flex-flow: row;
+			margin-bottom: 2rem;
+		}
+
+		.title {
+			font-size: px-to-vw(34) * 1vw;
+			@include tabletXl() {
+				font-size: px-to-vw(64, 1200) * 1vw;
+			}
+		}
+	}
+	.projects__list {
+		@include tabletXl {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+	.magazine-arrow {
+		align-self: flex-end;
+	}
+
+	// Estilos específicos para las imágenes de magazine-list
+	.project-card {
+		&__img {
+			img,
+			video {
+				border-radius: 0.5rem;
+				object-fit: cover;
+				width: 100%;
+				aspect-ratio: 366/290;
+
+				@include tabletXl {
+					aspect-ratio: 3/4;
+				}
+			}
+		}
+	}
+}
+
+// Estilos para el layout de magazine
+.magazine-content {
+	margin-top: 1rem;
+	padding: 0 1rem;
+
+	@include tabletXl {
+		margin-top: 0;
+		// padding-top: 5.25rem;
+		padding: 0 1rem;
+	}
+}
+
+// Mobile: Swiper para Magazine
+.magazine-swiper {
+	width: 100%;
+	overflow: hidden;
+
+	.swiper-slide {
+		position: relative;
+		
+		img,
+		video {
+			width: 100%;
+			height: 75vh;
+			object-fit: contain;
+			border-radius: 0.5rem;
+		}
+	}
+
+	.swiper-pagination {
+		margin-top: 1rem;
+
+		.swiper-pagination-bullet {
+			background: #000;
+			opacity: 0.3;
+
+			&.swiper-pagination-bullet-active {
+				opacity: 1;
+			}
+		}
+	}
+}
+
+// Layout general para magazine
+.magazine-layout {
+	@include tabletXl {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 4rem;
+		min-height: 100vh;
+	}
+}
+
+// Imágenes sticky para desktop (ocultas en mobile)
+.magazine-images {
+	display: none; // Ocultas en mobile
+
+	@include tabletXl {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.magazine-image {
+		position: relative;
+		
+		img,
+		video {
+			width: 100%;
+			height: calc(100vh - 5.25rem - 1rem);
+			-o-object-fit: cover;
+			object-fit: contain;
+			border-radius: 0.5rem;
+			margin-bottom: 1rem;
+		}
+	}
+}
+
+// Texto compartido
+.magazine-text {
+	// En mobile: 100% del ancho, comportamiento normal
+	// width: 100%;
+	// padding: 2rem 1rem;
+
+	// En desktop: 50% del ancho con sticky
+	@include tabletXl {
+		position: sticky;
+		top: calc(5.25rem + 1rem);
+		height: calc(100vh - 5.25rem - 1rem);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+	}
+}
+
+// Estilos específicos para la distributiva (anular sticky en archive pages)
+.magazine-desktop.magazine-archive .magazine-text {
+	position: static;
+	height: auto;
+}
+
+.magazine-text-content {
+	text-align: left;
+	@include tabletXl {
+		width: 50%;
+	}
+}
+
+.magazine-title {
+	font-size: 2.5rem;
+	font-weight: 400;
+	font-family: Helvetica, Arial, sans-serif;
+	margin: 0 0 1.5rem 0;
+	line-height: 1.2;
+}
+
+.magazine-description {
+	margin-bottom: 2rem;
+	font-size: 1.1rem;
+	line-height: 1.6;
+
+	p {
+		margin-bottom: 1rem;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
+
+// Estilos para información del magazine (páginas e idioma)
+.magazine-pages,
+.magazine-language {
+	margin: 0.5rem 0;
+	font-family: $cor-text;
+	font-weight: 400;
+	font-size: 1.1rem; // Mismo tamaño que magazine-description
+	line-height: 1.6; // Mismo line-height que magazine-description
+	color: #000;
+}
+
+// Estilos para el link de descarga de magazine
+.magazine-download {
+	margin-top: 1rem;
+	
+	.magazine-download-link {
+		display: inline-block;
+		color: #000;
+		text-decoration: underline;
+		font-family: $cor-text;
+		font-weight: 500;
+		font-size: 4vw;
+		transition: text-decoration 0.3s ease;
+
+		@include tabletXl {
+			font-size: 1rem;
+		}
+
+		&:hover {
+			text-decoration: line-through;
+		}
+	}
+}
+
+.page-404 {
+	height: 80vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}

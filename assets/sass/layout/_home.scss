@@ -1,0 +1,537 @@
+:root {
+	--color-prod: $cor-black;
+}
+
+$cor-font-size: 12vw;
+$cor-font-size-tablet: 10vw;
+$cor-font-size-desktop: 10.8vw;
+
+// Tamaños reducidos para about y projects (0.8 del original)
+$cor-font-size-small: 9.6vw; // 12vw * 0.8
+$cor-font-size-tablet-small: 8vw; // 10vw * 0.8
+$cor-font-size-desktop-small: 8.64vw; // 10.8vw * 0.8
+
+$cor-altura-svg: 10.4vw; // 13vw * 0.8
+$cor-altura-svg-tablet: 6.4vw; // 8vw * 0.8
+$cor-altura-svg-desktop: 6.8vw; // 8.5vw * 0.8
+
+.hero-home {
+	position: relative;
+	padding-bottom: 2rem;
+	.container {
+		// Sin altura mínima en móvil
+		height: 100%;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		@include tabletXl {
+			min-height: calc(100vh - $menu);
+			justify-content: space-between;
+		}
+	}
+	&__claim {
+		padding-top: $separacion * 1;
+		// margin-bottom: $separacion * 3;
+		// @include margen();
+
+		@include tabletXl {
+			// margin-bottom: 10rem;
+		}
+
+		&.claim {
+			.claim {
+				&__text {
+					display: flex;
+					justify-content: flex-start;
+					flex-flow: column;
+					font-style: normal;
+					font-weight: 400;
+					@include tabletXl {
+						flex-flow: row;
+						flex-wrap: nowrap;
+					}
+					.title {
+						@include tabletXl {
+							display: flex;
+
+							white-space: nowrap;
+						}
+						span {
+							display: inline-block;
+							@include tabletXl {
+								display: initial;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	&__copy {
+		// text-transform: uppercase;
+		font-family: $cor-text;
+
+		// @include margen();
+
+		@include tabletXl {
+			margin-top: 3rem;
+			margin-right: $col;
+			width: 33%;
+			align-self: flex-end;
+			// width: 28.125rem;
+			order: -1;
+		}
+		p {
+			// text-align: justify;
+			// text-justify: inter-word;
+		}
+
+		// @include col(4);
+	}
+	&__title {
+		font-family: $cor-text;
+		font-style: normal;
+		font-weight: 500;
+		font-size: 4vw;
+		line-height: 120%;
+		@include tabletXl {
+			font-size: 1vw;
+		}
+	}
+}
+
+.projects {
+	&__list {
+		@include grid(1, 1); // Default: 1 columna en móvil
+
+		@include tabletXl {
+			@include grid(2, 1);
+		}
+		@include desktop {
+			@include grid(4, 1);
+			// padding-bottom: 2rem;
+		}
+		
+		// Específico para página about: 2 columnas en móvil
+		&.about {
+			@include grid(2, 1);
+			
+			@include tabletXl {
+				@include grid(2, 1);
+			}
+			@include desktop {
+				@include grid(4, 1);
+			}
+			
+			// Aspect ratio específico para imágenes en about
+			img, video {
+				aspect-ratio: 177/208!important;
+				@include tabletXl {
+					aspect-ratio: 177/208!important;
+				}
+			}
+		}
+	}
+	&__title {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		padding-top: $separacion * 3;
+		margin-bottom: $separacion * 2;
+		// line-height: 6.5;
+		@include tabletXl {
+			padding-top: $separacion * 6;
+			margin-bottom: $separacion * 10;
+		}
+	}
+	// .container {
+	// 	@include margen();
+	// }
+	.project-card {
+		position: relative;
+		// margin-bottom: $separacion;
+		overflow: hidden;
+		border-radius: 0.5rem;
+		overflow: hidden;
+		&:hover {
+			.project-card__body {
+				opacity: 1;
+			}
+		}
+
+		&__a {
+			// En móvil: botón con estilo normal
+			width: max-content;
+			border: solid $cor-black 0.125rem;
+			padding: $separacion * 1 $separacion * 3 $separacion * 0.8;
+			border-radius: 5vw;
+			color: $cor-black;
+			font-weight: 400;
+			font-size: 3.5vw;
+			margin-top: 0.5rem;
+			display: inline-block;
+			transition: all 0.3s ease;
+
+			&:hover {
+				background-color: $cor-black;
+				color: $cor-white;
+			}
+
+			@include tabletXl {
+				// En desktop: comportamiento original
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				border: none;
+				height: 100%;
+				border-radius: 0;
+				text-align: center;
+				color: $cor-white;
+				padding: $separacion * 1.5 $separacion * 4 $separacion * 1;
+				margin-top: 0;
+				font-size: inherit;
+
+				&:hover {
+					background-color: transparent;
+					color: $cor-white;
+				}
+			}
+
+			span {
+				@include tabletXl {
+					display: none;
+				}
+			}
+		}
+
+		&__link {
+			color: inherit;
+			text-decoration: none;
+			display: block;
+			
+			&:hover {
+				color: inherit;
+			}
+			
+			@include tabletXl {
+				&::after {
+					content: '';
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					z-index: 1;
+				}
+			}
+		}
+		
+		&__img a {
+			display: block;
+			
+			@include tabletXl {
+				&::after {
+					content: '';
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					z-index: 1;
+				}
+			}
+		}
+
+
+		&__arrow {
+			font-size: .9em;
+			color: $cor-black;
+			font-weight: 400;
+			margin-left: 0.5rem;
+			
+			@include tabletXl {
+				display: none;
+			}
+		}
+		
+		&__body {
+			// En móvil: posición estática, siempre visible
+			position: static;
+			padding: 0.5rem 0rem 1rem 0rem;
+			background-color: transparent;
+			color: $cor-black;
+			text-align: left;
+			display: flex;
+			flex-direction: column;
+			opacity: 1;
+
+			@include tabletXl {
+				// En desktop: mantener comportamiento original
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				padding: $separacion * 2 $separacion;
+				background-color: var(--color-prod);
+				color: $cor-white;
+				text-align: center;
+				justify-content: space-between;
+				opacity: 0;
+				transition: opacity 0.3s ease-in-out;
+			}
+
+			.about & {
+				justify-content: flex-end;
+			}
+		}
+
+		&__tag {
+			font-size: 3.6vw; // 4.5vw * 0.8 para mobile
+			margin: 0;
+			font-weight: 300;
+			color: #A0A0A0;
+			// Truncar texto con puntos suspensivos
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+
+			@include tabletXl {
+				font-size: 1vw;
+			}
+
+			&--mobile, &--desktop {
+				// Aplicar truncado a los spans internos también
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: block;
+				width: 100%;
+			}
+
+			&--mobile {
+				color: #A0A0A0;
+				font-weight: 400;
+				
+				@include tabletXl {
+					display: none;
+				}
+			}
+
+			&--desktop {
+				display: none;
+				
+				@include tabletXl {
+					display: block;
+					color: $cor-white;
+					font-weight: 400;
+				}
+			}
+		}
+
+		&__title {
+			font-size: 7.5vw; // 5vw * 1.5 para mobile
+			margin: 0.3rem 0;
+			font-weight: 400;
+			line-height: 1.1;
+
+			@include tabletXl {
+				font-size: 2vw;
+				margin: 1rem 0;
+			}
+		}
+		&__img {
+			width: 100%;
+			img, video {
+				aspect-ratio: 366/290;
+				border-radius: 0.5rem;
+				object-fit: cover;
+				width: 100%;
+				@include tabletXl {
+					aspect-ratio: 3/4;
+				}
+			}
+			
+		}
+		&__title {
+			font-size: 6vw; // 4vw * 1.5 para mobile
+			@include tabletXl {
+				font-size: 1vw;
+			}
+			.about & {
+				position: absolute;
+				left: 0;
+				right: 0;
+				height: 100%;
+				bottom: 0;
+				margin: auto;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+		}
+	}
+}
+
+.title {
+	font-family: $cor-title;
+	margin: 0;
+	font-size: $cor-font-size;
+	line-height: 1;
+	text-transform: uppercase; // Mantener uppercase por defecto
+	
+	@include tabletXl {
+		font-size: $cor-font-size-tablet;
+	}
+	@include desktop {
+		font-size: $cor-font-size-desktop;
+	}
+}
+
+// Títulos específicos para about y projects - sin uppercase y tamaño reducido
+.projects .title,
+.about .title {
+	font-size: $cor-font-size-small;
+	text-transform: none; // Sin uppercase
+	
+	@include tabletXl {
+		font-size: $cor-font-size-tablet-small;
+	}
+	@include desktop {
+		font-size: $cor-font-size-desktop-small;
+	}
+}
+
+.container {
+}
+
+// Clase para ocultar elementos en móvil y mostrar solo en desktop
+.desktop-only {
+	display: none;
+	@include tabletXl {
+		display: block;
+	}
+}
+
+// Estilos para enlaces con flecha de texto (reemplaza btn-svg)
+.projects__title .link,
+.merch-arrow .link,
+.magazine-arrow .link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: $cor-altura-svg;
+	height: $cor-altura-svg;
+	text-decoration: none;
+	color: #000; // Forzar color negro corporativo
+	// No aplicamos transform aquí - se maneja en _intro-home.scss para animación de entrada
+	
+	@include tabletXl {
+		width: $cor-altura-svg-tablet;
+		height: $cor-altura-svg-tablet;
+	}
+	@include desktop {
+		width: $cor-altura-svg-desktop;
+		height: $cor-altura-svg-desktop;
+	}
+	
+	.btn-arrow {
+		font-size: 8vw; // Tamaño móvil
+		line-height: 1;
+		font-weight: 400;
+		transition: transform 0.3s ease;
+		display: inline-block;
+		color: inherit; // Hereda el color negro del enlace
+		// Sin transform inicial - solo el hover
+		
+		@include tabletXl {
+			font-size: 7vw; // Tamaño desktop
+		}
+	}
+	
+	// Animación hover solo horizontal - no interfiere con animación de entrada
+	&:hover .btn-arrow {
+		transform: translateX(5px);
+	}
+}
+
+// section.container {
+// 	display: flex;
+// 	flex-direction: column;
+// 	justify-content: center;
+// 	// overflow: hidden;
+// }
+
+.marquees {
+	padding-top: $separacion * 3;
+	margin-bottom: $separacion * 2;
+	overflow: hidden;
+	// line-height: 6.5;
+	@include tabletXl {
+		padding-top: $separacion * 6;
+		margin-bottom: $separacion * 10;
+	}
+	.home & {
+		// padding-top: 2rem;
+	}
+	.marquee {
+		$altura: 12vw;
+		$altura-tablet: 5vw;
+
+		$icono: 10vw;
+		$icono-tablet: 4vw;
+		// overflow: hidden;
+		position: relative;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: calc($altura + $separacion);
+		display: block;
+		transform-origin: 50% 100%;
+		transition: transform 0.25s;
+
+		margin-bottom: $separacion * 0.5;
+		// line-height: 6.5;
+		@include tabletXl {
+			margin-bottom: $separacion * 1;
+		}
+		@include tabletXl {
+			height: calc($altura-tablet * 1.1 + $separacion);
+		}
+
+		&__separator {
+			padding: 0 1vw;
+			@include tabletXl {
+				padding: 0 0.5vw;
+			}
+		}
+		.inner {
+			position: absolute;
+			top: 0;
+			left: 0;
+			display: flex;
+			align-items: flex-end;
+			color: white;
+			white-space: nowrap;
+			padding-right: 3vw;
+			@include tabletXl {
+				padding-right: 1vw;
+			}
+			* {
+				color: $cor-black;
+				font-size: $altura;
+				text-transform: uppercase;
+
+				margin: 0;
+				display: inline-block;
+				line-height: 1;
+
+				@include tabletXl {
+					font-size: $altura-tablet;
+				}
+			}
+		}
+	}
+}

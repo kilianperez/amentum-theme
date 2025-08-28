@@ -1,0 +1,218 @@
+// @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@font-face {
+    font-family: 'Nuckle Extra';
+    src: url('../../fonts/nuckle/Nuckle-ExtraLight.eot');
+    src: local('Nuckle Extra Light'), local('Nuckle-ExtraLight'),
+        url('../../fonts/nuckle/Nuckle-ExtraLight.eot?#iefix') format('embedded-opentype'),
+        url('../../fonts/nuckle/Nuckle-ExtraLight.woff2') format('woff2'),
+        url('../../fonts/nuckle/Nuckle-ExtraLight.woff') format('woff'),
+        url('../../fonts/nuckle/Nuckle-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Hagrid';
+    src: url('../../fonts/hagrid/Hagrid-Regular.eot');
+    src: local('Hagrid Regular'), local('Hagrid-Regular'),
+        url('../../fonts/hagrid/Hagrid-Regular.eot?#iefix') format('embedded-opentype'),
+        url('../../fonts/hagrid/Hagrid-Regular.woff2') format('woff2'),
+        url('../../fonts/hagrid/Hagrid-Regular.woff') format('woff'),
+        url('../../fonts/hagrid/Hagrid-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nuckle Hairline';
+    src: url('../../fonts/nuckle/Nuckle-Hairline.eot');
+    src: local('Nuckle Hairline'), local('Nuckle-Hairline'),
+        url('../../fonts/nuckle/Nuckle-Hairline.eot?#iefix') format('embedded-opentype'),
+        url('../../fonts/nuckle/Nuckle-Hairline.woff2') format('woff2'),
+        url('../../fonts/nuckle/Nuckle-Hairline.woff') format('woff'),
+        url('../../fonts/nuckle/Nuckle-Hairline.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nuckle';
+    src: url('../../fonts/nuckle/Nuckle-Bold.eot');
+    src: local('Nuckle Bold'), local('Nuckle-Bold'),
+        url('../../fonts/nuckle/Nuckle-Bold.eot?#iefix') format('embedded-opentype'),
+        url('../../fonts/nuckle/Nuckle-Bold.woff2') format('woff2'),
+        url('../../fonts/nuckle/Nuckle-Bold.woff') format('woff'),
+        url('../../fonts/nuckle/Nuckle-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nuckle';
+    src: url('../../fonts/nuckle/Nuckle-Thin.eot');
+    src: local('Nuckle Thin'), local('Nuckle-Thin'),
+        url('../../fonts/nuckle/Nuckle-Thin.eot?#iefix') format('embedded-opentype'),
+        url('../../fonts/nuckle/Nuckle-Thin.woff2') format('woff2'),
+        url('../../fonts/nuckle/Nuckle-Thin.woff') format('woff'),
+        url('../../fonts/nuckle/Nuckle-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nuckle';
+    src: url('../../fonts/nuckle/Nuckle-Medium.eot');
+    src: local('Nuckle Medium'), local('Nuckle-Medium'),
+        url('../../fonts/nuckle/Nuckle-Medium.eot?#iefix') format('embedded-opentype'),
+        url('../../fonts/nuckle/Nuckle-Medium.woff2') format('woff2'),
+        url('../../fonts/nuckle/Nuckle-Medium.woff') format('woff'),
+        url('../../fonts/nuckle/Nuckle-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nuckle';
+    src: url('../../fonts/nuckle/Nuckle-Light.eot');
+    src: local('Nuckle Light'), local('Nuckle-Light'),
+        url('../../fonts/nuckle/Nuckle-Light.eot?#iefix') format('embedded-opentype'),
+        url('../../fonts/nuckle/Nuckle-Light.woff2') format('woff2'),
+        url('../../fonts/nuckle/Nuckle-Light.woff') format('woff'),
+        url('../../fonts/nuckle/Nuckle-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nuckle';
+    src: url('../../fonts/nuckle/Nuckle-Semibold.eot');
+    src: local('Nuckle Semibold'), local('Nuckle-Semibold'),
+        url('../../fonts/nuckle/Nuckle-Semibold.eot?#iefix') format('embedded-opentype'),
+        url('../../fonts/nuckle/Nuckle-Semibold.woff2') format('woff2'),
+        url('../../fonts/nuckle/Nuckle-Semibold.woff') format('woff'),
+        url('../../fonts/nuckle/Nuckle-Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nuckle';
+    src: url('../../fonts/nuckle/Nuckle-Regular.eot');
+    src: local('Nuckle Regular'), local('Nuckle-Regular'),
+        url('../../fonts/nuckle/Nuckle-Regular.eot?#iefix') format('embedded-opentype'),
+        url('../../fonts/nuckle/Nuckle-Regular.woff2') format('woff2'),
+        url('../../fonts/nuckle/Nuckle-Regular.woff') format('woff'),
+        url('../../fonts/nuckle/Nuckle-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+// Helvetica Now Variable Fonts
+@font-face {
+    font-family: 'Helvetica Now';
+    src: url('../../fonts/helvetica/HelveticaNowVar.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-stretch: 75% 125%;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Helvetica Now';
+    src: url('../../fonts/helvetica/HelveticaNowVarItalic.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-stretch: 75% 125%;
+    font-style: italic;
+    font-display: swap;
+}
+
+
+
+// Fuentes
+$cor-title: 'Helvetica Now', sans-serif;
+$cor-title-blog: 'Nuckle', sans-serif;
+$cor-text: 'Nuckle', sans-serif;
+
+// Columna entre 12
+$col: 8.3333333333%;
+
+
+// Tamaño de Media Queries
+$mobile: 576px;
+$tablet: 768px;
+$tablet-xl: 992px;
+$desktop: 1200px;
+$desktop-xl: 1400px;
+
+// Colores corporativos
+$cor-gray: #3b3c42;
+$cor-black: #060606;
+$cor-white: #fff;
+
+// Control de margin y padding
+$separacion: 1rem;
+$separacion-2: 1rem;
+$menu: 5.25rem;
+$seccion: 5rem
+
+
+
+
+// Colores generales
+// $negro: #000000;
+// $amarillo: #e08709;
+// $verde: #71b100;
+// $blanco: #ffffff;
+// $gris: #e1e1e1;
+// $gris-oscuro: #333333;
+// $rojo: rgb(139, 3, 3);
+
+// Control de margin y padding
+// $separacion: 1rem;
+// $separacion-2: 1rem;
+
+// Fuentes
+// $delgada: 300;
+// $regular: 400;
+// $bold: 700;
+// $black: 900;
+
+/* Aquí definimos las Custom properties */
+// :root {
+// 	--negro: #393939;
+// 	--blanco: #ececec;
+// 	--sombra-ppal: #c9c9c9;
+// 	--sombra-sec: #ffffff;
+// 	--borde-negro: #00000050;
+// 	--marcado: rgb(127, 195, 255);
+
+// 	/* Tipografía */
+// 	--tipo-principal: Helvetica, Arial, sans-serif;
+// }
+
+// /* Las adaptamos al modo oscuro */
+// @media (prefers-color-scheme: dark) {
+// 	:root {
+// 		--negro: . #ececec;
+// 		--blanco: #303030;
+// 		--sombra-ppal: #242424;
+// 		--sombra-sec: #3c3c3c;
+// 		--borde-negro: #ffffff50;
+// 	}
+// }
+
+/* Configuramos si un usuario ha activado el modo alto contraste. (BETA) */
+// @media (prefers-contrast: high){
+//     :root{
+//
+//     }
+// }

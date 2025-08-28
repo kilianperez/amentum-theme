@@ -1,0 +1,727 @@
+html {
+	// font-size: 62.5%;
+	box-sizing: border-box;
+	background-color: $cor-white;
+	// Desactivar scroll nativo para que Lenis tome control
+	scroll-behavior: auto !important;
+	// Prevenir scroll horizontal
+	overflow-x: hidden;
+}
+
+// Configuración CSS específica para Lenis
+html.lenis {
+	height: auto;
+}
+
+.lenis.lenis-smooth {
+	scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+	overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+	overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+	pointer-events: none;
+}
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+	// Deshabilitar selección de texto por defecto
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+body {
+	font-family: $cor-title;
+	// font-size: 1.6rem;
+	line-height: 1;
+	margin-top: $menu;
+	font-size: 4vw;
+	// Cursor por defecto
+	cursor: default;
+	@include tabletXl {
+		font-size: 1vw;
+	}
+}
+p {
+	font-family: $cor-text;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 4vw;
+	line-height: 120%;
+	margin-top: 0;
+
+	@include tabletXl {
+		font-size: 1vw;
+	}
+}
+.contenedor {
+	// width: 95%;
+	// max-width: 120rem;
+	// margin: 0 auto;
+}
+
+a {
+	text-decoration: none;
+	// Cursor de puntero para enlaces
+	cursor: pointer;
+	// Permitir selección en enlaces si es necesario
+	user-select: auto;
+	-webkit-user-select: auto;
+	-moz-user-select: auto;
+	-ms-user-select: auto;
+}
+
+img,
+picture {
+	width: 100%;
+	display: block;
+}
+
+h1,
+h2 {
+	margin-bottom: 2rem;
+	font-family: $cor-title;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 66px;
+	line-height: 120%;
+	// text-transform: uppercase; // Removido para control específico
+}
+
+.title-h2 {
+	font-size: 11vw;
+	margin-top: 0;
+	@include tabletXl {
+		font-size: 2.7vw;
+	}
+}
+
+h1 {
+	// font-size: 3.8rem;
+}
+h2 {
+	// font-size: 3.4rem;
+}
+h3 {
+	// font-size: 3rem;
+}
+h4 {
+	// font-size: 2.6rem;
+}
+h5 {
+}
+h6 {
+}
+ul {
+	li {
+	}
+}
+ol {
+	li {
+	}
+}
+
+body:not(.wp-core-ui) form {
+	a {
+		color: $cor-black;
+		text-decoration: underline;
+		&:hover {
+			text-decoration: line-through;
+		}
+	}
+	fieldset {
+		padding: 0;
+		margin: 0;
+		border: none;
+		margin-bottom: 2rem;
+
+		&.checkboxs {
+			// display: flex;
+			// flex-flow: row wrap;
+
+		}
+	}
+	p {
+		width: 100%;
+	}
+	.check {
+		display: flex;
+		// align-items: flex-start; // Evita stretch vertical
+		@include tabletXl{
+			align-items: center;
+		}
+		label{
+			height: max-content;
+			align-self: center;
+
+		}
+	}
+	textarea {
+		font-family: $cor-text;
+		background: transparent;
+		border: none;
+		font-size: max(16px, 3.5vw); // Mínimo 16px para evitar zoom móvil
+		margin-bottom: 0;
+		padding-bottom: 0;
+		resize: none; // Quitar esquina de redimensionamiento
+		min-height: 168px; // Altura mínima en mobile (120px * 1.4)
+
+		width: 100%;
+		&:focus {
+			outline: none;
+		}
+		&::placeholder {
+			font-weight: 400;
+			font-family: $cor-text;
+		}
+		@include tabletXl {
+			padding-top: 1rem;
+			font-size: 1vw;
+			min-height: 112px; // Altura mínima en desktop (80px * 1.4)
+		}
+	}
+	
+	// Wrapper global para efecto de línea creciente en inputs y textareas
+	.input-wrapper {
+		position: relative;
+		display: flex;
+		margin-bottom: 1rem;
+		border-bottom: solid 1px #000; // Border base del wrapper
+		
+		// Línea animada por encima del border base
+		&::after {
+			content: '';
+			position: absolute;
+			bottom: 0px;
+			left: 0;
+			right: 0;
+			height: 2px!important;
+			background-color: #000;
+			transform: scaleX(0);
+			transform-origin: left;
+			transition: transform 0.3s ease;
+		}
+		
+		// Inputs y textareas dentro del wrapper no necesitan border
+		input,
+		textarea {
+			border-bottom: none !important;
+			margin-bottom: 0;
+		}
+		
+		&:focus-within::after {
+			transform: scaleX(1);
+		}
+		
+		// Mantener línea visible cuando el input está completo
+		&.input-filled::after {
+			transform: scaleX(1);
+		}
+		
+		// Estado de error - línea roja escalada
+		&.input-error::after {
+			background-color: #ff4757;
+			transform: scaleX(1);
+		}
+		
+		&.input-error {
+			border-bottom-color: #ff4757;
+		}
+		
+		// Mensaje de error individual debajo del wrapper
+		.field-error-message {
+			display: none;
+			color: #ff4757;
+			font-size: 0.8rem;
+			font-family: $cor-text;
+			position: absolute;
+			top: 100%; // Justo debajo del wrapper
+			left: 0;
+			width: 100%;
+			margin-top: 0.3rem;
+			margin-bottom: 0;
+			line-height: 1.2;
+			z-index: 10;
+			
+			@include tabletXl {
+				font-size: 0.7rem;
+			}
+		}
+		
+		// Padding específico para newsletter
+		.newsletter & .field-error-message {
+			padding-left: 1rem; // Móvil
+			
+			@include tabletXl {
+				padding-left: 2rem; // Desktop
+			}
+		}
+		
+		&.input-error .field-error-message {
+			display: block;
+		}
+	}
+	
+	// Soporte para mensajes de error en checkboxes (.check)
+	.check {
+		position: relative;
+		
+		// Mensaje de error para checkboxes
+		.field-error-message {
+			display: none;
+			color: #ff4757;
+			font-size: 0.8rem;
+			font-family: $cor-text;
+			position: absolute;
+			top: 100%; // Justo debajo del check
+			left: 0;
+			width: 100%;
+			margin-top: 0.3rem;
+			margin-bottom: 0;
+			line-height: 1.2;
+			z-index: 10;
+			
+			@include tabletXl {
+				font-size: 0.7rem;
+			}
+		}
+		
+		// Padding específico para newsletter
+		.newsletter & .field-error-message {
+			padding-left: 1rem; // Móvil
+			
+			@include tabletXl {
+				padding-left: 2rem; // Desktop
+			}
+		}
+		
+		&.input-error .field-error-message {
+			display: block;
+		}
+	}
+	
+	// Soporte para mensajes de error en grupos de checkboxes (.checkboxs)
+	.checkboxs {
+		position: relative;
+		
+		// Mensaje de error para grupos de checkboxes
+		.field-error-message {
+			display: none;
+			color: #ff4757;
+			font-size: 0.8rem;
+			font-family: $cor-text;
+			position: absolute;
+			top: 100%; // Justo debajo del fieldset
+			left: 0;
+			width: 100%;
+			margin-top: 0.3rem;
+			margin-bottom: 0;
+			line-height: 1.2;
+			z-index: 10;
+			
+			@include tabletXl {
+				font-size: 0.7rem;
+			}
+		}
+		
+		&.input-error .field-error-message {
+			display: block;
+		}
+	}
+	
+	input {
+		margin: 0;
+		margin-bottom: 1px;
+
+		font-size: max(16px, 3.5vw); // Mínimo 16px para evitar zoom móvil
+		padding: 1rem 0;
+		border: none;
+		width: 100%;
+		@include tabletXl {
+			font-size: 1vw;
+		}
+		&[type='submit'],
+		&[type='email'],
+		&[type='text'] {
+			background: transparent;
+			border-bottom: solid 1px #000;
+			@include tabletXl {
+				padding-top: 1rem;
+				padding-bottom: 1rem;
+			}
+			
+			&:focus {
+				outline: none;
+			}
+			
+			&::placeholder {
+				font-weight: 400;
+				font-family: $cor-text;
+			}
+		}
+		&[type='checkbox'] {
+			padding: 0;
+			appearance: none;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			border: none;
+			position: relative;
+			width: 4.8vw; // 6vw * 0.8
+			height: 4.8vw;
+			min-width: 4.8vw;
+			max-width: 4.8vw;
+			min-height: 4.8vw;
+			max-height: 4.8vw;
+			margin: 0;
+			margin-right: 0.5rem;
+			background: transparent;
+			cursor: pointer;
+			flex-shrink: 0;
+
+			@include tabletXl {
+				width: 1.6vw; // 2vw * 0.8
+				height: 1.6vw;
+				min-width: 1.6vw;
+				max-width: 1.6vw;
+				min-height: 1.6vw;
+				max-height: 1.6vw;
+			}
+			
+			// Círculo exterior con borde
+			&:before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 4.8vw;
+				height: 4.8vw;
+				min-width: 4.8vw;
+				max-width: 4.8vw;
+				min-height: 4.8vw;
+				max-height: 4.8vw;
+				border-radius: 50%;
+				border: 2px solid black;
+				box-sizing: border-box;
+				background-color: white;
+				
+				@include tabletXl {
+					width: 1.6vw; // 2vw * 0.8
+					height: 1.6vw;
+					min-width: 1.6vw;
+					max-width: 1.6vw;
+					min-height: 1.6vw;
+					max-height: 1.6vw;
+				}
+			}
+			
+			// Estado checked - con checkmark SVG
+			&:checked:after {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 4.8vw;
+				height: 4.8vw;
+				min-width: 4.8vw;
+				max-width: 4.8vw;
+				min-height: 4.8vw;
+				max-height: 4.8vw;
+				border-radius: 50%;
+				background-color: black;
+				background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+				background-position: center;
+				background-size: 70%;
+				background-repeat: no-repeat;
+				
+				@include tabletXl {
+					width: 1.6vw; // 2vw * 0.8
+					height: 1.6vw;
+					min-width: 1.6vw;
+					max-width: 1.6vw;
+					min-height: 1.6vw;
+					max-height: 1.6vw;
+				}
+			}
+			
+			// Focus
+			&:focus {
+				outline: none;
+			}
+			&:focus:before {
+				box-shadow: 0 0 0 0.2rem rgba(0,0,0,.25);
+			}
+		}
+	}
+	
+	
+	form {
+		@keyframes checkbox-appear {
+			0% {
+				opacity: 0;
+				transform: translate(-50%, -50%) scale(0);
+			}
+			100% {
+				opacity: 1;
+				transform: translate(-50%, -50%) scale(1);
+			}
+		}
+
+		&[type='submit'] {
+			border: none;
+			padding: 0;
+		}
+		&[type='email'] {
+		}
+		&:focus {
+			outline: none;
+			border-color: rgba(#000, 0.1);
+		}
+	}
+	.btn-check {
+		margin-right: 1rem;
+		position: relative;
+		& input[type='checkbox'] {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+		}
+		& input[type='checkbox']:checked:after {
+			background-color: red;
+			position: absolute;
+			width: 100%;
+			top: 0;
+			bottom: 0;
+			height: 100%;
+			border: solid 1px;
+			border-radius: 5vw;
+		}
+		& input[type='checkbox']:before {
+			// background-color: blue;
+			position: absolute;
+			width: 100%;
+			top: 0;
+			bottom: 0;
+			height: 100%;
+			border: solid 1px;
+			border-radius: 5vw;
+		}
+	}
+}
+ul.ks-cboxtags {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	li {
+		display: inline;
+
+		label {
+			display: inline-block;
+			border: 1px solid #e9e9e9;
+			color: #000;
+			font-size: 3vw;
+			border-radius: 5vw;
+			white-space: nowrap;
+			margin-right: 0.5rem;
+			margin-bottom: 0.4rem;
+			user-select: none;
+			padding: 0.8rem 1rem 0.5rem;
+			cursor: pointer;
+			line-height: 1;
+
+			&::before {
+				display: none;
+			}
+			@include tabletXl{
+				font-size: 1vw;
+			}
+		}
+
+		input[type='checkbox']:checked + label::before {
+			// content: "\f00c";
+			// transform: rotate(-360deg);
+			// transition: transform 0.3s ease-in-out;
+		}
+
+		input[type='checkbox']:checked + label {
+			// border: 2px solid #1bdbf8;
+			border-color: #000;
+			background-color: #000;
+			color: #fff;
+			// transition: all 0.2s;
+		}
+
+		& > li > input[type='checkbox'] {
+			display: none; // Solo ocultar checkboxes dentro de li en ks-cboxtags
+		}
+
+		input[type='checkbox']:focus + label {
+			// border: 2px solid #e9a1ff;
+		}
+	}
+}
+
+// Reglas adicionales para control de cursores y selección
+button, 
+input[type="button"], 
+input[type="submit"], 
+input[type="reset"],
+[role="button"],
+.button {
+	cursor: pointer;
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+// Permitir selección en campos de texto y áreas de texto
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="url"],
+input[type="tel"],
+textarea,
+select,
+[contenteditable="true"] {
+	user-select: text;
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	cursor: text;
+	// Prevenir zoom automático en móviles - mínimo 16px
+	font-size: max(16px, 3.5vw) !important;
+	
+	@include tabletXl {
+		font-size: 1vw !important;
+	}
+}
+
+// Elementos clickeables que no son enlaces
+[onclick],
+[data-toggle],
+[data-click],
+.clickable {
+	cursor: pointer;
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+// Sistema de notificaciones globales (errores de servidor, wp_mail, etc.) - FUERA del formulario
+.global-notification {
+	position: fixed !important;
+	top: 80px !important;
+	right: 1rem !important;
+	background: #ff4757 !important;
+	color: white !important;
+	padding: 1rem 1.5rem !important;
+	border-radius: 8px !important;
+	font-size: 0.9rem !important;
+	font-family: "Helvetica Now", sans-serif !important;
+	z-index: 99999 !important;
+	opacity: 0 !important;
+	visibility: hidden !important;
+	transform: translateX(400px) !important; // Distancia fija fuera de pantalla
+	transition: all 0.3s ease !important;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+	max-width: 350px !important;
+	min-width: 250px !important;
+	pointer-events: auto !important;
+	
+	&.show {
+		opacity: 1 !important;
+		visibility: visible !important;
+		transform: translateX(0) !important;
+		display: block !important;
+	}
+	
+	&.success {
+		background: #2ed573 !important;
+	}
+	
+	&.warning {
+		background: #ffa502 !important;
+	}
+	
+	&.info {
+		background: #3742fa !important;
+	}
+	
+	// Responsive
+	@media (max-width: 480px) {
+		left: 1rem;
+		right: 1rem;
+		max-width: none;
+		transform: translateY(-100%);
+		
+		&.show {
+			transform: translateY(0);
+		}
+	}
+	
+	@include tabletXl {
+		font-size: 0.85rem;
+		padding: 0.8rem 1.2rem;
+	}
+}
+
+// Override específico para newsletter con mayor especificidad
+body:not(.wp-core-ui) .newsletter form .input-wrapper .field-error-message,
+body:not(.wp-core-ui) .newsletter form .check .field-error-message {
+	padding-left: 1rem !important; // Móvil
+	
+	@include tabletXl {
+		padding-left: 2rem !important; // Desktop
+	}
+}
+
+// Estilos específicos para enlaces de texto (como el email de contacto)
+p a[href^="mailto:"] {
+	color: inherit;
+	text-decoration: underline;
+	text-decoration-color: currentColor;
+	text-underline-offset: 0.2em;
+	text-decoration-thickness: 1px;
+	transition: text-decoration 0.3s ease;
+	
+	&:hover,
+	&:focus {
+		text-decoration: line-through;
+		text-decoration-color: currentColor;
+		text-decoration-thickness: 1px;
+	}
+	
+	&:visited {
+		color: inherit;
+	}
+}
+
+// Padding horizontal para elementos de contenido básicos
+.entry-content {
+	> p,
+	> ul,
+	> ol,
+	> h1,
+	> h2,
+	> h3,
+	> h4,
+	> h5,
+	> h6,
+	> blockquote {
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
+}
+
+
+

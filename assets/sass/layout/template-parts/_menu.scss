@@ -1,0 +1,244 @@
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: $menu;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 9999; // Por debajo de intro (10000) pero por encima de transición
+	font-family: $cor-text;
+	// border-bottom: solid 1px #fff;
+	mix-blend-mode: difference;
+
+	&__a {
+	}
+	li {
+		list-style: none;
+		display: inline-block;
+		margin-left: 1.5rem;
+		font-weight: 400;
+		text-transform: uppercase;
+		a {
+			color: $cor-white;
+			@include tabletXl {
+				padding: 0.8rem 1rem;
+				display: block;
+			}
+		}
+	}
+	&__logo {
+		margin-right: 2rem;
+
+	}
+	&__nav {
+		display: none;
+		@include tabletXl {
+			display: block;
+		}
+	}
+	img {
+		width: auto;
+		height: calc((#{$menu} - 1rem) / 2); // Mitad de la altura del menú en móvil
+		max-width: 55vw; // Límite de 75vw en móvil
+		filter: invert(1);
+		margin-left: 0;
+		@include tabletXl {
+			max-height: none;
+			max-width: 100%; // Sin límite en desktop
+		}
+	}
+	&__ul {
+	}
+
+	.burger {
+		width: 32px;
+		height: 32px;
+		cursor: pointer;
+		display: flex;
+		z-index: 100;
+		justify-content: center;
+		align-items: center;
+		@include tabletXl {
+			display: none;
+		}
+		span {
+			width: 100%;
+			height: 2px;
+			background-color: #fff;
+			border-radius: 12px;
+			display: block;
+			transition: background-color 0.5s ease-in-out;
+
+			&::before,
+			&::after {
+				content: '';
+				width: 100%;
+				background-color: #fff;
+				display: block;
+				transition: all 0.5s ease-in-out;
+				border-radius: 12px;
+				height: 2px;
+			}
+
+			&::before {
+				transform: translateY(-10px);
+			}
+
+			&::after {
+				transform: translateY(10px);
+				margin-top: -2px;
+			}
+		}
+
+		.active-menu & {
+			span {
+				background-color: transparent;
+
+				&::before {
+					transform: rotateZ(45deg) translateY(0);
+				}
+
+				&::after {
+					transform: rotateZ(-45deg) translateY(0);
+				}
+			}
+		}
+	}
+	@include margen();
+
+	@include tabletXl {
+		// border: none;
+	}
+}
+.menu-mobile {
+	height: 100%;
+	z-index: 90;
+	font-family: $cor-text;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	background: #fff;
+	visibility: hidden;
+	opacity: 0;
+	transition: opacity 0.3s ease-in-out, visibility 0.3s linear;
+	.active-menu & {
+		visibility: visible;
+		opacity: 1;
+		transition: opacity 0.3s ease-in-out, visibility 0.3s linear;
+	}
+	
+	// Durante transición de página: mantener overlay visible pero ocultar contenido
+	&.transitioning {
+		visibility: visible !important;
+		opacity: 1 !important;
+	}
+	@include margen();
+	@include tabletXl {
+		display: none;
+	}
+
+	&__a {
+	}
+	ul {
+		margin: 0;
+		padding-left: 0;
+		text-align: center;
+		li {
+			list-style: none;
+			display: block;
+			margin-left: 0;
+			// margin-left: 3rem;
+			font-weight: 300;
+			text-transform: uppercase;
+			a {
+				color: $cor-black;
+			}
+		}
+	}
+
+	&__nav {
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+		> div {
+			// height: 100%;
+		}
+	}
+	&__ul {
+		li {
+			text-align: center;
+			font-size: 15vw;
+			font-family: $cor-title;
+			margin-bottom: 0.5rem;
+			a {
+			}
+		}
+	}
+	.social__li {
+		position: absolute;
+		bottom: 0;
+		padding-bottom: 2rem;
+	}
+}
+
+.btn.btn-white {
+	a {
+		@include tabletXl {
+			border: 1px solid #fff;
+			padding: 0.8rem 2rem;
+			border-radius: 50vw;
+			text-decoration: none;
+		}
+		&:hover {
+			@include tabletXl {
+				background-color: #fff;
+				color: #000;
+			}
+		}
+	}
+	
+	// Cuando está en la página actual de contacto
+	&.current-menu-item a,
+	&.current_page_item a {
+		@include tabletXl {
+			// Con mix-blend-mode: difference, necesitamos colores inversos
+			background-color: #fff;
+			color: #000;
+			border-color: #fff;
+		}
+		&:hover {
+			@include tabletXl {
+				background-color: #fff;
+				border-color: #fff;
+			}
+		}
+	}
+}
+
+#wpadminbar {
+	// display: none;
+}
+.admin-bar {
+	.header {
+		padding-top: 3rem;
+	}
+}
+.menu-mobile {
+	// Animación fade-in/out más rápida para sincronizar con transiciones de página
+	ul {
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+	}
+	
+	.active-menu & ul {
+		opacity: 1;
+		visibility: visible;
+	}
+}
