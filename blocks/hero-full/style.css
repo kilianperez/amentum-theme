@@ -120,11 +120,7 @@
 		font-size: 48px;
 	}
 
-	.hero-full-title {
-	}
-
-	.hero-full-text {
-	}
+	/* Media query específico para títulos en tablet */
 
 	.drop-cap {
 		font-size: 48px;

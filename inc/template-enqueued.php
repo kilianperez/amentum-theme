@@ -22,7 +22,10 @@ add_action( 'wp_enqueue_scripts', 'amentumscripts' );
 function amentum_scripts_styles(){
 
     // Estilos    
-    wp_enqueue_style('all',get_template_directory_uri(). '/assets/dist/css/style.css', array(), '1.0.0');    
+    wp_enqueue_style('all',get_template_directory_uri(). '/assets/dist/css/style.css', array(), '1.0.0');
+    
+    // CSS compilado de todos los bloques - Optimización SEO
+    wp_enqueue_style('amentum-blocks', get_template_directory_uri() . '/assets/dist/css/blocks.css', array('all'), '1.0.0');    
 
     // wp_enqueue_style('Estilos',get_template_directory_uri(). '/assets/css/estilos.css', array(), '1.0.0');    
     // wp_enqueue_style('Arreglos',get_template_directory_uri(). '/assets/css/arreglos.css', array(), '1.0.0');    

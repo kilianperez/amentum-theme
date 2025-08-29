@@ -877,6 +877,76 @@ async function purgeCss() {
 }
 
 /**
+ * Compila todos los archivos CSS de los bloques en un solo archivo minificado
+ * 
+ * @returns {Promise} - Una promesa que se resuelve al completar la tarea con éxito
+ */
+function blocksCss() {
+    return new Promise((resolve, reject) => {
+        const spinnerProcess = fork('./gulp/spinner.js');
+
+        // Enviar configuración al proceso del spinner
+        spinnerProcess.send({
+            type: 'start',
+            startMessage: 'Compilando CSS de bloques...',
+            successMessage: 'Compilación de CSS de bloques completada exitosamente.',
+            errorMessage: 'Error durante la compilación de CSS de bloques.',
+            spinnerType: 'dots'
+        });
+
+        const stream = src('blocks/**/style.css')
+            .pipe(errorHandler("blocksCss"))
+            .pipe(concat('blocks.css'))
+            .pipe(gulpIf(isProd, cleanCss({
+                level: 2,
+                format: 'beautify'
+            })))
+            .pipe(gulpIf(isProd, rename({
+                suffix: '.min'
+            })))
+            .pipe(replace(/\/\*\# sourceMappingURL=.*\.map \*\//g, ''))
+            .pipe(replace('../fonts/', '../assets/dist/fonts/'))
+            .pipe(replace('../img/', '../assets/dist/img/'));
+
+        let finished = false;
+
+        stream
+            .pipe(dest(paths.styles.dest))
+            .pipe(handleSyncTaskWithSpinnerAndErrors(spinnerProcess, 'blocksCss'))
+            .on('finish', () => {
+                if (!finished) {
+                    spinnerProcess.send({ type: 'finish' });
+                    finished = true;
+                }
+            })
+            .on('error', () => {
+                if (!finished) {
+                    spinnerProcess.send({ type: 'finish' });
+                    finished = true;
+                }
+            });
+
+        spinnerProcess.on('message', (msg) => {
+            if (msg.type === 'done') {
+                if (msg.exitCode === 0) {
+                    resolve();
+                } else {
+                    reject(new Error('Proceso del spinner terminó con error.'));
+                }
+                spinnerProcess.removeAllListeners();
+                spinnerProcess.kill();
+            }
+        });
+
+        spinnerProcess.on('error', () => {
+            reject(new Error('Error en el proceso del spinner.'));
+            spinnerProcess.removeAllListeners();
+            spinnerProcess.kill();
+        });
+    });
+}
+
+/**
  * Tareas exportadas
  */
 exports.vendorsCopy = vendorsCopy;
@@ -884,6 +954,7 @@ exports.vendorsCopyJs = vendorsCopyJs;
 exports.compileSass = compileSass;
 exports.css = css;
 exports.adminCss = adminCss;
+exports.blocksCss = blocksCss;
 exports.concatJs = concatJs;
 exports.minifyJs = minifyJs;
 exports.js = js;
@@ -898,6 +969,7 @@ exports.default = series(
     vendorsCopyJs,
     css,
     adminCss,
+    blocksCss,
     js,
     minPartialsJs,
     img,
@@ -910,6 +982,7 @@ exports.serve = parallel(
     vendorsCopyJs,
     css,
     adminCss,
+    blocksCss,
     js,
     minPartialsJs,
     img,

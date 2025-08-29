@@ -127,20 +127,20 @@ function amentum_render_hero_full_block($attributes) {
 }
 
 /**
- * Enqueue assets específicos para Hero Full block (Frontend)
+ * Los estilos del bloque ahora se cargan desde blocks.css compilado
+ * Mejor rendimiento y SEO - un solo archivo CSS minificado
  */
-function amentum_enqueue_hero_full_block_assets() {
-    // Solo cargar si el bloque está presente en la página
-    if (has_block('amentum/hero-full')) {
-        wp_enqueue_style(
-            'amentum-hero-full-style',
-            get_template_directory_uri() . '/blocks/hero-full/style.css',
-            array(),
-            wp_get_theme()->get('Version')
-        );
-    }
-}
-add_action('wp_enqueue_scripts', 'amentum_enqueue_hero_full_block_assets');
+// function amentum_enqueue_hero_full_block_assets() {
+//     if (has_block('amentum/hero-full')) {
+//         wp_enqueue_style(
+//             'amentum-hero-full-style',
+//             get_template_directory_uri() . '/blocks/hero-full/style.css',
+//             array(),
+//             wp_get_theme()->get('Version')
+//         );
+//     }
+// }
+// add_action('wp_enqueue_scripts', 'amentum_enqueue_hero_full_block_assets');
 
 /**
  * Enqueue editor assets para Hero Full block (Backend)
@@ -155,12 +155,12 @@ function amentum_enqueue_hero_full_block_editor_assets() {
         true
     );
     
-    // CSS del editor (para que se vea bien en el backend)
-    wp_enqueue_style(
-        'amentum-hero-full-editor-style',
-        get_template_directory_uri() . '/blocks/hero-full/style.css',
-        array(),
-        wp_get_theme()->get('Version')
-    );
+    // CSS del editor ahora se carga desde blocks.css compilado
+    // wp_enqueue_style(
+    //     'amentum-hero-full-editor-style',
+    //     get_template_directory_uri() . '/blocks/hero-full/style.css',
+    //     array(),
+    //     wp_get_theme()->get('Version')
+    // );
 }
 add_action('enqueue_block_editor_assets', 'amentum_enqueue_hero_full_block_editor_assets');
