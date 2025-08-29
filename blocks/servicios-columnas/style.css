@@ -1,0 +1,312 @@
+/**
+ * Servicios Columnas Block Styles - Sistema Flexbox Proporcional
+ */
+
+.block-servicios-columnas {
+	padding: 80px 0;
+	background-color: #f8f6f3;
+	position: relative;
+}
+
+.block-servicios-columnas .container {
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+.servicios-columnas-content {
+	animation: fadeInUp 0.8s ease-out;
+}
+
+/* Grid de Servicios - Sistema con columnas fijas y centrado */
+.servicios-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 30px;
+	margin-bottom: 60px;
+	text-align: center;
+	justify-content: center; /* Centra los elementos cuando hay menos que el máximo */
+}
+
+/* Tamaños exactos - ocupan TODO el ancho disponible */
+.servicios-grid[data-columns='1'] .servicio-columna {
+	flex: 0 0 100%;
+}
+
+.servicios-grid[data-columns='2'] .servicio-columna {
+	flex: 0 0 calc((100% - 30px) / 2);
+}
+
+.servicios-grid[data-columns='3'] .servicio-columna {
+	flex: 0 0 calc((100% - 60px) / 3);
+}
+
+.servicios-grid[data-columns='4'] .servicio-columna {
+	flex: 0 0 calc((100% - 90px) / 4);
+}
+
+.servicios-grid[data-columns='5'] .servicio-columna {
+	flex: 0 0 calc((100% - 120px) / 5);
+}
+
+.servicios-grid[data-columns='6'] .servicio-columna {
+	flex: 0 0 calc((100% - 150px) / 6);
+}
+
+/* Columna Individual */
+.servicio-columna {
+	padding: 30px 20px;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.3);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.servicio-columna:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	background: rgba(255, 255, 255, 0.4);
+}
+
+/* Títulos de Servicios */
+.servicio-titulo {
+	font-size: 18px;
+	font-weight: 700;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	margin: 0 0 20px 0;
+	color: inherit;
+	font-family: 'Adios Script Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	position: relative;
+}
+
+.servicio-titulo::after {
+	content: '';
+	display: block;
+	width: 50px;
+	height: 2px;
+	background: currentColor;
+	margin: 15px auto 0;
+	opacity: 0.6;
+}
+
+/* Contenido de Servicios */
+.servicio-contenido {
+	font-size: 16px;
+	line-height: 1.6;
+	opacity: 0.9;
+	color: inherit;
+}
+
+.servicio-contenido p {
+	margin: 0 0 15px 0;
+}
+
+.servicio-contenido p:last-child {
+	margin-bottom: 0;
+}
+
+/* CTA Section */
+.servicios-cta {
+	text-align: center;
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	padding-top: 40px;
+	margin-top: 40px;
+}
+
+.cta-texto {
+	margin-bottom: 25px;
+}
+
+.cta-texto p {
+	font-size: 24px;
+	font-style: italic;
+	margin: 0;
+	font-weight: 300;
+	line-height: 1.4;
+	color: inherit;
+	font-family: 'Adios Script Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Botón CTA */
+.btn-cta {
+	display: inline-block;
+	padding: 15px 30px;
+	background-color: transparent;
+	color: inherit;
+	text-decoration: none;
+	border: 2px solid currentColor;
+	border-radius: 4px;
+	font-weight: 600;
+	font-size: 16px;
+	transition: all 0.3s ease;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	position: relative;
+	overflow: hidden;
+}
+
+.btn-cta::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: currentColor;
+	transition: left 0.3s ease;
+	z-index: -1;
+}
+
+.btn-cta:hover::before {
+	left: 0;
+}
+
+.btn-cta:hover {
+	color: #f8f6f3;
+	transform: translateY(-2px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(40px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+	.block-servicios-columnas {
+		padding: 60px 0;
+	}
+
+	.servicio-columna {
+		padding: 25px 15px;
+	}
+
+	/* Ajustar columnas en tablet - máximo 3 columnas */
+	.servicios-grid[data-columns='4'] .servicio-columna,
+	.servicios-grid[data-columns='5'] .servicio-columna,
+	.servicios-grid[data-columns='6'] .servicio-columna {
+		flex: 0 0 calc((100% - 60px) / 3);
+	}
+}
+
+@media (max-width: 768px) {
+	.block-servicios-columnas {
+		padding: 50px 0;
+	}
+
+	/* En mobile, máximo 2 columnas */
+	.servicios-grid[data-columns='3'] .servicio-columna,
+	.servicios-grid[data-columns='4'] .servicio-columna,
+	.servicios-grid[data-columns='5'] .servicio-columna,
+	.servicios-grid[data-columns='6'] .servicio-columna {
+		flex: 0 0 calc((100% - 30px) / 2);
+	}
+
+	.servicio-titulo {
+		font-size: 16px;
+		margin-bottom: 15px;
+	}
+
+	.servicio-contenido {
+		font-size: 15px;
+	}
+
+	.cta-texto p {
+		font-size: 20px;
+	}
+
+	.btn-cta {
+		padding: 12px 24px;
+		font-size: 15px;
+	}
+}
+
+@media (max-width: 480px) {
+	.block-servicios-columnas .container {
+		padding: 0 15px;
+	}
+
+	/* En mobile pequeño, todo a 1 columna */
+	.servicios-grid[data-columns='1'] .servicio-columna,
+	.servicios-grid[data-columns='2'] .servicio-columna,
+	.servicios-grid[data-columns='3'] .servicio-columna,
+	.servicios-grid[data-columns='4'] .servicio-columna,
+	.servicios-grid[data-columns='5'] .servicio-columna,
+	.servicios-grid[data-columns='6'] .servicio-columna {
+		flex: 0 0 100%;
+	}
+
+	.servicio-columna {
+		padding: 20px 15px;
+		min-height: auto;
+	}
+
+	.servicio-titulo {
+		font-size: 15px;
+	}
+
+	.servicio-contenido {
+		font-size: 14px;
+		line-height: 1.5;
+	}
+
+	.cta-texto p {
+		font-size: 18px;
+		line-height: 1.3;
+	}
+
+	.btn-cta {
+		padding: 10px 20px;
+		font-size: 14px;
+	}
+}
+
+/* Editor Styles */
+.wp-block-editor .servicios-columnas-preview {
+	border: 2px dashed #ddd;
+	min-height: 200px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.wp-block-editor .servicios-grid-preview {
+	margin-bottom: 30px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+.wp-block-editor .servicio-columna-preview {
+	padding: 20px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.5);
+	flex: 1;
+	min-width: 200px;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+	.servicio-columna {
+		background: rgba(0, 0, 0, 0.3);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.servicio-columna:hover {
+		background: rgba(0, 0, 0, 0.4);
+	}
+
+	.servicios-cta {
+		border-top-color: rgba(255, 255, 255, 0.1);
+	}
+}
