@@ -791,6 +791,8 @@ function watchFiles() {
     watch([paths.styles.sass + "/**/*.scss", "!" + paths.styles.sass + "/admin.scss"], series(css));
     // Watch específico para admin.scss
     watch(paths.styles.sass + "/admin.scss", series(adminCss));
+    // Watch para CSS de bloques individuales
+    watch("blocks/**/style.css", series(blocksCss));
     watch(paths.scripts.src + "/**/*.js", series(js));
     watch(paths.scripts.src + "/partials/*.js", series(minPartialsJs));
     watch(paths.images.src + "/**/*", series(img)); // Observa cambios en imágenes

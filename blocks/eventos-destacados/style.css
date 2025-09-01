@@ -1,21 +1,65 @@
 /**
- * Cuatro Imágenes Block Styles - Sistema de Grid Responsivo
+ * Eventos Destacados Block Styles - Sistema de Grid Responsivo
  */
 
 /* Contenedor principal */
-.block-cuatro-imagenes {
+.block-eventos-destacados {
 	padding: 80px 0;
 	background-color: #f8f6f3;
 	position: relative;
 }
 
-.block-cuatro-imagenes .container {
+.block-eventos-destacados .container {
 	margin: 0 auto;
 	padding: 0 20px;
 }
 
+/* Header con texto "Sobre nosotros" */
+.eventos-destacados-header {
+	text-align: center;
+	margin-bottom: 50px;
+	max-width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.eventos-destacados-header h2 {
+	font-size: 3rem;
+	font-weight: 300;
+	color: #333;
+	margin-bottom: 20px;
+	font-style: italic;
+	line-height: 1.2;
+}
+
+.eventos-destacados-header p {
+	font-size: 1.1rem;
+	line-height: 1.6;
+	color: #666;
+	margin-bottom: 30px;
+}
+
+.eventos-link {
+	margin-top: 30px;
+}
+
+.eventos-link a {
+	display: inline-block;
+	color: #333;
+	text-decoration: none;
+	font-weight: 500;
+	border-bottom: 2px solid #333;
+	padding-bottom: 2px;
+	transition: all 0.3s ease;
+}
+
+.eventos-link a:hover {
+	color: #666;
+	border-bottom-color: #666;
+}
+
 /* Grid de imágenes - Desktop: 4 columnas */
-.cuatro-imagenes-grid {
+.eventos-destacados-grid {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	gap: 30px;
@@ -37,11 +81,11 @@
 
 /* Tablet: 2x2 (2 filas, 2 columnas) */
 @media (max-width: 1024px) {
-	.block-cuatro-imagenes {
+	.block-eventos-destacados {
 		padding: 60px 0;
 	}
 
-	.cuatro-imagenes-grid {
+	.eventos-destacados-grid {
 		grid-template-columns: repeat(2, 1fr);
 		gap: 25px;
 	}
@@ -49,11 +93,11 @@
 
 /* Mobile: 2x2 manteniendo diseño */
 @media (max-width: 768px) {
-	.block-cuatro-imagenes {
+	.block-eventos-destacados {
 		padding: 50px 0;
 	}
 
-	.cuatro-imagenes-grid {
+	.eventos-destacados-grid {
 		grid-template-columns: repeat(2, 1fr);
 		gap: 20px;
 	}
@@ -61,29 +105,39 @@
 
 /* Mobile muy pequeño: mantener 2x2 */
 @media (max-width: 480px) {
-	.block-cuatro-imagenes .container {
+	.block-eventos-destacados .container {
 		padding: 0 15px;
 	}
 
-	.cuatro-imagenes-grid {
+	.eventos-destacados-grid {
 		gap: 15px;
 	}
 }
 
 /* Editor Styles - Para Gutenberg */
-.wp-block-editor .cuatro-imagenes-preview {
+.wp-block-editor .eventos-destacados-preview {
 	border: 2px dashed #ddd;
 	padding: 40px 20px;
-	background-color: #f8f6f3;
 	border-radius: 8px;
 	text-align: center;
 }
 
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-	.block-cuatro-imagenes {
-		background-color: #2a2a2a;
-	}
+.eventos-titulo-editor {
+	font-size: 3rem;
+	font-weight: 300;
+	color: #333;
+	margin-bottom: 20px;
+	font-style: italic;
+	line-height: 1.2;
+	border: none;
+}
+
+.eventos-descripcion-editor {
+	font-size: 1.1rem;
+	line-height: 1.6;
+	color: #666;
+	margin-bottom: 30px;
+	border: none;
 }
 
 /* Animaciones */
@@ -122,7 +176,7 @@
 
 /* Reducir animaciones para usuarios con preferencias de movimiento reducido */
 @media (prefers-reduced-motion: reduce) {
-	.cuatro-imagenes-grid {
-		animation: none !important;
+	.eventos-destacados-grid {
+		animation: none;
 	}
 }

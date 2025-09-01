@@ -271,253 +271,8 @@ add_action('customize_register', 'my_customizer_settings');
 
 
 
-// Register Custom Post Type
-function custom_post_type()
-{
-
-    // Post type Proyectos
-    $labels = array(
-        'name'                  => _x('Proyectos', 'amentum-text'),
-        'singular_name'         => _x('Proyecto', 'amentum-text'),
-        'menu_name'             => __('Proyectos', 'amentum-text'),
-        'name_admin_bar'        => __('Proyectos', 'amentum-text'),
-        'archives'              => __('Archivos de proyectos', 'amentum-text'),
-        'attributes'            => __('Atributos de proyectos', 'amentum-text'),
-        'parent_item_colon'     => __('Proyectos padre', 'amentum-text'),
-        'all_items'             => __('Todos los proyectos', 'amentum-text'),
-        'add_new_item'          => __('Añadir nuevo proyecto', 'amentum-text'),
-        'add_new'               => __('Añadir nuevo', 'amentum-text'),
-        'new_item'              => __('Nuevo proyecto', 'amentum-text'),
-        'edit_item'             => __('Editar proyecto', 'amentum-text'),
-        'update_item'           => __('Actualizar proyecto', 'amentum-text'),
-        'view_item'             => __('Ver proyecto', 'amentum-text'),
-        'view_items'            => __('Ver proyectos', 'amentum-text'),
-        'search_items'          => __('Buscar proyecto', 'amentum-text'),
-        'not_found'             => __('No se han encontrado proyectos', 'amentum-text'),
-        'not_found_in_trash'    => __('No se han encontrado proyectos en la papelera', 'amentum-text'),
-        'featured_image'        => __('Imagen destacada', 'amentum-text'),
-        'set_featured_image'    => __('Establecer imagen destacada', 'amentum-text'),
-        'remove_featured_image' => __('Eliminar imagen destacada', 'amentum-text'),
-        'use_featured_image'    => __('Usar como imagen destacada', 'amentum-text'),
-        'insert_into_item'      => __('Insertar en proyecto', 'amentum-text'),
-        'uploaded_to_this_item' => __('Subir proyecto', 'amentum-text'),
-        'items_list'            => __('Lista de proyectos', 'amentum-text'),
-        'items_list_navigation' => __('Navegar en los proyectos', 'amentum-text'),
-        'filter_items_list'     => __('Filtrar proyectos', 'amentum-text'),
-    );
-    $rewrite = array(
-        'slug'                  => 'projects',
-        'with_front'            => true,
-        'pages'                 => true,
-        'feeds'                 => true,
-    );
-    $args = array(
-        'label'                 => __('Proyecto', 'amentum-text'),
-        'description'           => __('Añade y gestiona todos tus proyectos', 'amentum-text'),
-        'labels'                => $labels,
-        'supports'              => array( 'title', 'thumbnail', 'revisions', 'custom-fields' ),
-        'taxonomies'            => array(  ),
-        'hierarchical'          => false,
-        'public'                => true,
-        'show_ui'               => true,
-        'show_in_menu'          => true,
-        'menu_position'         => 5,
-        'menu_icon'             => 'dashicons-art',
-        'show_in_admin_bar'     => true,
-        'show_in_nav_menus'     => true,
-        'can_export'            => true,
-        'has_archive'           => true,
-        'exclude_from_search'   => true,
-        'publicly_queryable'    => true,
-        'rewrite'               => $rewrite,
-        'capability_type'       => 'page',
-    );
-    register_post_type('projects', $args);
-
-
-     // Post type Merch
-     $labels = array(
-        'name'                  => _x('Merch', 'amentum-text'),
-        'singular_name'         => _x('Merch', 'amentum-text'),
-        'menu_name'             => __('Merch', 'amentum-text'),
-        'name_admin_bar'        => __('Merch', 'amentum-text'),
-        'archives'              => __('Archivos de merch', 'amentum-text'),
-        'attributes'            => __('Atributos de merch', 'amentum-text'),
-        'parent_item_colon'     => __('Merch padre', 'amentum-text'),
-        'all_items'             => __('Todos los merch', 'amentum-text'),
-        'add_new_item'          => __('Añadir nuevo merch', 'amentum-text'),
-        'add_new'               => __('Añadir nuevo', 'amentum-text'),
-        'new_item'              => __('Nuevo merch', 'amentum-text'),
-        'edit_item'             => __('Editar merch', 'amentum-text'),
-        'update_item'           => __('Actualizar merch', 'amentum-text'),
-        'view_item'             => __('Ver merch', 'amentum-text'),
-        'view_items'            => __('Ver merch', 'amentum-text'),
-        'search_items'          => __('Buscar merch', 'amentum-text'),
-        'not_found'             => __('No se han encontrado merch', 'amentum-text'),
-        'not_found_in_trash'    => __('No se han encontrado merch en la papelera', 'amentum-text'),
-        'featured_image'        => __('Imagen destacada', 'amentum-text'),
-        'set_featured_image'    => __('Establecer imagen destacada', 'amentum-text'),
-        'remove_featured_image' => __('Eliminar imagen destacada', 'amentum-text'),
-        'use_featured_image'    => __('Usar como imagen destacada', 'amentum-text'),
-        'insert_into_item'      => __('Insertar en merch', 'amentum-text'),
-        'uploaded_to_this_item' => __('Subir merch', 'amentum-text'),
-        'items_list'            => __('Lista de merch', 'amentum-text'),
-        'items_list_navigation' => __('Navegar en los merch', 'amentum-text'),
-        'filter_items_list'     => __('Filtrar merch', 'amentum-text'),
-    );
-    $rewrite = array(
-        'slug'                  => 'merch',
-        'with_front'            => true,
-        'pages'                 => true,
-        'feeds'                 => true,
-    );
-    $args = array(
-        'label'                 => __('Merch', 'amentum-text'),
-        'description'           => __('Añade y gestiona todos tus merch', 'amentum-text'),
-        'labels'                => $labels,
-        'supports'              => array( 'title', 'thumbnail', 'revisions', 'custom-fields' ),
-        'taxonomies'            => array(  ),
-        'hierarchical'          => false,
-        'public'                => true,
-        'show_ui'               => true,
-        'show_in_menu'          => true,
-        'menu_position'         => 5,
-        'menu_icon'             => 'dashicons-products',
-        'show_in_admin_bar'     => true,
-        'show_in_nav_menus'     => true,
-        'can_export'            => true,
-        'has_archive'           => true,
-        'exclude_from_search'   => true,
-        'publicly_queryable'    => true,
-        'rewrite'               => $rewrite,
-        'capability_type'       => 'page',
-    );
-    register_post_type('merch', $args);
-
-    // Post type Magazine
-    $labels = array(
-        'name'                  => _x('Magazine', 'amentum-text'),
-        'singular_name'         => _x('Magazine', 'amentum-text'),
-        'menu_name'             => __('Magazine', 'amentum-text'),
-        'name_admin_bar'        => __('Magazine', 'amentum-text'),
-        'archives'              => __('Archivos de magazine', 'amentum-text'),
-        'attributes'            => __('Atributos de magazine', 'amentum-text'),
-        'parent_item_colon'     => __('Magazine padre', 'amentum-text'),
-        'all_items'             => __('Todos los magazine', 'amentum-text'),
-        'add_new_item'          => __('Añadir nuevo magazine', 'amentum-text'),
-        'add_new'               => __('Añadir nuevo', 'amentum-text'),
-        'new_item'              => __('Nuevo magazine', 'amentum-text'),
-        'edit_item'             => __('Editar magazine', 'amentum-text'),
-        'update_item'           => __('Actualizar magazine', 'amentum-text'),
-        'view_item'             => __('Ver magazine', 'amentum-text'),
-        'view_items'            => __('Ver magazine', 'amentum-text'),
-        'search_items'          => __('Buscar magazine', 'amentum-text'),
-        'not_found'             => __('No se han encontrado magazine', 'amentum-text'),
-        'not_found_in_trash'    => __('No se han encontrado magazine en la papelera', 'amentum-text'),
-        'featured_image'        => __('Imagen destacada', 'amentum-text'),
-        'set_featured_image'    => __('Establecer imagen destacada', 'amentum-text'),
-        'remove_featured_image' => __('Eliminar imagen destacada', 'amentum-text'),
-        'use_featured_image'    => __('Usar como imagen destacada', 'amentum-text'),
-        'insert_into_item'      => __('Insertar en magazine', 'amentum-text'),
-        'uploaded_to_this_item' => __('Subir magazine', 'amentum-text'),
-        'items_list'            => __('Lista de magazine', 'amentum-text'),
-        'items_list_navigation' => __('Navegar en los magazine', 'amentum-text'),
-        'filter_items_list'     => __('Filtrar magazine', 'amentum-text'),
-    );
-    $rewrite = array(
-        'slug'                  => 'magazine',
-        'with_front'            => true,
-        'pages'                 => true,
-        'feeds'                 => true,
-    );
-    $args = array(
-        'label'                 => __('Magazine', 'amentum-text'),
-        'description'           => __('Añade y gestiona todos tus magazine', 'amentum-text'),
-        'labels'                => $labels,
-        'supports'              => array( 'title', 'thumbnail', 'revisions', 'custom-fields' ),
-        'taxonomies'            => array(  ),
-        'hierarchical'          => false,
-        'public'                => true,
-        'show_ui'               => true,
-        'show_in_menu'          => true,
-        'menu_position'         => 5,
-        'menu_icon'             => 'dashicons-media-document',
-        'show_in_admin_bar'     => true,
-        'show_in_nav_menus'     => true,
-        'can_export'            => true,
-        'has_archive'           => true,
-        'exclude_from_search'   => true,
-        'publicly_queryable'    => true,
-        'rewrite'               => $rewrite,
-        'capability_type'       => 'page',
-    );
-    register_post_type('magazine', $args);
-    
-
-    /*
-
-    // Post type Equipo
-    $labels = array(
-        'name'                  => _x( 'Equipo', 'amentum-text' ),
-        'singular_name'         => _x( 'Equipo'	, 'amentum-text' ),
-        'menu_name'             => __( 'Equipo', 'amentum-text' ),
-        'name_admin_bar'        => __( 'Equipo', 'amentum-text' ),
-        'archives'              => __( 'Archivos de integrantes', 'amentum-text' ),
-        'attributes'            => __( 'Atributos de integrantes', 'amentum-text' ),
-        'parent_item_colon'     => __( 'Equipo padre', 'amentum-text' ),
-        'all_items'             => __( 'Todos los integrantes', 'amentum-text' ),
-        'add_new_item'          => __( 'Añadir integrante', 'amentum-text' ),
-        'add_new'               => __( 'Añadir integrante', 'amentum-text' ),
-        'new_item'              => __( 'Nuevo integrante', 'amentum-text' ),
-        'edit_item'             => __( 'Editar integrante', 'amentum-text' ),
-        'update_item'           => __( 'Actualizar integrante', 'amentum-text' ),
-        'view_item'             => __( 'Ver integrante', 'amentum-text' ),
-        'view_items'            => __( 'Ver integrantes', 'amentum-text' ),
-        'search_items'          => __( 'Buscar integrante', 'amentum-text' ),
-        'not_found'             => __( 'No se han encontrado integrantes', 'amentum-text' ),
-        'not_found_in_trash'    => __( 'No se han encontrado integrantes en la papelera', 'amentum-text' ),
-        'featured_image'        => __( 'Imagen destacada', 'amentum-text' ),
-        'set_featured_image'    => __( 'Establecer imagen destacada', 'amentum-text' ),
-        'remove_featured_image' => __( 'Eliminar imagen destacada', 'amentum-text' ),
-        'use_featured_image'    => __( 'Usar como imagen destacada', 'amentum-text' ),
-        'insert_into_item'      => __( 'Insertar en integrante', 'amentum-text' ),
-        'uploaded_to_this_item' => __( 'Subir integrante', 'amentum-text' ),
-        'items_list'            => __( 'Lista de integrantes', 'amentum-text' ),
-        'items_list_navigation' => __( 'Navegar en los integrantes', 'amentum-text' ),
-        'filter_items_list'     => __( 'Filtrar integrantes', 'amentum-text' ),
-    );
-    $rewrite = array(
-        'slug'                  => 'equipo',
-        'with_front'            => true,
-        'pages'                 => true,
-        'feeds'                 => true,
-    );
-    $args = array(
-        'label'                 => __( 'Equipo', 'amentum-text' ),
-        'description'           => __( 'Añade y gestiona todos tus equipos', 'amentum-text' ),
-        'labels'                => $labels,
-        'supports'              => array( 'title', 'thumbnail', 'revisions', 'custom-fields' ),
-        'taxonomies'            => array(  ),
-        'hierarchical'          => false,
-        'public'                => true,
-        'show_ui'               => true,
-        'show_in_menu'          => true,
-        'menu_position'         => 5,
-        'menu_icon'             => 'dashicons-portfolio',
-        'show_in_admin_bar'     => true,
-        'show_in_nav_menus'     => true,
-        'can_export'            => true,
-        'has_archive'           => true,
-        'exclude_from_search'   => true,
-        'publicly_queryable'    => true,
-        'rewrite'               => $rewrite,
-        'capability_type'       => 'page',
-        'menu_order'			=> true
-    );
-    register_post_type( 'equipo', $args );
-    */
-}
-add_action('init', 'custom_post_type', 0);
+// Incluir post types personalizados
+require get_template_directory() . '/inc/post-types.php';
 /*
 // redirect single posts to the archive page, scrolled to current ID
 
@@ -532,37 +287,6 @@ function amentum_redirecion_equipo() {
 
 add_action( 'template_redirect', 'amentum_redirecion_equipo');
 */
-// Register Custom Taxonomy
-function amentum_taxonomy()
-{
-
-    $labels = array(
-        'name'              => _x('Tipos', 'taxonomy general name'),
-        'singular_name'     => _x('Tipo', 'taxonomy singular name'),
-        'search_items'      => __('Buscar tipos'),
-        'all_items'         => __('Todos los tipos'),
-        'parent_item'       => __('Tipo padre'),
-        'parent_item_colon' => __('Tipo padre:'),
-        'edit_item'         => __('Editar tipo'),
-        'update_item'       => __('Actualizar tipo'),
-        'add_new_item'      => __('Añadir nuevo tipo'),
-        'new_item_name'     => __('Nombre del nuevo tipo'),
-        'menu_name'         => __('Tipos'),
-    );
-    
-    $args = array(
-        'hierarchical'      => true,
-        'labels'            => $labels,
-        'show_ui'           => true,
-        'show_admin_column' => true,
-        'query_var'         => true,
-        'rewrite'           => array( 'slug' => 'tipo' ),
-    );
-    
-    register_taxonomy('tipo', array( 'projects' ), $args);
-
-}
-add_action('init', 'amentum_taxonomy', 0);
 
 // Enqueue javascript file
 add_action('wp_enqueue_scripts', 'amentum_insert_custom_js');
@@ -892,6 +616,145 @@ function custom_post_type_icons_css() {
     </style>';
 }
 
+
+/**
+ * Función para mostrar la imagen destacada del post
+ */
+if (!function_exists('amentum_post_thumbnail')) :
+    function amentum_post_thumbnail() {
+        if (post_password_required() || is_attachment() || !has_post_thumbnail()) {
+            return;
+        }
+
+        if (is_singular()) :
+            ?>
+            <div class="post-thumbnail">
+                <?php the_post_thumbnail(); ?>
+            </div><!-- .post-thumbnail -->
+            <?php
+        else :
+            ?>
+            <a class="post-thumbnail" href="<?php the_permalink(); ?>" aria-hidden="true" tabindex="-1">
+                <?php
+                the_post_thumbnail(
+                    'post-thumbnail',
+                    array(
+                        'alt' => the_title_attribute(
+                            array(
+                                'echo' => false,
+                            )
+                        ),
+                    )
+                );
+                ?>
+            </a>
+            <?php
+        endif; // End is_singular().
+    }
+endif;
+
+/**
+ * Función para mostrar la fecha de publicación del post
+ */
+if (!function_exists('amentum_posted_on')) :
+    function amentum_posted_on() {
+        $time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
+        if (get_the_time('U') !== get_the_modified_time('U')) {
+            $time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
+        }
+
+        $time_string = sprintf(
+            $time_string,
+            esc_attr(get_the_date(DATE_W3C)),
+            esc_html(get_the_date()),
+            esc_attr(get_the_modified_date(DATE_W3C)),
+            esc_html(get_the_modified_date())
+        );
+
+        $posted_on = sprintf(
+            /* translators: %s: post date. */
+            esc_html_x('Publicado el %s', 'post date', 'amentum'),
+            '<a href="' . esc_url(get_permalink()) . '" rel="bookmark">' . $time_string . '</a>'
+        );
+
+        echo '<span class="posted-on">' . $posted_on . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    }
+endif;
+
+/**
+ * Función para mostrar el autor del post
+ */
+if (!function_exists('amentum_posted_by')) :
+    function amentum_posted_by() {
+        $byline = sprintf(
+            /* translators: %s: post author. */
+            esc_html_x('por %s', 'post author', 'amentum'),
+            '<span class="author vcard"><a class="url fn n" href="' . esc_url(get_author_posts_url(get_the_author_meta('ID'))) . '">' . esc_html(get_the_author()) . '</a></span>'
+        );
+
+        echo '<span class="byline"> ' . $byline . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    }
+endif;
+
+/**
+ * Función para mostrar el footer de las entradas (categorías, tags, etc.)
+ */
+if (!function_exists('amentum_entry_footer')) :
+    function amentum_entry_footer() {
+        // Ocultar categoría y tag text para páginas.
+        if ('post' === get_post_type()) {
+            /* translators: used between list items, there is a space after the comma */
+            $categories_list = get_the_category_list(esc_html__(', ', 'amentum'));
+            if ($categories_list) {
+                /* translators: 1: list of categories. */
+                printf('<span class="cat-links">' . esc_html__('Publicado en %1$s', 'amentum') . '</span>', $categories_list); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            }
+
+            /* translators: used between list items, there is a space after the comma */
+            $tags_list = get_the_tag_list('', esc_html_x(', ', 'list item separator', 'amentum'));
+            if ($tags_list) {
+                /* translators: 1: list of tags. */
+                printf('<span class="tags-links">' . esc_html__('Etiquetado %1$s', 'amentum') . '</span>', $tags_list); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            }
+        }
+
+        if (!is_single() && !post_password_required() && (comments_open() || get_comments_number())) {
+            echo '<span class="comments-link">';
+            comments_popup_link(
+                sprintf(
+                    wp_kses(
+                        /* translators: %s: post title */
+                        __('Deja un comentario<span class="screen-reader-text"> en %s</span>', 'amentum'),
+                        array(
+                            'span' => array(
+                                'class' => array(),
+                            ),
+                        )
+                    ),
+                    wp_kses_post(get_the_title())
+                )
+            );
+            echo '</span>';
+        }
+
+        edit_post_link(
+            sprintf(
+                wp_kses(
+                    /* translators: %s: Name of current post. Only visible to screen readers */
+                    __('Editar <span class="screen-reader-text">%s</span>', 'amentum'),
+                    array(
+                        'span' => array(
+                            'class' => array(),
+                        ),
+                    )
+                ),
+                wp_kses_post(get_the_title())
+            ),
+            '<span class="edit-link">',
+            '</span>'
+        );
+    }
+endif;
 
 /**
  * INCLUIR SISTEMA DE BLOQUES INDEPENDIENTE
