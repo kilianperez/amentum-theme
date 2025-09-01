@@ -88,6 +88,7 @@ const filesToAllJs = [
     'node_modules/jquery.marquee/jquery.marquee.js',
     'node_modules/lenis/dist/lenis.min.js',
     paths.scripts.src + "/**/*.js",
+    'blocks/**/script.js'  // JS frontend de bloques (estándar: script.js)
 ];
 
 /**
@@ -564,7 +565,7 @@ function adminCss() {
 }
 
 /**
- * Combina archivos JS en un solo archivo.
+ * Combina archivos JS en un solo archivo - Versión simplificada.
  *
  * @return {stream.Writable} - Retorna el stream de Gulp con los archivos JS combinados.
  */
@@ -579,22 +580,29 @@ async function concatJs() {
         spinner: "dots",
     }).start();
 
-    // Crear el flujo de trabajo
-    const stream = src(filesToAllJs).
-    pipe(errorHandler("concatJs")).
-    pipe(sourcemaps.init()).
-    pipe(concat("all.js")).
-    pipe(sourcemaps.write(".")).
-    pipe(dest(paths.scripts.dest));
+    try {
+        const stream = src(filesToAllJs)
+            .pipe(errorHandler("concatJs"))
+            .pipe(sourcemaps.init())
+            .pipe(concat("all.js"))
+            .pipe(sourcemaps.write("."))
+            .pipe(dest(paths.scripts.dest));
 
-    return stream.pipe(
-        handleTaskWithSpinnerAndErrors(
-            spinner,
-            "concatJs",
-            "Concatenación de archivos JS completada.",
-            "Error durante la concatenación de archivos JS",
-        ),
-    );
+        return new Promise((resolve, reject) => {
+            stream
+                .on('end', () => {
+                    spinner.succeed("Concatenación de archivos JS completada.");
+                    resolve();
+                })
+                .on('error', (err) => {
+                    spinner.fail("Error durante la concatenación de archivos JS");
+                    reject(err);
+                });
+        });
+    } catch (error) {
+        spinner.fail("Error durante la concatenación de archivos JS");
+        throw error;
+    }
 }
 
 /**
@@ -663,14 +671,57 @@ function minifyJs() {
 }
 
 /**
+ * Versión simple de minifyJs para evitar problemas con spinner en watch
+ */
+async function minifyJsSimple() {
+    // Cargar ora dinámicamente si no está cargado
+    if (!ora) {
+        ora = (await import('ora')).default;
+    }
+    
+    const spinner = ora({
+        text: "Minificando archivo all.js...",
+        spinner: "dots",
+    }).start();
+    
+    try {
+        const stream = src(paths.scripts.dest + "/all.js")
+            .pipe(errorHandler("minifyJs"))
+            .pipe(terser())
+            .pipe(rename("all.min.js"))
+            .pipe(dest(paths.scripts.dest));
+
+        return new Promise((resolve, reject) => {
+            stream
+                .on('end', () => {
+                    spinner.succeed("Minificación de archivo all.min.js completada.");
+                    resolve();
+                })
+                .on('error', (err) => {
+                    spinner.fail("Error durante la minificación de archivo all.min.js");
+                    reject(err);
+                });
+        });
+    } catch (error) {
+        spinner.fail("Error durante la minificación de archivo all.min.js");
+        throw error;
+    }
+}
+
+/**
  * Combina y minifica archivos JS
  */
-const js = series(concatJs, minifyJs);
+const js = series(concatJs, minifyJsSimple);
 
 /**
  * Optimización de imágenes
  */
 async function img() {
+    // Cargar ora dinámicamente si no está cargado
+    if (!ora) {
+        ora = (await import('ora')).default;
+    }
+    
     const spinner = ora({
         text: "Optimizando imágenes...",
         spinner: "dots",
@@ -793,7 +844,10 @@ function watchFiles() {
     watch(paths.styles.sass + "/admin.scss", series(adminCss));
     // Watch para CSS de bloques individuales
     watch("blocks/**/style.css", series(blocksCss));
+    // Watch para JS de assets
     watch(paths.scripts.src + "/**/*.js", series(js));
+    // Watch para JS de bloques individuales (estándar: script.js)
+    watch("blocks/**/script.js", series(js));
     watch(paths.scripts.src + "/partials/*.js", series(minPartialsJs));
     watch(paths.images.src + "/**/*", series(img)); // Observa cambios en imágenes
 }
