@@ -42,9 +42,6 @@
 </div>
 <?php endif; ?>
 <div class="page-transition"></div>
-<?php if ( ! is_user_logged_in() ): ?>
-<div class="puntero"></div>
-<?php endif; ?>
 <div id="page" class="site"	data-barba="container" data-barba-namespace="<?php echo is_archive() ? get_post_type() :  get_page_uri() ?>">
 
 

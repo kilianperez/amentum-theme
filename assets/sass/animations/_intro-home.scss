@@ -1,4 +1,4 @@
-// Arreglo de advertencias de Sass y limpieza general del código
+// Estilos para la intro de la home page
 
 .intro-home {
 	position: fixed;
@@ -8,12 +8,10 @@
 	height: 100%;
 	width: 100%;
 	background: #fff;
-	z-index: 10002; // Por encima de cursor (10001), newsletter (9999) y header (9999)
+	z-index: 10002;
 	opacity: 1;
 	transition: opacity 1s 2s, z-index 0s 3s;
-	// Por defecto visible, se ocultará con JS si ya se visitó
 	
-
 	svg {
 		width: 100px;
 		height: auto;
@@ -21,233 +19,13 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		animation: fadeInOut 2s ease-in-out ;
+		animation: fadeInOut 2s ease-in-out;
 		opacity: 0;
 	}
 
 	&.load {
 		opacity: 0;
 		z-index: -1;
-
-		svg {
-			// Mantener la animación de pulsación durante el fade out
-			// animation: fadeInOut 2s ease-in-out ;
-		}
-	}
-}
-
-.char {
-	transform: translateY(100%);
-	transition: transform 0.5s;
-}
-
-// Técnica correcta: palabras ocultas inicialmente
-.animation-intro-2,
-.animation-intro-3 {
-	.word {
-		opacity: 0; // Palabras ocultas hasta que GSAP tome control
-		display: inline-block;
-		position: relative;
-	}
-
-	// Los clips dentro de animaciones de texto: clip-path + overflow hidden
-	.clip {
-		clip-path: polygon(0 0, 100% 0, 100% 110%, 0% 110%);
-		overflow: visible;
-		display: inline-block;
-		position: relative;
-	}
-}
-
-// Espaciado específico para el texto "GOOD CONTENT"
-.animation-intro-3 {
-	.clip:first-child {
-		margin-right: 0.3em; // Espacio entre GOOD y CONTENT
-	}
-}
-
-// Animation-scroll con texto
-.animation-scroll {
-	.word {
-		opacity: 0; // Palabras ocultas hasta que GSAP tome control
-		display: inline-block;
-		position: relative;
-	}
-
-	.clip {
-		clip-path: polygon(0 0, 100% 0, 100% 110%, 0% 110%);
-		overflow: visible;
-		display: inline-block;
-		position: relative;
-	}
-}
-
-// Animation-scroll que contiene elementos directos (como SVGs)
-.animation-scroll:not(:has(.word)):not(:has(.link)) {
-	opacity: 0; // Ocultar completamente si no tiene words ni enlaces
-}
-
-// Animation-scroll con enlaces: visible pero clippeado
-.animation-scroll:has(.link) {
-	opacity: 1; // Visible para que funcione el clip-path
-}
-
-// Fix completo para prevenir saltos en animaciones de texto
-.animation-scroll {
-	// Prevenir cambio de caracteres al dividir
-	font-kerning: none !important;
-	text-rendering: optimizeSpeed !important;
-	
-	// Específico para contenedores flex
-	.projects__title & {
-		flex-shrink: 0; // No permitir que se encoja
-		max-width: 100%; // Prevenir overflow
-	}
-	
-	// Las líneas generadas por SplitType
-	.line {
-		display: block;
-		text-align: start;
-	}
-}
-
-// Letras individuales
-.char {
-	display: inline-block;
-	transform: translateY(100%); // Empiezan debajo de su contenedor
-}
-
-// SVG específico: necesita estar más abajo para no verse antes de la animación
-.btn-svg.char {
-	transform: translateY(120%); // Más abajo que las letras  
-}
-
-// Enlaces con flecha - manejado por GSAP en JavaScript
-.link.char {
-	transform: translateY(120%); // Posición inicial, GSAP los animará
-	
-	// Asegurar que el sr-only no interfiera con el layout
-	.sr-only {
-		position: absolute !important;
-		width: 1px !important;
-		height: 1px !important;
-		padding: 0 !important;
-		margin: -1px !important;
-		overflow: hidden !important;
-		clip: rect(0, 0, 0, 0) !important;
-		white-space: nowrap !important;
-		border: 0 !important;
-	}
-}
-
-// Clip-path para elementos que no son texto (como SVGs)
-.clip {
-	clip-path: polygon(0 0, 100% 0, 100% 110%, 0% 110%);
-	// Prevenir overflow horizontal en elementos clip
-	max-width: 100%;
-	box-sizing: border-box;
-	overflow: visible;
-}
-
-.line {
-	max-width: 100%; // Prevenir que las líneas causen overflow
-}
-
-a {
-	&:hover {
-		text-decoration: line-through;
-	}
-}
-
-.current-menu-item a {
-	text-decoration: line-through;
-}
-
-body {
-	cursor: none!important; // Ocultar cursor nativo en todo el sitio
-	a, input, textarea, select, button, *{
-		cursor: none!important; // Ocultar cursor en enlaces
-	}
-	
-	.puntero {
-		display: none; // Oculto en móvil
-		width: 18px;
-		height: 18px;
-		position: fixed;
-		top: 0;
-		left: 0;
-		border-radius: 50%;
-		pointer-events: none;
-		background-color: #fff;
-		mix-blend-mode: difference;
-		z-index: 10001; // Por encima de newsletter (9999) y header (9999), por debajo de intro (10000)
-		// NO transition en transform para evitar interferencias con GSAP
-		transition: width 0.4s ease-out, height 0.4s ease-out;
-		
-		// Optimizaciones de rendimiento
-		will-change: transform;
-		transform: translateZ(0); // Forzar capa de composición
-		backface-visibility: hidden; // Prevenir parpadeos
-
-		@include tabletXl {
-			display: block; // Solo visible en desktop
-		}
-
-		&.ver {
-			@include tabletXl {
-				font-size: 24px;
-				width: 50px;
-				height: 50px;
-			}
-		}
-
-		&.enlace {
-			font-size: 0;
-			width: 5vw;
-			height: 5vw;
-		}
-
-		&.input-hover {
-			width: 2.5vw;
-			height: 2.5vw;
-		}
-	}
-
-}
-
-// Solo ocultar cursor nativo cuando NO está logueado (cuando hay cursor personalizado)
-body.wp-admin, 
-body.logged-in {
-	@include tabletXl {
-		cursor: auto !important;
-		* {
-			cursor: auto !important;
-		}
-	}
-}
-
-img {
-	// Comentado para referencia futura
-	// clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-}
-
-.page-transition {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: #fff;
-	z-index: 9998; // Reducido para que el header quede por encima
-	pointer-events: none;
-	opacity: 0;
-	visibility: hidden;
-	transition: opacity 0.6s ease-in-out, visibility 0s 0.6s;
-	
-	&.active {
-		opacity: 1;
-		visibility: visible;
-		transition: opacity 0.6s ease-in-out, visibility 0s;
 	}
 }
 

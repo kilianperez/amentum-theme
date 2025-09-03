@@ -1,6 +1,5 @@
 // Variables globales
 let lenis;
-let customCursor;
 
 // Mantener control manual del scroll
 if ('scrollRestoration' in history) {
@@ -17,8 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		introHome.style.display = 'none';
 	}
 	
-	// Inicializar cursor una sola vez - FUERA de Barba
-	customCursor = new CustomCursor();
+	// Cursor eliminado para simplificar el tema
 	
 	// Solo inicializar Barba.js si el usuario NO está logueado
 	if (typeof ajax_forms !== 'undefined' && ajax_forms.isUserLoggedIn === 'false') {
@@ -64,10 +62,7 @@ function contentAnimation() {
 	inputFilledStates();
 	initCustomValidation();
 	
-	// Actualizar referencias del cursor para nuevos elementos
-	if (customCursor) {
-		customCursor.refreshHoverElements();
-	}
+	// Cursor eliminado para simplificar
 	
 	if (document.querySelectorAll('video').length) {
 		document.querySelectorAll('video').forEach((video) => {
@@ -77,170 +72,6 @@ function contentAnimation() {
 }
 
 /* ------------------ GSAP ------------------ */
-
-// Sistema de cursor personalizado - Implementación moderna con quickTo
-class CustomCursor {
-	constructor() {
-		this.element = null;
-		this.xTo = null;
-		this.yTo = null;
-		this.isInitialized = false;
-		
-		this.init();
-	}
-	
-	init() {
-		if (this.isInitialized) return;
-		
-		this.element = document.querySelector('.puntero');
-		if (!this.element) {
-			console.warn('Cursor element .puntero not found');
-			return;
-		}
-		
-		// Configuración inicial
-		gsap.set(this.element, {
-			xPercent: -50,
-			yPercent: -50,
-			scale: 1,
-			visibility: 'visible',
-			force3D: true
-		});
-		
-		// Configurar quickTo para movimiento suave y sin delay
-		this.xTo = gsap.quickTo(this.element, "x", {
-			duration: 0.2,
-			ease: "power3",
-			overwrite: true
-		});
-		
-		this.yTo = gsap.quickTo(this.element, "y", {
-			duration: 0.2,
-			ease: "power3",
-			overwrite: true
-		});
-		
-		// Event listener para movimiento del mouse
-		window.addEventListener('mousemove', (e) => {
-			this.xTo(e.clientX);
-			this.yTo(e.clientY);
-		});
-		
-		// Configurar efectos hover
-		this.setupHoverEffects();
-		
-		this.isInitialized = true;
-		console.log('✅ Custom cursor initialized with quickTo');
-	}
-	
-	setupHoverEffects() {
-		// Inputs, checkboxes, radios y labels - cursor pequeño
-		const inputElements = document.querySelectorAll('input[type="checkbox"], input[type="radio"], input[type="text"], input[type="email"], input[type="tel"], input[type="number"], input[type="password"], textarea, select, label');
-		
-		inputElements.forEach(element => {
-			element.addEventListener('mouseenter', () => this.addInputHoverEffect());
-			element.addEventListener('mouseleave', () => this.removeInputHoverEffect());
-		});
-		
-		// Enlaces y botones - cursor grande (después para tener prioridad)
-		const interactiveElements = document.querySelectorAll('a, .link, button');
-		
-		interactiveElements.forEach(element => {
-			element.addEventListener('mouseenter', (e) => {
-				// Remover clase input-hover si estaba activa
-				this.removeInputHoverEffect();
-				this.addHoverEffect();
-				e.stopPropagation(); // Evitar que se propague al label padre
-			});
-			element.addEventListener('mouseleave', (e) => {
-				this.removeHoverEffect();
-				// Si el elemento padre es un label, restaurar el cursor pequeño
-				if (element.closest('label')) {
-					this.addInputHoverEffect();
-				}
-				e.stopPropagation();
-			});
-		});
-	}
-	
-	addHoverEffect() {
-		if (this.element) {
-			this.element.classList.add('enlace');
-		}
-	}
-	
-	removeHoverEffect() {
-		if (this.element) {
-			this.element.classList.remove('enlace');
-		}
-	}
-	
-	addInputHoverEffect() {
-		if (this.element) {
-			this.element.classList.add('input-hover');
-		}
-	}
-	
-	removeInputHoverEffect() {
-		if (this.element) {
-			this.element.classList.remove('input-hover');
-		}
-	}
-	
-	refreshHoverElements() {
-		// Actualizar referencia del elemento después de transiciones
-		const newElement = document.querySelector('.puntero');
-		if (newElement && newElement !== this.element) {
-			this.element = newElement;
-			
-			// Reconfigurar quickTo con el nuevo elemento
-			this.xTo = gsap.quickTo(this.element, "x", {
-				duration: 0.2,
-				ease: "power3",
-				overwrite: true
-			});
-			
-			this.yTo = gsap.quickTo(this.element, "y", {
-				duration: 0.2,
-				ease: "power3",
-				overwrite: true
-			});
-			
-			// Configuración inicial del nuevo elemento
-			gsap.set(this.element, {
-				xPercent: -50,
-				yPercent: -50,
-				scale: 1,
-				visibility: 'visible',
-				force3D: true
-			});
-		}
-		
-		// IMPORTANTE: Limpiar estado hover al actualizar elementos
-		this.resetCursor();
-		
-		// Reconfigurar efectos hover para nuevos elementos
-		this.setupHoverEffects();
-	}
-	
-	resetCursor() {
-		// Método para limpiar completamente el estado del cursor
-		if (this.element) {
-			this.element.classList.remove('enlace', 'input-hover');
-		}
-	}
-	
-	
-	destroy() {
-		if (this.element) {
-			window.removeEventListener('mousemove', this.handleMouseMove);
-			this.xTo = null;
-			this.yTo = null;
-			this.element = null;
-			this.isInitialized = false;
-		}
-	}
-}
 
 function sectionProyecto() {
 	if (document.querySelectorAll('.prod-imgs__img.effect').length) {
@@ -1176,10 +1007,7 @@ function barbaJsInit() {
 				async leave(data) {
 					const done = this.async();
 					
-					// Resetear cursor antes de la transición
-					if (customCursor) {
-						customCursor.resetCursor();
-					}
+					// Cursor eliminado
 					
 					// Mostrar transición
 					await pageTransition();
@@ -1189,10 +1017,7 @@ function barbaJsInit() {
 				
 				// Antes de entrar a la nueva página
 				beforeEnter(data) {
-					// Resetear cursor al cambiar de página
-					if (customCursor) {
-						customCursor.resetCursor();
-					}
+					// Cursor eliminado
 					
 					// Scroll to top usando Lenis si está disponible
 					if (window.lenis) {
