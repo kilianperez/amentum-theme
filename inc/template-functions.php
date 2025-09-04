@@ -1,10 +1,14 @@
 <?php
-
 /**
  * Functions which enhance the theme by hooking into WordPress
  *
  * @package Amentum
  */
+
+// Evitar acceso directo
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 /**
  * Adds custom classes to the array of body classes.

@@ -1,6 +1,17 @@
 <?php
 /**
  * Enqueue scripts and styles.
+ *
+ * @package Amentum
+ */
+
+// Evitar acceso directo
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+/**
+ * Enqueue scripts and styles.
  */
 function amentumscripts() {
 	wp_enqueue_style( 'amentum-style', get_stylesheet_uri(), array(), _S_VERSION );

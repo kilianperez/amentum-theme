@@ -5,6 +5,11 @@
  * @package Amentum
  */
 
+// Evitar acceso directo
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 // Register Custom Post Type
 function amentum_custom_post_types()
 {
