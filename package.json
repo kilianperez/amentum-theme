@@ -35,9 +35,12 @@
     "vite:dev": "vite build --mode development",
     "vite:prod": "vite build --mode production",
     "vite:watch": "vite build --mode development --watch",
-    "vite:serve": "vite serve"
+    "vite:serve": "vite serve",
+    "watch:vite": "vite build --mode development --watch",
+    "dev:vite": "vite build --mode development --watch"
   },
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^7.0.2",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-terser": "^0.4.4",
@@ -82,7 +85,9 @@
     "ora": "^8.0.1",
     "postcss": "^8.5.6",
     "pretty-bytes": "^6.1.1",
+    "purgecss": "^7.0.2",
     "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-postcss": "^4.0.2",
     "sass": "^1.77.8",
     "terser": "^5.44.0",
     "through2": "^4.0.2",

@@ -53,18 +53,67 @@ export default defineConfig(({ command, mode }) => {
     };
   };
 
-  // Plugin para generar versiones minificadas de CSS y source maps
+  // Plugin para generar versiones minificadas de CSS y source maps + PurgeCSS
   const generateMinifiedCSS = () => {
     return {
-      name: 'generate-minified-css',
-      generateBundle(options, bundle) {
+      name: 'generate-minified-css-with-purgecss',
+      async generateBundle(options, bundle) {
+        let purgecss = null;
+        
+        // Cargar PurgeCSS SIEMPRE (sin diferencia prod/dev)
+        try {
+          // Usar PurgeCSS directamente, no como plugin PostCSS
+          const { PurgeCSS } = require('purgecss');
+          purgecss = new PurgeCSS();
+        } catch (error) {
+          console.warn('⚠️ PurgeCSS no disponible, continuando sin optimización CSS');
+        }
+        
         // Buscar todos los archivos CSS generados
-        Object.keys(bundle).forEach(fileName => {
+        for (const fileName of Object.keys(bundle)) {
           if (fileName.endsWith('.css') && !fileName.includes('.min.css')) {
             const cssAsset = bundle[fileName];
             if (cssAsset.type === 'asset') {
-              const cssContent = cssAsset.source;
+              let cssContent = cssAsset.source;
               const baseName = fileName.replace('css/', '').replace('.css', '');
+              
+              // Aplicar PurgeCSS SIEMPRE
+              if (purgecss) {
+                try {
+                  const purgeResult = await purgecss.purge({
+                    content: [
+                      './**/*.php',
+                      './blocks/**/*.php',
+                      './assets/js/**/*.js', 
+                      './blocks/**/script.js',
+                    ],
+                    css: [{ raw: cssContent }],
+                    safelist: [
+                      // WordPress core classes
+                      /^wp-/, /^admin-/, /^post-/, /^page-/, /^attachment-/,
+                      // Swiper classes
+                      /^swiper/,
+                      // Bootstrap classes
+                      /^btn/, /^navbar/, /^modal/, /^carousel/,
+                      // Classes dinámicas
+                      /^js-/, /^is-/, /^has-/,
+                      'active', 'show', 'fade', 'in', 'out'
+                    ],
+                    keyframes: true,
+                    fontFace: true,
+                  });
+                  
+                  if (purgeResult && purgeResult[0] && purgeResult[0].css) {
+                    const originalSize = cssContent.length;
+                    cssContent = purgeResult[0].css;
+                    const newSize = cssContent.length;
+                    const reduction = ((originalSize - newSize) / originalSize * 100).toFixed(1);
+                    console.log(`🧹 PurgeCSS aplicado a ${fileName}: ${originalSize}B → ${newSize}B (${reduction}% reducción)`);
+                  }
+                } catch (error) {
+                  console.warn(`⚠️ Error aplicando PurgeCSS a ${fileName}:`, error.message);
+                }
+              }
               
               // Agregar referencia al source map en el CSS normal
               const cssWithMap = cssContent + `\n/*# sourceMappingURL=${baseName}.css.map */`;
@@ -99,7 +148,7 @@ export default defineConfig(({ command, mode }) => {
               console.log(`✅ Generado: ${minFileName} y ${fileName}.map`);
             }
           }
-        });
+        }
       }
     };
   };
@@ -236,6 +285,8 @@ export default defineConfig(({ command, mode }) => {
       postcss: {
         plugins: [
           require('autoprefixer')(),
+          // TODO: PurgeCSS está instalado pero comentado por problemas de compatibilidad con Vite
+          // Se puede habilitar más adelante o usar un plugin específico de Vite
         ],
       },
       preprocessorOptions: {
