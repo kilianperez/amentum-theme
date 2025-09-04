@@ -1,0 +1,19 @@
+.page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 9998; // Reducido para que el header quede por encima
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease-in-out, visibility 0s 0.6s;
+    
+    &.active {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.6s ease-in-out, visibility 0s;
+    }
+}

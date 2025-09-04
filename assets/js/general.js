@@ -56,91 +56,11 @@ function delay(n) {
 }
 
 function contentAnimation() {
-	scrollElementos();
 	menu();
-	formulariosAjax();
-	inputFilledStates();
-	initCustomValidation();
 	
-	// Cursor eliminado para simplificar
-	
-	if (document.querySelectorAll('video').length) {
-		document.querySelectorAll('video').forEach((video) => {
-			video.play();
-		});
-	}
 }
 
 /* ------------------ GSAP ------------------ */
-
-function sectionProyecto() {
-	if (document.querySelectorAll('.prod-imgs__img.effect').length) {
-		var lazyVideos = [].slice.call(document.querySelectorAll('video.lazy'));
-
-		if ('IntersectionObserver' in window) {
-			var lazyVideoObserver = new IntersectionObserver(function (entries, observer) {
-				entries.forEach(function (video) {
-					if (video.isIntersecting) {
-						for (var source in video.target.children) {
-							var videoSource = video.target.children[source];
-							if (typeof videoSource.tagName === 'string' && videoSource.tagName === 'SOURCE') {
-								videoSource.src = videoSource.dataset.src;
-							}
-						}
-
-						video.target.load();
-						video.target.classList.remove('lazy');
-						lazyVideoObserver.unobserve(video.target);
-					}
-				});
-			});
-
-			lazyVideos.forEach(function (lazyVideo) {
-				lazyVideoObserver.observe(lazyVideo);
-			});
-		}
-
-		gsap.utils.toArray('.prod-imgs__img.effect').forEach((section) => {
-			ScrollTrigger.create({
-				trigger: section,
-				start: 'top top',
-				pin: true,
-				pinSpacing: false,
-				markers: false,
-				onEnter: () => {
-					// if (section.querySelectorAll('video').length) {
-					// 	section.querySelectorAll('video').forEach((video) => {
-					// 		video.play();
-					// 	});
-					// }
-				},
-				onEnterBack: () => {
-					// if (section.querySelectorAll('video').length) {
-					// 	section.querySelectorAll('video').forEach((video) => {
-					// 		video.play();
-					// 	});
-					// }
-				},
-				onLeave: () => {
-					// if (section.querySelectorAll('video').length) {
-					// 	section.querySelectorAll('video').forEach((video) => {
-					// 		video.play();
-					// 	});
-					// }
-				},
-				onLeaveBack: () => {
-					// if (section.querySelectorAll('video').length) {
-					// 	section
-					// 		.querySelectorAll('video')
-					// 		.forEach((video) => {
-					// 			video.pause();
-					// 		});
-					// }
-				},
-			});
-		});
-	}
-}
 
 function pageTransition() {
 	return new Promise((resolve) => {
@@ -193,50 +113,6 @@ function efectoLetrasHome() {
 	}
 }
 
-function scrollElementos() {
-	if (document.querySelectorAll('.animation-scroll').length) {
-		gsap.registerPlugin(ScrollTrigger);
-
-		// Usar la misma técnica: SplitType con words y chars, pero excluir contenedores con enlaces
-		const animationElements = document.querySelectorAll('.animation-scroll');
-		const textElements = Array.from(animationElements).filter(el => !el.querySelector('.link'));
-		
-		let textos3 = new SplitType(textElements, { 
-			types: 'words, chars',
-			// Configuración para prevenir saltos
-			lineClass: 'line',
-			wordClass: 'word', 
-			charClass: 'char',
-			preserveWhitespace: true
-		});
-
-		let tl = gsap.timeline({
-			scrollTrigger: {
-				trigger: '.section',
-				start: 'top center',
-				toggleClass: 'animado',
-				toggleActions: 'play none none none',
-			},
-		});
-
-		// Hacer visibles tanto las palabras como los elementos directos
-		tl.set('.animation-scroll', { opacity: 1 }) // Para elementos sin words
-		  .set('.animation-scroll .word', { opacity: 1 }) // Para palabras
-		  .to('.animation-scroll .char', {
-			y: 0,
-			stagger: 0.05,
-			delay: 0,
-			duration: 0.1,
-		})
-		  // Animar enlaces por separado con el mismo timing que las letras
-		  .to('.animation-scroll .link.char', {
-			y: 0,
-			delay: 0.1, // Pequeño delay adicional para que aparezca después del texto
-			duration: 0.1, // Misma duración que las letras
-			// Sin ease definido - usar el por defecto como las letras
-		}, "-=0.05"); // Ajustado para sincronizar mejor
-	}
-}
 
 function menu() {
 	const burger = document.querySelector('.burger');
@@ -325,9 +201,8 @@ function marquee() {
 	});
 }
 
-/*-------------- Validaciones Personalizadas ------------------- */
-
-function initCustomValidation() {
+/* ------------------ BARBAJS ------------------ */
+function barbaJsInit() {
 	console.log('🔧 Inicializando sistema de validación personalizado');
 	
 	// Agregar patrón estricto a todos los campos de email
@@ -658,289 +533,6 @@ function initCustomValidation() {
 	}
 }
 
-/*-------------- Estados de Inputs ------------------- */
-
-function inputFilledStates() {
-	const inputWrappers = document.querySelectorAll('.input-wrapper');
-	
-	inputWrappers.forEach(wrapper => {
-		const input = wrapper.querySelector('input, textarea');
-		if (!input) return;
-		
-		// Función para verificar si el input está lleno
-		const checkFilled = () => {
-			if (input.value.trim() !== '') {
-				wrapper.classList.add('input-filled');
-			} else {
-				wrapper.classList.remove('input-filled');
-			}
-		};
-		
-		// Verificar estado inicial
-		checkFilled();
-		
-		// Event listeners para cambios
-		input.addEventListener('input', checkFilled);
-		input.addEventListener('change', checkFilled);
-		input.addEventListener('blur', checkFilled);
-	});
-}
-
-/*-------------- Formularios ------------------- */
-
-function formulariosAjax() {
-	const btnNews = document.querySelector('.newsletter-link'),
-		formsContainer = document.querySelector('.newsletter'),
-		formsExit = document.querySelector('.newsletter__exit'),
-		formNews = document.querySelector('.newsletter #frm-contact');
-
-	// Verificar que los elementos existen antes de agregar event listeners
-	if (!btnNews || !formsContainer || !formsExit || !formNews) {
-		console.warn('Newsletter elements not found:', {
-			btnNews: !!btnNews,
-			formsContainer: !!formsContainer,
-			formsExit: !!formsExit,
-			formNews: !!formNews
-		});
-		return;
-	}
-
-	// Cuando hago click en la x de la newsletter
-	formsExit.addEventListener('click', () => {
-		formsContainer.classList.remove('ver');
-	});
-	// Cuando hago click en el enlace del footer
-	btnNews.addEventListener('click', () => {
-		formsContainer.classList.toggle('ver');
-	});
-	// REMOVIDO: El newsletter ya no se cierra automáticamente con scroll
-	// para mejorar la UX del usuario
-	// Cuando hago click fuera del elemento elimino la clase ver
-	formsContainer.addEventListener('click', function (event) {
-		if (!formNews.contains(event.target)) {
-			formsContainer.classList.remove('ver');
-		}
-	});
-
-	$('#frm-contact').on('submit', function (e) {
-		e.preventDefault();
-
-		// VALIDAR FORMULARIO ANTES DE ENVIAR AJAX
-		const form = this;
-		const isFormValid = form.checkValidity();
-		
-		if (!isFormValid) {
-			console.log('❌ Newsletter form validation failed');
-			// Mostrar errores de validación - SIMPLIFICADO
-			const invalidFields = form.querySelectorAll(':invalid');
-			invalidFields.forEach(field => {
-				let message = 'Este campo es requerido';
-				if (field.type === 'email') {
-					message = field.validity.valueMissing ? 'Por favor, introduce tu email' : 'Introduce un email válido';
-				} else if (field.type === 'checkbox') {
-					message = 'Debes aceptar los términos para continuar';
-				}
-				
-				// Mostrar error simplificado
-				let wrapper = field.closest('.input-wrapper') || field.closest('.check');
-				if (wrapper) {
-					wrapper.classList.add('input-error');
-					let errorElement = wrapper.querySelector('.field-error-message');
-					if (!errorElement) {
-						errorElement = document.createElement('div');
-						errorElement.className = 'field-error-message';
-						wrapper.appendChild(errorElement);
-					}
-					errorElement.textContent = message;
-				}
-			});
-			// Hacer focus en el primer campo inválido
-			const firstInvalidField = form.querySelector(':invalid');
-			if (firstInvalidField) {
-				firstInvalidField.focus();
-			}
-			return false; // NO enviar AJAX si hay errores
-		}
-		
-		console.log('✅ Newsletter form validation passed');
-		var formData = $(this).serializeArray();
-		console.log('📧 Newsletter form data:', formData);
-		formData.push({name: 'action', value: 'amentum_ajax_frm_contact'});
-		formData.push({name: 'nonce', value: ajax_forms.frmNonce});
-		$.ajax({
-			url: ajax_forms.ajaxUrl,
-			type: 'post',
-			dataType: 'json',
-			data: formData,
-			beforeSend: function () {
-				$('#frm-contact .newsletter__svgs ').removeClass(['init', 'success']).addClass(['load']);
-				$('#frm-contact .frm-message').removeClass('error').text(''); // Limpiar mensaje previo
-				$('#frm-contact #submit').prop('disabled', true);
-			},
-		})
-			.done(function (res) {
-				console.log('📧 Newsletter response:', res);
-				if (res.status === 1) {
-					$('#frm-contact .newsletter__svgs ').removeClass(['init', 'load']).addClass(['success']);
-					$('#frm-contact .frm-message').removeClass('error').text(''); // No mostrar mensaje en newsletter success
-					$('#frm-contact')[0].reset();
-				} else {
-					$('#frm-contact .newsletter__svgs ').removeClass(['init', 'load']).addClass(['error']);
-					// NO mostrar NINGÚN error en .frm-message del newsletter
-					// Todos los errores del newsletter (validación y wp_mail) se manejan externamente
-					$('#frm-contact .frm-message').removeClass('error').text('');
-					console.log('📧 Newsletter error, but NOT showing in .frm-message:', res.message);
-				}
-			})
-			.always(function () {
-				$('#frm-contact #submit').prop('disabled', false);
-			});
-	});
-
-	$('#formulario-contacto').on('submit', function (e) {
-		e.preventDefault();
-
-		// VALIDAR FORMULARIO ANTES DE ENVIAR AJAX
-		const form = this;
-		
-		// Limpiar errores previos - SIMPLIFICADO para evitar problemas de scope
-		const inputs = form.querySelectorAll('input, textarea');
-		inputs.forEach(input => {
-			// Limpiar validación personalizada
-			input.setCustomValidity('');
-			// Limpiar clases de error
-			let wrapper = input.closest('.input-wrapper') || input.closest('.check') || input.closest('.field-wrapper.checkboxs');
-			if (wrapper) {
-				wrapper.classList.remove('input-error');
-				const errorMsg = wrapper.querySelector('.field-error-message');
-				if (errorMsg) errorMsg.remove();
-			}
-		});
-		
-		// Validar grupos de checkboxes - SIMPLIFICADO
-		const checkboxContainers = form.querySelectorAll('.field-wrapper.checkboxs');
-		let hasCheckboxErrors = false;
-		
-		checkboxContainers.forEach(container => {
-			const checkboxes = container.querySelectorAll('input[type="checkbox"][data-option="tags"]');
-			
-			// Verificar si algún checkbox del grupo es requerido
-			const hasRequiredCheckbox = Array.from(checkboxes).some(cb => cb.hasAttribute('data-required') && cb.getAttribute('data-required') === 'required');
-			
-			// Solo validar si hay al menos un checkbox requerido en el grupo
-			if (!hasRequiredCheckbox) {
-				return; // Saltar validación si no es requerido
-			}
-			
-			const isAnyChecked = Array.from(checkboxes).some(cb => cb.checked);
-			
-			if (!isAnyChecked) {
-				hasCheckboxErrors = true;
-				const firstCheckbox = checkboxes[0];
-				if (firstCheckbox) {
-					firstCheckbox.setCustomValidity('Selecciona al menos una opción');
-					// Mostrar error en el container
-					container.classList.add('input-error');
-					let errorElement = container.querySelector('.field-error-message');
-					if (!errorElement) {
-						errorElement = document.createElement('div');
-						errorElement.className = 'field-error-message';
-						container.appendChild(errorElement);
-					}
-					errorElement.textContent = 'Selecciona al menos una opción';
-				}
-			}
-		});
-		
-		// Verificar validez del formulario HTML5
-		const isFormValid = form.checkValidity();
-		
-		if (!isFormValid || hasCheckboxErrors) {
-			console.log('❌ Contact form validation failed');
-			// Mostrar mensajes de error individuales para cada campo inválido - SIMPLIFICADO
-			const invalidFields = form.querySelectorAll(':invalid');
-			invalidFields.forEach(field => {
-				// Solo mostrar error si no es un checkbox de grupo (ya procesado arriba)
-				if (!(field.hasAttribute('data-option') && field.getAttribute('data-option') === 'tags')) {
-					// Mensaje de error simplificado
-					let message = 'Este campo es requerido';
-					if (field.type === 'email') {
-						message = field.validity.valueMissing ? 'Por favor, introduce tu email' : 'Introduce un email válido';
-					} else if (field.type === 'checkbox') {
-						message = 'Debes aceptar los términos para continuar';
-					}
-					
-					// Mostrar error simplificado
-					let wrapper = field.closest('.input-wrapper') || field.closest('.check');
-					if (wrapper) {
-						wrapper.classList.add('input-error');
-						let errorElement = wrapper.querySelector('.field-error-message');
-						if (!errorElement) {
-							errorElement = document.createElement('div');
-							errorElement.className = 'field-error-message';
-							wrapper.appendChild(errorElement);
-						}
-						errorElement.textContent = message;
-					}
-				}
-			});
-			
-			// Hacer focus en el primer campo inválido
-			const firstInvalidField = form.querySelector(':invalid') || form.querySelector('.field-wrapper.checkboxs.input-error input[type="checkbox"]');
-			if (firstInvalidField) {
-				firstInvalidField.focus();
-			}
-			
-			return false; // NO enviar AJAX si hay errores
-		}
-		
-		console.log('✅ Contact form validation passed');
-		var formData = $(this).serializeArray();
-		console.log(formData);
-
-		// Obtener checkboxes marcados
-		var checkboxes = $(this).find('input[type="checkbox"]');
-		checkboxes.each(function () {
-			var checkbox = $(this);
-			if (checkbox.is(':checked')) {
-				formData.push({
-					name: checkbox.attr('name'),
-					value: checkbox.val(),
-				});
-			}
-		});
-
-		// Agregar acción y nonce a los datos del formulario
-		formData.push({name: 'action', value: 'amentum_ajax_frm_contact'});
-		formData.push({name: 'nonce', value: ajax_forms.frmNonce});
-
-		$.ajax({
-			url: ajax_forms.ajaxUrl,
-			type: 'post',
-			dataType: 'json',
-			data: formData,
-			beforeSend: function () {
-				// Solo manejar el formulario de contacto, NO tocar newsletter
-				$('#formulario-contacto button[type="submit"]').prop('disabled', true).text('Enviando...');
-			},
-		})
-			.done(function (res) {
-				console.log('📝 Contact form response:', res);
-				// NO tocar elementos del newsletter - Las notificaciones globales se manejan automáticamente
-				if (res.status === 1) {
-					$('#formulario-contacto')[0].reset();
-					// El éxito se muestra en notificación global automáticamente
-				} else {
-					// Los errores se muestran en notificación global automáticamente
-					// NO mostrar en .frm-message del newsletter
-				}
-			})
-			.always(function () {
-				$('#formulario-contacto button[type="submit"]').prop('disabled', false).text('Enviar →');
-			});
-	});
-}
-
 /* ------------------ BARBAJS ------------------ */
 function barbaJsInit() {
 	barba.init({
@@ -958,17 +550,14 @@ function barbaJsInit() {
 						sessionStorage.setItem('hasSeenIntro', 'true');
 						initWebAnimation();
 						initSmoothScroll();
-						marquee();
 					} else {
 						// Ya visitó: iniciar todo normal
 						initSmoothScroll();
-						marquee();
-						contentAnimation();
 					}
 					
 					// Inicializar imágenes de magazine (para primera carga)
 					if (typeof initMagazineImages === 'function') {
-						initMagazineImages();
+						// initMagazineImages();
 					}
 					
 					// Reproducir videos
@@ -1005,6 +594,7 @@ function barbaJsInit() {
 				
 				// Salir de la página
 				async leave(data) {
+					console.log('🚪 Barba leave() ejecutándose');
 					const done = this.async();
 					
 					// Cursor eliminado
@@ -1049,9 +639,6 @@ function barbaJsInit() {
 					// Pequeño delay para asegurar que el DOM esté listo
 					setTimeout(() => {
 						// Inicializar scripts
-						marquee();
-						efectoLetrasHome(); // Solo para transiciones entre páginas
-						contentAnimation();
 						
 						// Inicializar imágenes de magazine (para navegación con Barba.js)
 						if (typeof initMagazineImages === 'function') {
@@ -1094,7 +681,6 @@ function initWebAnimation() {
 			// Esperar a que termine la transición CSS (opacity 1s + delay 2s = 3s)
 			setTimeout(() => {
 				introHome.style.display = 'none';
-				contentAnimation();
 			}, 3500); // 3.5 segundos para que termine toda la transición
 		}, 100);
 	}
@@ -1146,125 +732,3 @@ function initSmoothScroll() {
 	}
 }
 
-/*-------------- Sistema de Notificaciones Globales ------------------- */
-
-function initGlobalNotifications() {
-	// Crear el elemento de notificación global si no existe
-	let globalNotification = document.querySelector('.global-notification');
-	if (!globalNotification) {
-		globalNotification = document.createElement('div');
-		globalNotification.className = 'global-notification';
-		document.body.appendChild(globalNotification);
-	}
-	
-	// Función global para mostrar notificaciones
-	window.showGlobalNotification = function(message, type = 'error', duration = 6000) {
-		console.log(`🔔 showGlobalNotification called: "${message}", type: ${type}`);
-		globalNotification.textContent = message;
-		globalNotification.className = `global-notification ${type}`;
-		
-		// DEBUG: Verificar posición en pantalla
-		console.log('📍 Element position before show:', globalNotification.getBoundingClientRect());
-		console.log('📍 Element computed styles before show:', {
-			position: window.getComputedStyle(globalNotification).position,
-			top: window.getComputedStyle(globalNotification).top,
-			right: window.getComputedStyle(globalNotification).right,
-			zIndex: window.getComputedStyle(globalNotification).zIndex,
-			opacity: window.getComputedStyle(globalNotification).opacity,
-			visibility: window.getComputedStyle(globalNotification).visibility,
-			display: window.getComputedStyle(globalNotification).display
-		});
-		
-		// FORZAR la clase show con setTimeout para evitar problemas de timing
-		setTimeout(() => {
-			globalNotification.classList.add('show');
-			console.log('📍 Classes after forced show:', globalNotification.className);
-			console.log('📍 Element position after show:', globalNotification.getBoundingClientRect());
-			console.log('📍 Element computed styles after show:', {
-				opacity: window.getComputedStyle(globalNotification).opacity,
-				visibility: window.getComputedStyle(globalNotification).visibility,
-				transform: window.getComputedStyle(globalNotification).transform
-			});
-		}, 10);
-		
-		// Auto-ocultar después del tiempo especificado
-		setTimeout(() => {
-			globalNotification.classList.remove('show');
-			console.log('⏰ Auto-hiding notification after', duration, 'ms');
-		}, duration);
-	};
-	
-	// TEST MANUAL: Agregar función de test global
-	window.testNotification = function() {
-		console.log('🧪 Testing notification manually...');
-		showGlobalNotification('Test notification - should be visible!', 'error', 10000);
-	};
-	
-	// Función global para ocultar notificaciones
-	window.hideGlobalNotification = function() {
-		globalNotification.classList.remove('show');
-	};
-	
-	// Interceptar errores AJAX de WordPress (wp_mail, etc.)
-	$(document).ajaxComplete(function(event, xhr, settings) {
-		// Solo procesar respuestas JSON de nuestros formularios
-		if (settings.data && settings.data.indexOf('amentum_ajax_frm_contact') !== -1) {
-			try {
-				const response = JSON.parse(xhr.responseText);
-				
-				// Identificar qué formulario envió la petición
-				let formType = 'unknown';
-				if (settings.data.indexOf('tipo=newsletter') !== -1) {
-					formType = 'newsletter';
-				} else if (settings.data.indexOf('tipo=contacto') !== -1) {
-					formType = 'contact';
-				}
-				
-				console.log(`📧 AJAX respuesta de formulario: ${formType}`, response);
-				
-				if (response.status === 0 && response.message) {
-					// Error del servidor (wp_mail, etc.) - Solo mostrar notificación global para contacto
-					if (formType === 'contact') {
-						showGlobalNotification(response.message, 'error');
-						console.log('🔔 Mostrando notificación global para error en contacto');
-					} else {
-						// Ahora SIEMPRE mostramos notificación global
-					showGlobalNotification(response.message, 'error');
-					}
-				} else if (response.status === 1 && response.message) {
-					// Éxito - Solo mostrar notificación global para contacto
-					if (formType === 'contact') {
-						showGlobalNotification(response.message, 'success', 4000);
-						console.log('🔔 Mostrando notificación global para éxito en contacto');
-					} else {
-						// Ahora SIEMPRE mostramos notificación global  
-					showGlobalNotification(response.message, 'success', 4000);
-					}
-				}
-			} catch (e) {
-				// Si no es JSON válido, ignorar
-				console.warn('Error parsing AJAX response:', e);
-			}
-		}
-	});
-
-	// Inicializar Swiper para Magazine
-	const magazineSwiper = document.querySelector('.magazine-swiper .swiper-wrapper');
-	
-	if (magazineSwiper) {
-		const swiper = new Swiper('.magazine-swiper', {
-			slidesPerView: 1,
-			spaceBetween: 20,
-			pagination: {
-				el: '.swiper-pagination',
-				clickable: true,
-			},
-			breakpoints: {
-				768: {
-					slidesPerView: 1.2,
-					spaceBetween: 30,
-				}
-			}
-		});
-	}
-}
