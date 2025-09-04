@@ -81,11 +81,7 @@ const paths = {
  */
 const filesToAllJs = [
     'node_modules/jquery/dist/jquery.min.js',
-    'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
     'node_modules/swiper/swiper-bundle.min.js',
-    'node_modules/bs5-lightbox/dist/index.bundle.min.js',
-    'node_modules/hc-sticky/dist/hc-sticky.js',
-    'node_modules/jquery.marquee/jquery.marquee.js',
     'node_modules/lenis/dist/lenis.min.js',
     paths.scripts.src + "/**/*.js",
     'blocks/**/script.js'  // JS frontend de bloques (estándar: script.js)
