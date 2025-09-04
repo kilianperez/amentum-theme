@@ -34,12 +34,7 @@ function amentum_scripts_styles(){
 
     // Estilos    
     wp_enqueue_style('all',get_template_directory_uri(). '/assets/dist/css/style.css', array(), '1.0.0');
-    
-    // CSS compilado de todos los bloques - Optimización SEO
-    wp_enqueue_style('amentum-blocks', get_template_directory_uri() . '/assets/dist/css/blocks.css', array('all'), '1.0.0');    
-
    
-
     wp_enqueue_script('gsap','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js', array('jquery'),'3.11.5', true);
     wp_enqueue_script('jquery-validate','https://cdnjs.cloudflare.com/ajax/libs/jQuery-Validation-Engine/2.6.4/jquery.validationEngine.min.js', array('jquery'),'1.19.5', true);
     

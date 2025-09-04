@@ -426,31 +426,54 @@ function minifyCss(inputStream, outputFile) {
 }
 
 /**
- * Compila archivos SCSS a CSS mostrando un spinner durante el proceso.
+ * Compila SCSS principal + automáticamente concatena todos los bloques SCSS
+ * Sistema completamente automático sin imports manuales
  *
- * @returns {Promise} - Una promesa que se resuelve al completar la tarea con éxito o se rechaza en caso de error.
+ * @returns {Promise} - Una promesa que se resuelve al completar la tarea con éxito
  */
 function css() {
     return new Promise((resolve, reject) => {
         const spinnerProcess = fork('./gulp/spinner.js');
 
-        // Enviar configuración al proceso del spinner
         spinnerProcess.send({
             type: 'start',
-            startMessage: 'Compilando SCSS a CSS...',
-            successMessage: 'Compilación de CSS completada exitosamente.',
-            errorMessage: 'Error durante la compilación de CSS.',
+            startMessage: 'Compilando SCSS principal + bloques automáticamente...',
+            successMessage: 'CSS unificado compilado exitosamente.',
+            errorMessage: 'Error durante la compilación de CSS unificado.',
             spinnerType: 'dots'
         });
 
-        const stream = minifyCss(
-            replacePaths(
-                compileSass(
-                    paths.styles.sass + "/style.scss"
+        // Crear array de archivos para compilar: SCSS principal + todos los bloques
+        const filesToCompile = [
+            paths.styles.sass + "/style.scss",  // SCSS principal primero
+            "blocks/**/style.scss"              // Todos los bloques automáticamente
+        ];
+
+        const stream = src(filesToCompile)
+            .pipe(errorHandler("css-unified"))
+            .pipe(sourcemaps.init())
+            .pipe(
+                sass({
+                    includePaths: ["node_modules", "assets/sass/base"],
+                    outputStyle: "expanded",
+                    quietDeps: !showLogs,
+                }).on("error", sass.logError)
+            )
+            .pipe(postcss([autoprefixer()]))
+            .pipe(concat('style.css'))  // Concatenar todo en style.css
+            .pipe(replace(/\/\*\# sourceMappingURL=.*\.map \*\//g, ''))
+            .pipe(replace('../fonts/', '../assets/dist/fonts/'))
+            .pipe(replace('../img/', '../assets/dist/img/'))
+            .pipe(replace(/url\(['"]?(?:\.\.\/)?(fonts|img)\/([^'"]+)['"]?\)/g, 'url(../assets/dist/$1/$2)'))
+            .pipe(replace(/Version:\s*\d+\.\d+\.\d+/, `Version: ${themeVersion}`))
+            .pipe(
+                gulpIf(
+                    !isProd,
+                    sourcemaps.write('.')
                 )
-            ),
-            "style.css"
-        );
+            )
+            .pipe(gulpIf(isProd, cleanCss()))
+            .pipe(gulpIf(isProd, rename({ suffix: '.min' })));
 
         let finished = false;
 
@@ -477,13 +500,11 @@ function css() {
                 } else {
                     reject(new Error('Proceso del spinner terminó con error.'));
                 }
-                // Limpiar y terminar el proceso del spinner
                 spinnerProcess.removeAllListeners();
                 spinnerProcess.kill();
             }
         });
 
-        // En caso de error en el proceso del spinner
         spinnerProcess.on('error', () => {
             reject(new Error('Error en el proceso del spinner.'));
             spinnerProcess.removeAllListeners();
@@ -838,8 +859,8 @@ function watchFiles() {
     watch([paths.styles.sass + "/**/*.scss", "!" + paths.styles.sass + "/admin.scss"], series(css));
     // Watch específico para admin.scss
     watch(paths.styles.sass + "/admin.scss", series(adminCss));
-    // Watch para CSS de bloques individuales
-    watch("blocks/**/style.css", series(blocksCss));
+    // Watch para SCSS de bloques individuales (ahora integrados en style.css)
+    watch("blocks/**/style.scss", series(css));
     // Watch para JS de assets
     watch(paths.scripts.src + "/**/*.js", series(js));
     // Watch para JS de bloques individuales (estándar: script.js)
@@ -929,7 +950,8 @@ async function purgeCss() {
 }
 
 /**
- * Compila todos los archivos CSS de los bloques en un solo archivo minificado
+ * Compila automáticamente todos los archivos SCSS de los bloques en un solo archivo minificado
+ * Sistema automático que detecta todos los style.scss sin necesidad de imports manuales
  * 
  * @returns {Promise} - Una promesa que se resuelve al completar la tarea con éxito
  */
@@ -940,25 +962,41 @@ function blocksCss() {
         // Enviar configuración al proceso del spinner
         spinnerProcess.send({
             type: 'start',
-            startMessage: 'Compilando CSS de bloques...',
-            successMessage: 'Compilación de CSS de bloques completada exitosamente.',
-            errorMessage: 'Error durante la compilación de CSS de bloques.',
+            startMessage: 'Compilando SCSS de bloques automáticamente...',
+            successMessage: 'Compilación de SCSS de bloques completada exitosamente.',
+            errorMessage: 'Error durante la compilación de SCSS de bloques.',
             spinnerType: 'dots'
         });
 
-        const stream = src('blocks/**/style.css')
+        const stream = src('blocks/**/style.scss')
             .pipe(errorHandler("blocksCss"))
+            .pipe(sourcemaps.init())
+            .pipe(
+                sass({
+                    includePaths: ["node_modules", "assets/sass/base"],
+                    outputStyle: "expanded",
+                    quietDeps: !showLogs,
+                }).on("error", sass.logError)
+            )
+            .pipe(postcss([autoprefixer()]))
             .pipe(concat('blocks.css'))
+            .pipe(replace(/\/\*\# sourceMappingURL=.*\.map \*\//g, ''))
+            .pipe(replace('../fonts/', '../assets/dist/fonts/'))
+            .pipe(replace('../img/', '../assets/dist/img/'))
+            .pipe(replace(/url\(['"]?(?:\.\.\/)?(fonts|img)\/([^'"]+)['"]?\)/g, 'url(../assets/dist/$1/$2)'))
+            .pipe(
+                gulpIf(
+                    !isProd,
+                    sourcemaps.write('.')
+                )
+            )
             .pipe(gulpIf(isProd, cleanCss({
                 level: 2,
                 format: 'beautify'
             })))
             .pipe(gulpIf(isProd, rename({
                 suffix: '.min'
-            })))
-            .pipe(replace(/\/\*\# sourceMappingURL=.*\.map \*\//g, ''))
-            .pipe(replace('../fonts/', '../assets/dist/fonts/'))
-            .pipe(replace('../img/', '../assets/dist/img/'));
+            })));
 
         let finished = false;
 
@@ -1006,7 +1044,7 @@ exports.vendorsCopyJs = vendorsCopyJs;
 exports.compileSass = compileSass;
 exports.css = css;
 exports.adminCss = adminCss;
-exports.blocksCss = blocksCss;
+// exports.blocksCss = blocksCss; // Ya no es necesario, todo se compila automáticamente en css()
 exports.concatJs = concatJs;
 exports.minifyJs = minifyJs;
 exports.js = js;
@@ -1019,9 +1057,8 @@ exports.watchFiles = watchFiles;
 exports.default = series(
     vendorsCopy,
     vendorsCopyJs,
-    css,
+    css,        // Ya incluye automáticamente todos los bloques SCSS
     adminCss,
-    blocksCss,
     js,
     minPartialsJs,
     img,
@@ -1032,9 +1069,8 @@ exports.default = series(
 exports.serve = parallel(
     vendorsCopy,
     vendorsCopyJs,
-    css,
+    css,        // Ya incluye automáticamente todos los bloques SCSS
     adminCss,
-    blocksCss,
     js,
     minPartialsJs,
     img,
