@@ -28,9 +28,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		contentAnimation();
 		
 		// Inicializar imágenes de magazine (para usuarios logueados)
-		if (typeof initMagazineImages === 'function') {
-			initMagazineImages();
-		}
+		// if (typeof initMagazineImages === 'function') {
+			// initMagazineImages();
+		// }
 		
 		// Asegurar que la intro esté oculta para usuarios logueados
 		if (introHome) {
@@ -556,9 +556,9 @@ function barbaJsInit() {
 					}
 					
 					// Inicializar imágenes de magazine (para primera carga)
-					if (typeof initMagazineImages === 'function') {
-						// initMagazineImages();
-					}
+					// if (typeof initMagazineImages === 'function') {
+					// 	// initMagazineImages();
+					// }
 					
 					// Reproducir videos
 					if (document.querySelectorAll('video').length) {
@@ -641,9 +641,9 @@ function barbaJsInit() {
 						// Inicializar scripts
 						
 						// Inicializar imágenes de magazine (para navegación con Barba.js)
-						if (typeof initMagazineImages === 'function') {
-							initMagazineImages();
-						}
+						// if (typeof initMagazineImages === 'function') {
+							// initMagazineImages();
+						// }
 						
 						// Reproducir videos
 						if (document.querySelectorAll('video').length) {
