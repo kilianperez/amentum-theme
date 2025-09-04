@@ -201,8 +201,8 @@ function marquee() {
 	});
 }
 
-/* ------------------ BARBAJS ------------------ */
-function barbaJsInit() {
+/* ------------------ VALIDACIÓN PERSONALIZADA ------------------ */
+function initValidationSystem() {
 	console.log('🔧 Inicializando sistema de validación personalizado');
 	
 	// Agregar patrón estricto a todos los campos de email

@@ -70,6 +70,12 @@ const paths = {
  * estas variables son las que definen qué hacer con cada
  * archivo JS, según el tratamiento que se necesite dar
  *
+ * 🔄 ESTADO DE MIGRACIÓN A VITE:
+ * ✅ = Migrado completamente a Vite
+ * 🟡 = En proceso de migración
+ * ❌ = Pendiente de migración
+ * 🚫 = No necesario migrar (funcionalidad vacía)
+ *
  --------------------------------------------------------------------------------------------------------------*/
 
 /**
@@ -184,6 +190,7 @@ function handleSyncTaskWithSpinnerAndErrors(spinnerProcess, taskName, errorMessa
 }
 
 /**
+ * 🚫 VITE: NO NECESARIO (funcionalidad vacía)
  * Copia literal de archivos que pertenecen a VENDORS.
  * Esta tarea es útil para mover archivos específicos de bibliotecas o dependencias que
  * no necesitan procesamiento adicional y solo deben estar disponibles en el proyecto.
@@ -223,6 +230,7 @@ async function vendorsCopy() {
 }
 
 /**
+ * 🟡 VITE: MIGRADO PARCIALMENTE (solo swiper map)
  * Copia literal de archivos que pertenecen a VENDORS en carpeta JS/.
  *
  * Tarea encargada de realizar copias exactas de archivos que pertenecen a módulos de NODE
@@ -261,6 +269,7 @@ async function vendorsCopyJs() {
 }
 
 /**
+ * 🟡 VITE: CONFIGURADO EN vite.config.js
  * Minificación de archivos JS que están en la carpeta partials/.
  *
  * Tarea encargada de copiar los archivos JS de la carpeta partials a la carpeta distribuida
@@ -426,6 +435,7 @@ function minifyCss(inputStream, outputFile) {
 }
 
 /**
+ * ✅ VITE: MIGRADO COMPLETAMENTE (compilación SCSS unificada)
  * Compila SCSS principal + automáticamente concatena todos los bloques SCSS
  * Sistema completamente automático sin imports manuales
  *
@@ -514,6 +524,7 @@ function css() {
 }
 
 /**
+ * ✅ VITE: MIGRADO COMPLETAMENTE (admin.scss)
  * Compila archivos SCSS a CSS mostrando un spinner durante el proceso.
  *
  * @returns {Promise} - Una promesa que se resuelve al completar la tarea con éxito o se rechaza en caso de error.
@@ -582,6 +593,7 @@ function adminCss() {
 }
 
 /**
+ * 🟡 VITE: CONFIGURADO EN main.js y vite.config.js
  * Combina archivos JS en un solo archivo - Versión simplificada.
  *
  * @return {stream.Writable} - Retorna el stream de Gulp con los archivos JS combinados.
@@ -623,6 +635,7 @@ async function concatJs() {
 }
 
 /**
+ * 🟡 VITE: CONFIGURADO EN vite.config.js (minificación automática)
  * Minifica el archivo JS combinado.
  *
  * @return {stream.Writable} - Retorna el stream de Gulp con el archivo JS minificado.
@@ -731,6 +744,7 @@ async function minifyJsSimple() {
 const js = series(concatJs, minifyJsSimple);
 
 /**
+ * ❌ VITE: PENDIENTE DE MIGRAR (optimización de imágenes)
  * Optimización de imágenes
  */
 async function img() {
@@ -824,6 +838,7 @@ async function img() {
 }
 
 /**
+ * 🟡 VITE: CONFIGURADO EN rollup-plugin-copy
  * Copia de fuentes
  */
 async function fonts() {
@@ -870,6 +885,7 @@ function watchFiles() {
 }
 
 /**
+ * ❌ VITE: PENDIENTE DE MIGRAR (PurgeCSS)
  * Eliminación de CSS no utilizado con PurgeCSS
  */
 async function purgeCss() {
