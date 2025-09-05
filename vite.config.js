@@ -13,7 +13,7 @@ const __dirname = dirname(__filename);
 // Leer package.json para obtener la versión
 const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(() => {
   
   // Plugin para generar SCSS unificado con limpieza automática (como Gulp)
   const unifiedScssPlugin = () => {

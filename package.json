@@ -32,11 +32,8 @@
     "purgeCss": "gulp purgeCss",
     "watch": "gulp watchFiles",
     "check-dependencies": "depcheck & npm-check -u",
-    "vite:dev": "vite build --mode development",
-    "vite:prod": "vite build --mode production",
-    "vite:watch": "vite build --mode development --watch",
-    "watch:vite": "vite build --mode development --watch",
-    "dev:vite": "vite build --mode development --watch"
+    "vite:build": "vite build",
+    "vite:watch": "vite build --watch"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^7.0.2",
