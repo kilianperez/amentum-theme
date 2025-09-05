@@ -18,30 +18,62 @@ export default defineConfig(() => {
   // Plugin para generar SCSS unificado con limpieza automática (como Gulp)
   const unifiedScssPlugin = () => {
     const tempFile = resolve(__dirname, 'assets/sass/.temp-unified-style.scss');
+    let isWatchMode = false;
+    let lastScssCheck = 0;
+    
+    const generateUnifiedScss = (force = false) => {
+      // En watch mode, verificar si necesitamos regenerar
+      if (isWatchMode && !force) {
+        // Verificar timestamps de archivos SCSS
+        const mainScssPath = resolve(__dirname, 'assets/sass/style.scss');
+        const mainScssTime = fs.existsSync(mainScssPath) ? fs.statSync(mainScssPath).mtime.getTime() : 0;
+        
+        const blocksScss = glob.globSync('blocks/**/style.scss', { cwd: __dirname });
+        const blocksMaxTime = blocksScss.reduce((maxTime, file) => {
+          const filePath = resolve(__dirname, file);
+          const fileTime = fs.existsSync(filePath) ? fs.statSync(filePath).mtime.getTime() : 0;
+          return Math.max(maxTime, fileTime);
+        }, 0);
+        
+        const latestScssTime = Math.max(mainScssTime, blocksMaxTime);
+        
+        // Si no hay cambios en SCSS, no regenerar
+        if (latestScssTime <= lastScssCheck) {
+          console.log('⏭️ Sin cambios en archivos SCSS - reutilizando unificado');
+          return false;
+        }
+        
+        lastScssCheck = latestScssTime;
+      }
+      
+      // Buscar todos los archivos style.scss en bloques (como hace Gulp)
+      const blocksScss = glob.globSync('blocks/**/style.scss', { cwd: __dirname });
+      console.log(`📁 Encontrados ${blocksScss.length} archivos SCSS de bloques:`, blocksScss);
+      
+      // Generar contenido SCSS unificado
+      let styleUnifiedContent = `// Archivo unificado generado automáticamente (se limpia automáticamente)
+// Replica la funcionalidad de Gulp que compila style.scss + blocks/**/style.scss
+@import './style.scss';
+`;
+      
+      if (blocksScss.length > 0) {
+        styleUnifiedContent += '\n// Bloques SCSS importados automáticamente:\n';
+        blocksScss.forEach(file => {
+          styleUnifiedContent += `@import '../../${file}';\n`;
+        });
+      }
+      
+      // Crear archivo temporal con punto inicial para ocultarlo
+      fs.writeFileSync(tempFile, styleUnifiedContent);
+      console.log(isWatchMode ? '🔄 SCSS unificado actualizado' : '✅ SCSS unificado generado (con limpieza automática)');
+      return true;
+    };
     
     return {
       name: 'unified-scss-auto-cleanup',
       buildStart() {
-        // Buscar todos los archivos style.scss en bloques (como hace Gulp)
-        const blocksScss = glob.globSync('blocks/**/style.scss', { cwd: __dirname });
-        console.log(`📁 Encontrados ${blocksScss.length} archivos SCSS de bloques:`, blocksScss);
-        
-        // Generar contenido SCSS unificado
-        let styleUnifiedContent = `// Archivo unificado generado automáticamente (se limpia automáticamente)
-// Replica la funcionalidad de Gulp que compila style.scss + blocks/**/style.scss
-@import './style.scss';
-`;
-        
-        if (blocksScss.length > 0) {
-          styleUnifiedContent += '\n// Bloques SCSS importados automáticamente:\n';
-          blocksScss.forEach(file => {
-            styleUnifiedContent += `@import '../../${file}';\n`;
-          });
-        }
-        
-        // Crear archivo temporal con punto inicial para ocultarlo
-        fs.writeFileSync(tempFile, styleUnifiedContent);
-        console.log('✅ SCSS unificado generado (con limpieza automática)');
+        isWatchMode = process.argv.includes('--watch');
+        generateUnifiedScss(true); // Siempre generar en buildStart
       },
       buildEnd() {
         // Limpiar archivo temporal después de la compilación
@@ -267,6 +299,96 @@ export default defineConfig(() => {
     };
   };
 
+  // Plugin inteligente para copia selectiva de assets
+  const smartAssetCopy = () => {
+    let isWatchMode = false;
+    const copiedFiles = new Map(); // Cache de archivos copiados con sus timestamps
+    
+    const copyFileIfChanged = (srcPath, destPath) => {
+      try {
+        const srcStats = fs.statSync(srcPath);
+        const destExists = fs.existsSync(destPath);
+        
+        // En build normal, siempre copiar
+        if (!isWatchMode) {
+          const destDir = dirname(destPath);
+          if (!fs.existsSync(destDir)) {
+            fs.mkdirSync(destDir, { recursive: true });
+          }
+          fs.copyFileSync(srcPath, destPath);
+          console.log(`📋 Copiado: ${srcPath} → ${destPath}`);
+          return true;
+        }
+        
+        // En watch mode, solo copiar si cambió
+        const lastModified = copiedFiles.get(srcPath);
+        const srcTime = srcStats.mtime.getTime();
+        
+        if (!destExists || !lastModified || srcTime > lastModified) {
+          const destDir = dirname(destPath);
+          if (!fs.existsSync(destDir)) {
+            fs.mkdirSync(destDir, { recursive: true });
+          }
+          fs.copyFileSync(srcPath, destPath);
+          copiedFiles.set(srcPath, srcTime);
+          console.log(`🔄 Actualizado: ${srcPath} → ${destPath}`);
+          return true;
+        }
+        
+        return false; // No se copió porque no cambió
+      } catch (error) {
+        console.warn(`⚠️ Error copiando ${srcPath}:`, error.message);
+        return false;
+      }
+    };
+    
+    const processAssetDirectory = (srcPattern, destBase) => {
+      const files = glob.globSync(srcPattern, { cwd: __dirname });
+      let copiedCount = 0;
+      
+      files.forEach(file => {
+        const srcPath = resolve(__dirname, file);
+        const relativePath = file.replace(/^assets\/(fonts|img)\//, '');
+        const destPath = resolve(__dirname, destBase, relativePath);
+        
+        if (copyFileIfChanged(srcPath, destPath)) {
+          copiedCount++;
+        }
+      });
+      
+      if (isWatchMode && copiedCount > 0) {
+        console.log(`✅ ${copiedCount} archivos ${srcPattern.includes('fonts') ? 'de fuentes' : 'de imágenes'} actualizados`);
+      } else if (isWatchMode) {
+        console.log(`⏭️ Sin cambios en ${srcPattern.includes('fonts') ? 'fuentes' : 'imágenes'}`);
+      }
+      
+      return copiedCount;
+    };
+    
+    return {
+      name: 'smart-asset-copy',
+      buildStart() {
+        isWatchMode = process.argv.includes('--watch');
+        if (isWatchMode) {
+          console.log('👀 Modo watch: copia inteligente de assets activada');
+        }
+      },
+      generateBundle() {
+        console.log('📁 Procesando assets estáticos...');
+        
+        // Copiar fuentes
+        const fontsCopied = processAssetDirectory('assets/fonts/**/*', 'assets/dist/fonts');
+        
+        // Copiar imágenes  
+        const imagesCopied = processAssetDirectory('assets/img/**/*', 'assets/dist/img');
+        
+        if (!isWatchMode) {
+          console.log(`✅ Assets copiados: ${fontsCopied} fuentes, ${imagesCopied} imágenes`);
+        }
+      }
+    };
+  };
+
   // Configuración de entrada
   const input = {
     // CSS principal unificado (style.scss + bloques automáticamente - IGUAL que Gulp)
@@ -305,24 +427,8 @@ export default defineConfig(() => {
       concatenateJavaScript(),
       // Plugin para generar versiones minificadas de CSS
       generateMinifiedCSS(),
-      // Plugin para copiar archivos estáticos
-      copy({
-        targets: [
-          // Copiar fuentes
-          {
-            src: 'assets/fonts/**/*',
-            dest: 'assets/dist/fonts',
-            flatten: false,
-          },
-          // Copiar imágenes (sin optimización por ahora)
-          {
-            src: 'assets/img/**/*',
-            dest: 'assets/dist/img',
-            flatten: false,
-          },
-        ],
-        hook: 'writeBundle',
-      }),
+      // Plugin inteligente para copiar assets solo cuando cambien
+      smartAssetCopy(),
     ],
 
     build: {
