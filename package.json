@@ -35,6 +35,7 @@
     "vite:dev": "vite build --mode development",
     "vite:prod": "vite build --mode production",
     "vite:watch": "vite build --mode development --watch",
+    "vite:serve": "vite serve",
     "watch:vite": "vite build --mode development --watch",
     "dev:vite": "vite build --mode development --watch"
   },
