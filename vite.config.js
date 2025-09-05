@@ -380,12 +380,5 @@ export default defineConfig(({ command, mode }) => {
         },
       },
     },
-
-    // Configuración del servidor de desarrollo
-    server: {
-      host: 'localhost',
-      port: 3000,
-      open: false,
-    },
   };
 });
