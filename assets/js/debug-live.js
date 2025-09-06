@@ -7,8 +7,8 @@
 window.amentumDebug = {
     
     // Info del paso actual
-    paso: 2,
-    descripcion: 'PASO 2: jQuery + GSAP + ScrollTrigger + Swiper + Lenis locales | SplitType, Barba, jQuery Validate CDN',
+    paso: 4,
+    descripcion: 'PASO 4: jQuery + GSAP + ScrollTrigger + SplitType + Barba + Swiper + Lenis locales | jQuery Validate CDN',
     
     // Verificar estado de librerías
     checkLibraries: function() {
@@ -68,12 +68,12 @@ window.amentumDebug = {
             },
             'SplitType (Local)': {
                 available: typeof SplitType !== 'undefined',
-                version: 'N/A',
+                version: typeof SplitType !== 'undefined' ? 'v0.3.4' : 'N/A',
                 test: () => typeof SplitType === 'function'
             },
-            'Barba (CDN)': {
+            'Barba (Local)': {
                 available: typeof barba !== 'undefined',
-                version: 'N/A',
+                version: typeof barba !== 'undefined' ? 'v2.9.7' : 'N/A',
                 test: () => typeof barba !== 'undefined' && typeof barba.init === 'function'
             },
             'jQuery Validate (CDN)': {
