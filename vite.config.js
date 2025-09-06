@@ -405,7 +405,10 @@ export default defineConfig(() => {
         
         return false; // No se copió porque no cambió
       } catch (error) {
-        console.warn(`⚠️ Error copiando ${srcPath}:`, error.message);
+        // Silenciar errores de directorios (son normales)
+        if (!error.message.includes('EISDIR')) {
+          console.warn(`⚠️ Error copiando ${srcPath}:`, error.message);
+        }
         return false;
       }
     };
@@ -461,8 +464,8 @@ export default defineConfig(() => {
     root: __dirname,
     base: './', // Usar rutas relativas para assets
     
-    // LOGS DE DEBUG PARA EL WATCH
-    logLevel: 'info',
+    // LOGS SIMPLIFICADOS
+    logLevel: 'warn',
     
     css: {
       devSourcemap: true,
@@ -532,6 +535,7 @@ export default defineConfig(() => {
       outDir: 'assets/dist',
       emptyOutDir: false, // No limpiar todo el directorio
       assetsDir: 'assets', // Carpeta para assets estáticos
+      reportCompressedSize: false, // No mostrar tamaños comprimidos
       
       // CORREGIR rutas de assets para WordPress
       assetsInlineLimit: 0, // No inline assets
