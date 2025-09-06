@@ -198,7 +198,11 @@ export default defineConfig(() => {
         const filesToConcat = [
           'node_modules/jquery/dist/jquery.min.js',
           'node_modules/swiper/swiper-bundle.min.js', 
-          'node_modules/lenis/dist/lenis.min.js'
+          'node_modules/lenis/dist/lenis.min.js',
+          'node_modules/gsap/dist/gsap.min.js',
+          'node_modules/gsap/dist/ScrollTrigger.min.js',
+          'node_modules/split-type/umd/index.min.js',
+          'node_modules/@barba/core/dist/barba.umd.js'
         ];
         
         // Agregar archivos JS personalizados del theme (assets/js/**/*.js)
