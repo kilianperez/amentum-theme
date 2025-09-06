@@ -194,23 +194,41 @@ export default defineConfig(() => {
       async generateBundle(options, bundle) {
         console.log('🔄 Iniciando concatenación de JavaScript...');
         
-        // Definir archivos a concatenar (replicando filesToAllJs de gulpfile.js)
+        // Definir archivos a concatenar en el ORDEN CORRECTO (replicando la versión CDN que funcionaba)
         const filesToConcat = [
+          // 1. Base: jQuery
           'node_modules/jquery/dist/jquery.min.js',
-          'node_modules/swiper/swiper-bundle.min.js', 
-          'node_modules/lenis/dist/lenis.min.js',
+          // 2. jQuery plugins que dependen de jQuery
+          'node_modules/jquery-validation/dist/jquery.validate.min.js',
+          // 3. GSAP base (debe ir antes que sus plugins y Split-Type)
           'node_modules/gsap/dist/gsap.min.js',
+          // 4. GSAP plugins (después de GSAP base)
           'node_modules/gsap/dist/ScrollTrigger.min.js',
+          // 5. Split-Type (necesita GSAP disponible)
           'node_modules/split-type/umd/index.min.js',
+          // 6. Barba.js (necesita las bases anteriores)
           'node_modules/@barba/core/dist/barba.umd.js',
-          'node_modules/jquery-validation/dist/jquery.validate.min.js'
+          // 7. Otras librerías
+          'node_modules/swiper/swiper-bundle.min.js',
+          'node_modules/lenis/dist/lenis.min.js'
         ];
         
-        // Agregar archivos JS personalizados del theme (assets/js/**/*.js)
-        const customJsFiles = glob.globSync('assets/js/**/*.js', { cwd: __dirname });
+        // Agregar archivos JS personalizados en ORDEN ESPECÍFICO
+        // ORDEN CRÍTICO: main.js (verificaciones) → general.js (código principal) → otros
+        const orderedCustomFiles = [
+          'assets/js/main.js',     // 1. Verificaciones y logs
+          'assets/js/general.js'   // 2. Código principal (Barba, animaciones, etc.)
+        ];
+        
+        // Agregar otros archivos JS personalizados (si los hay, excluyendo los ya ordenados)
+        const otherCustomFiles = glob.globSync('assets/js/**/*.js', { cwd: __dirname })
+          .filter(file => !orderedCustomFiles.includes(file));
+        
+        // Agregar archivos de bloques
         const blocksJsFiles = glob.globSync('blocks/**/script.js', { cwd: __dirname });
         
-        filesToConcat.push(...customJsFiles, ...blocksJsFiles);
+        // Concatenar en orden correcto
+        filesToConcat.push(...orderedCustomFiles, ...otherCustomFiles, ...blocksJsFiles);
 
         console.log('📂 Archivos a concatenar:', filesToConcat);
 
@@ -406,14 +424,28 @@ export default defineConfig(() => {
 
   return {
     root: __dirname,
+    base: './', // Usar rutas relativas para assets
     
     css: {
       devSourcemap: true,
       postcss: {
         plugins: [
           require('autoprefixer')(),
-          // TODO: PurgeCSS está instalado pero comentado por problemas de compatibilidad con Vite
-          // Se puede habilitar más adelante o usar un plugin específico de Vite
+          // Plugin personalizado para corregir rutas de assets en WordPress
+          (() => {
+            const plugin = {
+              postcssPlugin: 'fix-wordpress-asset-urls',
+              Once(root) {
+                root.walkDecls(decl => {
+                  if (decl.value.includes('url(/assets/')) {
+                    decl.value = decl.value.replace(/url\(\/assets\//g, 'url(assets/');
+                  }
+                });
+              }
+            };
+            plugin.postcssPlugin = 'fix-wordpress-asset-urls';
+            return plugin;
+          })()
         ],
       },
       preprocessorOptions: {
@@ -434,11 +466,39 @@ export default defineConfig(() => {
       generateMinifiedCSS(),
       // Plugin inteligente para copiar assets solo cuando cambien
       smartAssetCopy(),
+      // Plugin para corregir rutas de assets después del build
+      {
+        name: 'fix-asset-urls',
+        writeBundle() {
+          const fs = require('fs');
+          const path = require('path');
+          
+          // Corregir rutas en archivos CSS
+          const cssFiles = [
+            path.resolve(__dirname, 'assets/dist/css/style.css'),
+            path.resolve(__dirname, 'assets/dist/css/style.min.css')
+          ];
+          
+          cssFiles.forEach(file => {
+            if (fs.existsSync(file)) {
+              let content = fs.readFileSync(file, 'utf8');
+              content = content.replace(/url\(\/assets\//g, 'url(assets/');
+              fs.writeFileSync(file, content);
+              console.log(`✅ Rutas de assets corregidas en ${path.basename(file)}`);
+            }
+          });
+        }
+      },
     ],
 
     build: {
       outDir: 'assets/dist',
       emptyOutDir: false, // No limpiar todo el directorio
+      assetsDir: 'assets', // Carpeta para assets estáticos
+      
+      // CORREGIR rutas de assets para WordPress
+      assetsInlineLimit: 0, // No inline assets
+      cssCodeSplit: false, // No split CSS
       
       rollupOptions: {
         input,
