@@ -17,7 +17,7 @@ export default defineConfig(() => {
   
   // Plugin para generar SCSS unificado con limpieza automática (como Gulp)
   const unifiedScssPlugin = () => {
-    const tempFile = resolve(__dirname, 'assets/sass/.temp-unified-style.scss');
+    const tempFile = resolve(__dirname, 'assets/sass/.temp-unified-style.scss'); // RESTAURAR ubicación original
     let isWatchMode = false;
     let lastScssCheck = 0;
     
@@ -59,7 +59,7 @@ export default defineConfig(() => {
       if (blocksScss.length > 0) {
         styleUnifiedContent += '\n// Bloques SCSS importados automáticamente:\n';
         blocksScss.forEach(file => {
-          styleUnifiedContent += `@import '../../${file}';\n`;
+          styleUnifiedContent += `@import '../../${file}';\n`; // RESTAURAR rutas originales
         });
       }
       
@@ -76,8 +76,8 @@ export default defineConfig(() => {
         generateUnifiedScss(true); // Siempre generar en buildStart
       },
       buildEnd() {
-        // Limpiar archivo temporal después de la compilación
-        if (fs.existsSync(tempFile)) {
+        // Solo limpiar en build normal, no en watch mode
+        if (!isWatchMode && fs.existsSync(tempFile)) {
           fs.unlinkSync(tempFile);
           console.log('🧹 Archivo temporal SCSS limpiado');
         }
@@ -191,6 +191,28 @@ export default defineConfig(() => {
     
     return {
       name: 'concatenate-javascript',
+      buildStart() {
+        // En modo watch, agregar archivos JS al watchlist de Vite
+        const isWatchMode = process.argv.includes('--watch');
+        if (isWatchMode) {
+          const sourceFiles = [
+            resolve(__dirname, 'assets/js/main.js'),
+            resolve(__dirname, 'assets/js/general.js'),
+            resolve(__dirname, 'assets/js/debug-live.js'),
+            ...glob.globSync('blocks/**/script.js', { cwd: __dirname }).map(file => 
+              resolve(__dirname, file)
+            )
+          ];
+          
+          sourceFiles.forEach(file => {
+            if (fs.existsSync(file)) {
+              this.addWatchFile(file);
+            }
+          });
+          
+          console.log('👀 JS Watch activado para:', sourceFiles.length, 'archivos');
+        }
+      },
       async generateBundle(options, bundle) {
         console.log('🔄 Iniciando concatenación de JavaScript...');
         
@@ -412,19 +434,22 @@ export default defineConfig(() => {
     };
   };
 
-  // Configuración de entrada
+  // Configuración de entrada - SIN archivo temporal problemático
   const input = {
-    // CSS principal unificado (style.scss + bloques automáticamente - IGUAL que Gulp)
-    style: resolve(__dirname, 'assets/sass/.temp-unified-style.scss'),
+    // CSS principal (style.scss directo)
+    style: resolve(__dirname, 'assets/sass/style.scss'),
     // CSS de admin
     admin: resolve(__dirname, 'assets/sass/admin.scss'),
-    // JavaScript principal - crearemos un archivo dummy que será reemplazado por el plugin
+    // JavaScript principal
     all: resolve(__dirname, 'assets/js/main.js'),
   };
 
   return {
     root: __dirname,
     base: './', // Usar rutas relativas para assets
+    
+    // LOGS DE DEBUG PARA EL WATCH
+    logLevel: 'info',
     
     css: {
       devSourcemap: true,
@@ -451,15 +476,13 @@ export default defineConfig(() => {
       preprocessorOptions: {
         scss: {
           api: 'modern-compiler',
-          includePaths: ['node_modules', 'assets/sass/base'],
+          includePaths: ['node_modules', 'assets/sass/base'], // RESTAURAR configuración original
           quietDeps: true,
         },
       },
     },
 
     plugins: [
-      // Plugin para generar SCSS unificado en memoria
-      unifiedScssPlugin(),
       // Plugin personalizado para concatenar JavaScript
       concatenateJavaScript(),
       // Plugin para generar versiones minificadas de CSS
@@ -499,6 +522,7 @@ export default defineConfig(() => {
       // CORREGIR rutas de assets para WordPress
       assetsInlineLimit: 0, // No inline assets
       cssCodeSplit: false, // No split CSS
+      
       
       rollupOptions: {
         input,

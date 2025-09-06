@@ -1,9 +1,10 @@
-// Variables globales
+// Variables globales 
+console.log('🔥 TEST WATCH MODE - CAMBIO:', Date.now());
 let lenis;
-
 // Mantener control manual del scroll
 if ('scrollRestoration' in history) {
 	history.scrollRestoration = 'manual';
+
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -731,4 +732,3 @@ function initSmoothScroll() {
 		console.warn('⚠️ Lenis library not found');
 	}
 }
-
