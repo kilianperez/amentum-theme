@@ -202,7 +202,8 @@ export default defineConfig(() => {
           'node_modules/gsap/dist/gsap.min.js',
           'node_modules/gsap/dist/ScrollTrigger.min.js',
           'node_modules/split-type/umd/index.min.js',
-          'node_modules/@barba/core/dist/barba.umd.js'
+          'node_modules/@barba/core/dist/barba.umd.js',
+          'node_modules/jquery-validation/dist/jquery.validate.min.js'
         ];
         
         // Agregar archivos JS personalizados del theme (assets/js/**/*.js)

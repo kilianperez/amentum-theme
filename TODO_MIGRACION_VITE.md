@@ -155,11 +155,11 @@ blocks/**/script.js → incluir en all.js
 
 ### Librerías a Mantener:
 - jQuery 3.7.1
-- Bootstrap 5.3.3
+- Bootstrap 5.3.3 -> Eliminarlo
 - Swiper 8.0.6
-- bs5-lightbox 1.7.8
-- hc-sticky 2.2.7
-- jquery.marquee 1.6.0
+- bs5-lightbox 1.7.8 -> Eliminarlo
+- hc-sticky 2.2.7 -> Eliminarlo
+- jquery.marquee 1.6.0 -> Eliminarlo
 - Lenis 1.1.20
 
 **NOTA:** No se migrarán las funcionalidades de copia de vendors (`filesToVendors` y `filesToVendorsJs`) ya que están vacías o contienen solo archivos map innecesarios.
