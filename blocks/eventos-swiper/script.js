@@ -3,8 +3,24 @@
  * Maneja todos los swipers de eventos en la página
  */
 
+// Array para almacenar instancias de Swiper y evitar duplicados
+let eventosSwipersInstances = [];
+
+// Función para limpiar swipers existentes
+function limpiarEventosSwiper() {
+    eventosSwipersInstances.forEach(swiperInstance => {
+        if (swiperInstance && typeof swiperInstance.destroy === 'function') {
+            swiperInstance.destroy(true, true);
+        }
+    });
+    eventosSwipersInstances = [];
+}
+
 // Función para inicializar swipers
 function inicializarEventosSwiper() {
+    // Limpiar swipers existentes antes de crear nuevos
+    limpiarEventosSwiper();
+    
     // Buscar todos los swipers de eventos en la página
     const eventosSwippers = document.querySelectorAll('.block-eventos-swiper .swiper');
     
@@ -96,6 +112,9 @@ function inicializarEventosSwiper() {
         // Inicializar el swiper
         try {
             const swiper = new Swiper(swiperContainer, swiperConfig);
+            
+            // Almacenar la instancia para poder destruirla después
+            eventosSwipersInstances.push(swiper);
             
             // Debug info en desarrollo
             if (typeof WP_DEBUG !== 'undefined' && WP_DEBUG) {

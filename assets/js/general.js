@@ -28,6 +28,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		marquee();
 		contentAnimation();
 		
+		// Inicializar Swipers de eventos para usuarios logueados
+		if (typeof inicializarEventosSwiper === 'function') {
+			inicializarEventosSwiper();
+		}
+		
 		// Inicializar imágenes de magazine (para usuarios logueados)
 		// if (typeof initMagazineImages === 'function') {
 			// initMagazineImages();
@@ -556,6 +561,15 @@ function barbaJsInit() {
 						initSmoothScroll();
 					}
 					
+					// Inicializar scripts básicos
+					marquee();
+					contentAnimation();
+					
+					// Inicializar Swipers de eventos en primera carga
+					if (typeof inicializarEventosSwiper === 'function') {
+						inicializarEventosSwiper();
+					}
+					
 					// Inicializar imágenes de magazine (para primera carga)
 					// if (typeof initMagazineImages === 'function') {
 					// 	// initMagazineImages();
@@ -640,6 +654,13 @@ function barbaJsInit() {
 					// Pequeño delay para asegurar que el DOM esté listo
 					setTimeout(() => {
 						// Inicializar scripts
+						marquee();
+						contentAnimation();
+						
+						// Reinicializar Swipers de eventos después de navegación Barba.js
+						if (typeof inicializarEventosSwiper === 'function') {
+							inicializarEventosSwiper();
+						}
 						
 						// Inicializar imágenes de magazine (para navegación con Barba.js)
 						// if (typeof initMagazineImages === 'function') {
