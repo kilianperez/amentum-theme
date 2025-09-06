@@ -38,13 +38,12 @@ function amentum_scripts_styles(){
     // PASO 1: Desregistrar jQuery de WordPress para usar nuestro local
     wp_deregister_script('jquery');
     
-    // PASO 4: Barba ahora está en bundle local
-    wp_enqueue_script('jquery-validate','https://cdnjs.cloudflare.com/ajax/libs/jQuery-Validation-Engine/2.6.4/jquery.validationEngine.min.js', array(),'1.19.5', true);
+    // PASO 5 FINAL: Todas las librerías ahora están en bundle local - Sin dependencias CDN
    
 
 
 
-    wp_enqueue_script('all', get_template_directory_uri().'/assets/dist/js/all.js', array('jquery-validate'),'1.4.0', true);
+    wp_enqueue_script('all', get_template_directory_uri().'/assets/dist/js/all.js', array(),'1.5.0', true);
 
 }
 

@@ -7,8 +7,8 @@
 window.amentumDebug = {
     
     // Info del paso actual
-    paso: 4,
-    descripcion: 'PASO 4: jQuery + GSAP + ScrollTrigger + SplitType + Barba + Swiper + Lenis locales | jQuery Validate CDN',
+    paso: 5,
+    descripcion: 'PASO 5 FINAL: ¡100% MIGRADO! Todas las librerías locales en un solo bundle',
     
     // Verificar estado de librerías
     checkLibraries: function() {
@@ -76,9 +76,9 @@ window.amentumDebug = {
                 version: typeof barba !== 'undefined' ? 'v2.9.7' : 'N/A',
                 test: () => typeof barba !== 'undefined' && typeof barba.init === 'function'
             },
-            'jQuery Validate (CDN)': {
+            'jQuery Validate (Local)': {
                 available: typeof $ !== 'undefined' && !!$.validator,
-                version: typeof $ !== 'undefined' && $.validator ? $.validator.version || 'N/A' : 'N/A',
+                version: typeof $ !== 'undefined' && $.validator ? 'v2.6.4' : 'N/A',
                 test: () => typeof $ !== 'undefined' && !!$.validator
             }
         };
