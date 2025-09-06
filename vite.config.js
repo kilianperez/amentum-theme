@@ -200,7 +200,7 @@ export default defineConfig(() => {
           'node_modules/swiper/swiper-bundle.min.js', 
           'node_modules/lenis/dist/lenis.min.js'
         ];
-
+        
         // Agregar archivos JS personalizados del theme (assets/js/**/*.js)
         const customJsFiles = glob.globSync('assets/js/**/*.js', { cwd: __dirname });
         const blocksJsFiles = glob.globSync('blocks/**/script.js', { cwd: __dirname });
