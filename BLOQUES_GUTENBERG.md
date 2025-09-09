@@ -94,7 +94,7 @@ function amentum_render_[nombre]_block($attributes) {
 
  */
 // NOTA: No es necesario enqueue individual de CSS
-// Los estilos se compilan automáticamente con: npx gulp blocksCss
+// Los estilos se compilan automáticamente con: npm run build
 
 /**
 
@@ -495,7 +495,7 @@ El archivo `script.js` se incluye automáticamente en la compilación:
 
 - **Patrón de búsqueda**: `blocks/**/script.js`
 - **Compilación**: Se añade a `all.js` y se minifica en `all.min.js`
-- **Watch**: Los cambios activan recompilación automática con `gulp watchFiles`
+- **Watch**: Los cambios activan recompilación automática con `npm run dev`
 
 ---
 
@@ -558,15 +558,7 @@ touch blocks/nombre-bloque/script.js  # Opcional: solo si necesita JS frontend
 
 # Compilar todos los CSS de bloques en un archivo único
 
-npx gulp blocksCss
-
-# Compilar todos los JS de bloques en all.js
-
-npx gulp js
-
-# O usar el build completo (incluye ambos automáticamente)
-
-npx gulp
+npm run build
 
 ```text
 ### 8. Testing y Refinamiento
@@ -612,7 +604,7 @@ python3 logs/debug.py
 
 ### 🔧 Configuración Automática
 
-El sistema está configurado en `gulpfile.js`:
+El sistema está configurado en `vite.config.js`:
 
 ```javascript
 
@@ -640,17 +632,13 @@ wp_enqueue_style('amentum-blocks',
 
 ```bash
 
-# Solo CSS de bloques
-
-npx gulp blocksCss
-
 # Build completo (recomendado)
 
-npx gulp
+npm run build
 
 # Modo desarrollo con watch
 
-npx gulp watchFiles
+npm run dev
 
 ```text
 ### ✅ Beneficios SEO
@@ -902,7 +890,7 @@ ABOUT_PAGE_ID=3
 echo "🚀 Desplegando bloques automáticamente..."
 
 # Compilar CSS de bloques
-npx gulp blocksCss
+npm run build
 
 # Insertar bloque hero en página principal
 docker compose exec wordpress-cli wp post update $HOME_PAGE_ID --post_content="<!-- wp:amentum/hero-full {\"backgroundImage\":\"/wp-content/themes/amentum/assets/images/hero-bg.jpg\"} -->

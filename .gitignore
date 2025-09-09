@@ -22,7 +22,7 @@ dist/
 # SASS cache
 .sass-cache/
 
-# Gulp/Webpack temp files
+# Build temp files
 .tmp/
 temp/
 
