@@ -58,7 +58,7 @@ function initWebAnimation() {
 	const introHome = document.querySelector('.intro-home');
 	if (introHome) {
 		// La intro ya está visible por defecto en CSS, solo agregar animación
-		console.log('🎬 Iniciando animación de intro');
+		console.log('🎬 Iniciando animación de intro v2');
 		
 		// Después de un momento, agregar la clase load para la animación
 		setTimeout(() => {

@@ -22,6 +22,16 @@ export default defineConfig(() => {
     let isWatchMode = false;
     let lastScssCheck = 0;
     
+    // Colores ANSI
+    const colors = {
+      reset: '\x1b[0m',
+      cyan: '\x1b[36m',
+      green: '\x1b[32m',
+      yellow: '\x1b[33m',
+      magenta: '\x1b[35m',
+      gray: '\x1b[90m'
+    };
+    
     const generateUnifiedScss = (force = false) => {
       // En watch mode, verificar si necesitamos regenerar
       if (isWatchMode && !force) {
@@ -40,7 +50,7 @@ export default defineConfig(() => {
         
         // Si no hay cambios en SCSS, no regenerar
         if (latestScssTime <= lastScssCheck) {
-          console.log('⏭️ Sin cambios en archivos SCSS - reutilizando unificado');
+          // Silencioso - no mostrar mensajes innecesarios
           return false;
         }
         
@@ -49,7 +59,7 @@ export default defineConfig(() => {
       
       // Buscar todos los archivos style.scss en bloques (como hace Gulp)
       const blocksScss = glob.globSync('blocks/**/style.scss', { cwd: __dirname });
-      console.log(`📁 Encontrados ${blocksScss.length} archivos SCSS de bloques:`, blocksScss);
+      // Silencioso - detalles no necesarios
       
       // Generar contenido SCSS unificado
       let styleUnifiedContent = `// Archivo unificado generado automáticamente (se limpia automáticamente)
@@ -66,14 +76,46 @@ export default defineConfig(() => {
       
       // Crear archivo temporal con punto inicial para ocultarlo
       fs.writeFileSync(tempFile, styleUnifiedContent);
-      console.log(isWatchMode ? '🔄 SCSS unificado actualizado' : '✅ SCSS unificado generado (con limpieza automática)');
+      // Silencioso - el output principal se muestra en el resumen
       return true;
     };
     
     return {
       name: 'unified-scss-auto-cleanup',
+      // Detectar cambios en archivos SCSS
+      watchChange(id) {
+        if (id.endsWith('.scss') && (
+          id.includes('/assets/sass/') || 
+          id.includes('/blocks/')
+        )) {
+          const fileName = id.split('/').slice(-2).join('/');
+          const time = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          console.log(`\n${colors.gray}[${time}]${colors.reset} ${colors.magenta}Cambio detectado:${colors.reset} ${colors.cyan}${fileName}${colors.reset}`);
+        }
+      },
       buildStart() {
         isWatchMode = process.argv.includes('--watch');
+        
+        // En modo watch, agregar archivos SCSS al watchlist
+        if (isWatchMode) {
+          const scssFiles = [
+            resolve(__dirname, 'assets/sass/style.scss'),
+            resolve(__dirname, 'assets/sass/admin.scss'),
+            ...glob.globSync('assets/sass/**/*.scss', { cwd: __dirname }).map(file => 
+              resolve(__dirname, file)
+            ),
+            ...glob.globSync('blocks/**/style.scss', { cwd: __dirname }).map(file => 
+              resolve(__dirname, file)
+            )
+          ];
+          
+          scssFiles.forEach(file => {
+            if (fs.existsSync(file)) {
+              this.addWatchFile(file);
+            }
+          });
+        }
+        
         generateUnifiedScss(true); // Siempre generar en buildStart
       },
       buildEnd() {
@@ -178,7 +220,8 @@ export default defineConfig(() => {
                 source: JSON.stringify(sourceMap, null, 2)
               });
               
-              console.log(`✅ Generado: ${minFileName} y ${fileName}.map`);
+              // Solo mostrar en modo verbose
+              // console.log(`✅ Generado: ${minFileName} y ${fileName}.map`);
             }
           }
         }
@@ -189,6 +232,22 @@ export default defineConfig(() => {
   // Plugin personalizado para concatenar JavaScript igual que Gulp
   const concatenateJavaScript = () => {
     const { minify } = require('terser');
+    let isWatchMode = false;
+    let buildCount = 0;
+    
+    // Colores ANSI
+    const colors = {
+      reset: '\x1b[0m',
+      bright: '\x1b[1m',
+      dim: '\x1b[2m',
+      cyan: '\x1b[36m',
+      green: '\x1b[32m',
+      yellow: '\x1b[33m',
+      blue: '\x1b[34m',
+      magenta: '\x1b[35m',
+      gray: '\x1b[90m',
+      white: '\x1b[37m'
+    };
     
     return {
       name: 'concatenate-javascript',
@@ -198,12 +257,16 @@ export default defineConfig(() => {
           id.includes('/assets/js/') || 
           id.includes('/blocks/')
         )) {
-          console.log(`🔄 Detectado cambio en: ${id.split('/').slice(-2).join('/')}`);
+          const fileName = id.split('/').slice(-2).join('/');
+          const time = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          console.log(`\n${colors.gray}[${time}]${colors.reset} ${colors.yellow}Cambio detectado:${colors.reset} ${colors.cyan}${fileName}${colors.reset}`);
         }
       },
       buildStart() {
         // En modo watch, agregar archivos JS al watchlist de Vite
-        const isWatchMode = process.argv.includes('--watch');
+        isWatchMode = process.argv.includes('--watch');
+        buildCount++;
+        
         if (isWatchMode) {
           const sourceFiles = [
             resolve(__dirname, 'assets/js/main.js'),
@@ -229,7 +292,15 @@ export default defineConfig(() => {
             }
           });
           
-          console.log(`👀 Watching ${sourceFiles.length} JavaScript files`);
+          if (buildCount === 1) {
+            console.log('\n' + colors.blue + '━'.repeat(60) + colors.reset);
+            console.log(colors.bright + colors.cyan + 'VITE BUILD SYSTEM' + colors.reset + colors.gray + ' - Theme Amentum' + colors.reset);
+            console.log(colors.blue + '━'.repeat(60) + colors.reset);
+            console.log(colors.gray + 'Monitoreando ' + colors.white + sourceFiles.length + colors.gray + ' archivos JavaScript' + colors.reset);
+            console.log(colors.dim + 'Esperando cambios...' + colors.reset + '\n');
+          }
+        } else {
+          console.log('\n' + colors.yellow + 'Compilando JavaScript...' + colors.reset);
         }
       },
       async generateBundle(options, bundle) {
@@ -389,7 +460,28 @@ export default defineConfig(() => {
             source: minifiedProd.code || concatenatedContent
           });
 
-          console.log(`✅ JS compilado: all.js (${(devSize/1024).toFixed(1)}KB) + all.min.js (${(prodSize/1024).toFixed(1)}KB)`);
+          // Calcular estadísticas
+          const endTime = Date.now();
+          const buildTime = endTime - startTime;
+          const reduction = ((originalSize - prodSize) / originalSize * 100).toFixed(1);
+          
+          if (isWatchMode) {
+            console.log(colors.green + 'Compilación completada' + colors.reset + colors.gray + ' en ' + buildTime + 'ms' + colors.reset);
+            console.log(`   ${colors.cyan}${filesProcessed} archivos${colors.reset} → ${colors.white}all.js${colors.reset} ${colors.gray}(${(devSize/1024).toFixed(1)}KB)${colors.reset} / ${colors.white}all.min.js${colors.reset} ${colors.gray}(${(prodSize/1024).toFixed(1)}KB)${colors.reset}`);
+            console.log(`   ${colors.magenta}Reducción: ${reduction}%${colors.reset} ${colors.gray}| Ahorro: ${((originalSize - prodSize)/1024).toFixed(1)}KB${colors.reset}`);
+          } else {
+            console.log('\n' + colors.green + '━'.repeat(60) + colors.reset);
+            console.log(colors.bright + colors.green + 'BUILD COMPLETADO' + colors.reset);
+            console.log(colors.green + '━'.repeat(60) + colors.reset);
+            console.log(colors.cyan + 'Estadísticas:' + colors.reset);
+            console.log(`   ${colors.gray}• Archivos procesados:${colors.reset} ${colors.white}${filesProcessed}${colors.reset}`);
+            console.log(`   ${colors.gray}• Tamaño original:${colors.reset} ${colors.white}${(originalSize/1024).toFixed(1)}KB${colors.reset}`);
+            console.log(`   ${colors.gray}• all.js:${colors.reset} ${colors.white}${(devSize/1024).toFixed(1)}KB${colors.reset} ${colors.dim}(con source maps)${colors.reset}`);
+            console.log(`   ${colors.gray}• all.min.js:${colors.reset} ${colors.white}${(prodSize/1024).toFixed(1)}KB${colors.reset} ${colors.dim}(producción)${colors.reset}`);
+            console.log(`   ${colors.gray}• Reducción:${colors.reset} ${colors.magenta}${reduction}%${colors.reset}`);
+            console.log(`   ${colors.gray}• Tiempo:${colors.reset} ${colors.yellow}${buildTime}ms${colors.reset}`);
+            console.log(colors.green + '━'.repeat(60) + colors.reset + '\n');
+          }
         } catch (error) {
           console.error('❌ Error al minificar:', error);
           
@@ -484,8 +576,9 @@ export default defineConfig(() => {
         // Copiar imágenes  
         const imagesCopied = processAssetDirectory('assets/img/**/*', 'assets/dist/img');
         
+        // Solo mostrar si hay cambios significativos
         if (!isWatchMode && (fontsCopied > 0 || imagesCopied > 0)) {
-          console.log(`✅ Assets: ${fontsCopied} fuentes, ${imagesCopied} imágenes`);
+          // Silencioso para no saturar el output
         }
       }
     };
@@ -506,7 +599,7 @@ export default defineConfig(() => {
     base: './', // Usar rutas relativas para assets
     
     // LOGS SIMPLIFICADOS
-    logLevel: 'warn',
+    logLevel: 'silent', // Desactivar logs por defecto de Vite para controlarlos nosotros
     
     css: {
       devSourcemap: true,
@@ -573,7 +666,7 @@ export default defineConfig(() => {
               let content = fs.readFileSync(file, 'utf8');
               content = content.replace(/url\(\/assets\//g, 'url(assets/');
               fs.writeFileSync(file, content);
-              console.log(`✅ Rutas de assets corregidas en ${path.basename(file)}`);
+              // Silencioso - ya se muestra el resumen general
             }
           });
         }
