@@ -6,7 +6,7 @@
  * - modules/barba-transitions.js - Barba.js y transiciones
  * - modules/smooth-scroll.js - Lenis smooth scroll
  * - modules/animations.js - GSAP y efectos visuales
- * - modules/ui-components.js - Menu, marquee y UI
+ * - modules/ui-components.js - Menu y UI
  * - modules/form-validation.js - Sistema de validación
  * - modules/utils.js - Funciones auxiliares
  * 

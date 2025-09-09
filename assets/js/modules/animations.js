@@ -21,39 +21,6 @@ function pageTransition() {
 	});
 }
 
-function efectoLetrasHome() {
-	if (document.querySelectorAll('.animation-intro-2').length || document.querySelectorAll('.animation-intro-3').length) {
-		// Procesar texto con SplitType incluyendo words y chars
-		const textos2 = new SplitType('.animation-intro-2', { types: 'words, chars' });
-		const textos3 = new SplitType('.animation-intro-3', { types: 'words, chars' });
-
-		// Verificar si estamos en la intro o en transición
-		const introHome = document.querySelector('.intro-home');
-		const isIntro = introHome && introHome.style.display !== 'none' && window.getComputedStyle(introHome).display !== 'none';
-		
-		// Delay diferente según contexto
-		const delay = isIntro ? 2.5 : 0.1; // 2.5s en intro, 0.1s en transiciones
-		
-		// Crear timeline para animación secuencial
-		const tl = gsap.timeline({ delay: delay });
-
-		// Hacer visibles las palabras primero, luego animar las letras
-		tl.set(['.animation-intro-2 .word', '.animation-intro-3 .word'], { opacity: 1 })
-		  .to('.animation-intro-2 .char', {
-			y: 0,
-			stagger: 0.05,
-			duration: 0.1,
-			ease: 'power2.out'
-		  })
-		  .to('.animation-intro-3 .char', {
-			y: 0,
-			stagger: 0.05,
-			duration: 0.1,
-			ease: 'power2.out'
-		  }, "-=0.1"); // Empezar ligeramente antes de que termine la primera línea
-	}
-}
-
 function initWebAnimation() {
 	const introHome = document.querySelector('.intro-home');
 	if (introHome) {
@@ -63,7 +30,6 @@ function initWebAnimation() {
 		// Después de un momento, agregar la clase load para la animación
 		setTimeout(() => {
 			introHome.classList.add('load');
-			// efectoLetrasHome();
 			
 			// Esperar a que termine la transición CSS (opacity 1s + delay 2s = 3s)
 			setTimeout(() => {

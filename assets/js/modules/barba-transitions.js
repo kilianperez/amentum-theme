@@ -25,14 +25,10 @@ function barbaJsInit() {
 					}
 					
 					// Inicializar scripts básicos
-					marquee();
 					contentAnimation();
 					
 					// Inicializar Swipers de eventos en primera carga
 					callIfExists('inicializarEventosSwiper');
-					
-					// Inicializar imágenes de magazine (para primera carga)
-					// callIfExists('initMagazineImages');
 					
 					// Reproducir videos
 					autoPlayVideos();
@@ -105,14 +101,11 @@ function barbaJsInit() {
 					// Pequeño delay para asegurar que el DOM esté listo
 					setTimeout(() => {
 						// Inicializar scripts
-						marquee();
 						contentAnimation();
 						
 						// Reinicializar Swipers de eventos después de navegación Barba.js
 						callIfExists('inicializarEventosSwiper');
 						
-						// Inicializar imágenes de magazine (para navegación con Barba.js)
-						// callIfExists('initMagazineImages');
 						
 						// Reproducir videos
 						autoPlayVideos();

@@ -36,7 +36,6 @@ function initTheme() {
 
 function initUserLoggedMode() {
 	initSmoothScroll();
-	marquee();
 	contentAnimation();
 	
 	// Inicializar Swipers de eventos para usuarios logueados
