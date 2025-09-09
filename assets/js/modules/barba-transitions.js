@@ -18,6 +18,28 @@ function initPageModules() {
 	autoPlayVideos();
 }
 
+/**
+ * Cleanup simple y efectivo para prevenir memory leaks
+ * Basado en patrones de proyectos reales WordPress + Barba.js
+ */
+function cleanupPageModules() {
+	// Swiper cleanup
+	if (window.swiperInstances) {
+		window.swiperInstances.forEach(swiper => {
+			try { swiper.destroy(); } catch(e) {}
+		});
+		window.swiperInstances = [];
+	}
+	
+	// Video cleanup
+	document.querySelectorAll('video').forEach(video => {
+		try { 
+			video.pause(); 
+			video.currentTime = 0; 
+		} catch(e) {}
+	});
+}
+
 function barbaJsInit() {
 	barba.init({
 		sync: true,
@@ -66,28 +88,7 @@ function barbaJsInit() {
 						// NO esperar - las transiciones de menú y página ocurren en paralelo
 					}
 					
-					// ✅ CLEANUP BÁSICO: Prevenir memory leaks
-					// Cleanup Swiper instances
-					if (window.swiperInstances && Array.isArray(window.swiperInstances)) {
-						window.swiperInstances.forEach(swiper => {
-							try {
-								swiper.destroy(true, true); // Destroy DOM and events
-							} catch (error) {
-								console.warn('Swiper cleanup failed:', error);
-							}
-						});
-						window.swiperInstances = [];
-					}
-					
-					// Pausar y resetear todos los videos
-					document.querySelectorAll('video').forEach(video => {
-						try {
-							video.pause();
-							video.currentTime = 0;
-						} catch (error) {
-							console.warn('Video cleanup failed:', error);
-						}
-					});
+					// ✅ CLEANUP: Ahora se maneja en hooks globales (más simple)
 				},
 				
 				// Salir de la página
@@ -148,6 +149,23 @@ function barbaJsInit() {
 		// Scroll al top en cada navegación
 		if (window.lenis) {
 			window.lenis.scrollTo(0, { immediate: true });
+		}
+	});
+	
+	// ✅ HOOKS GLOBALES SIMPLES: Patrón de proyectos reales
+	barba.hooks.before(() => {
+		cleanupPageModules();
+	});
+
+	barba.hooks.after(() => {
+		initPageModules();
+	});
+	
+	// ✅ WORDPRESS BODY CLASS UPDATE: Esencial para themes WordPress
+	barba.hooks.after((data) => {
+		const bodyMatch = data.next.html.match(/<body[^>]*class="([^"]*)"[^>]*>/);
+		if (bodyMatch && bodyMatch[1]) {
+			document.body.className = bodyMatch[1];
 		}
 	});
 }
