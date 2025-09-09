@@ -192,6 +192,15 @@ export default defineConfig(() => {
     
     return {
       name: 'concatenate-javascript',
+      // Hacer que el plugin detecte cambios en archivos JS
+      watchChange(id) {
+        if (id.endsWith('.js') && (
+          id.includes('/assets/js/') || 
+          id.includes('/blocks/')
+        )) {
+          console.log(`🔄 Detectado cambio en: ${id.split('/').slice(-2).join('/')}`);
+        }
+      },
       buildStart() {
         // En modo watch, agregar archivos JS al watchlist de Vite
         const isWatchMode = process.argv.includes('--watch');
@@ -200,6 +209,15 @@ export default defineConfig(() => {
             resolve(__dirname, 'assets/js/main.js'),
             resolve(__dirname, 'assets/js/general.js'),
             resolve(__dirname, 'assets/js/debug-live.js'),
+            // IMPORTANTE: Agregar módulos al watch
+            ...glob.globSync('assets/js/modules/**/*.js', { cwd: __dirname }).map(file => 
+              resolve(__dirname, file)
+            ),
+            // Agregar partials al watch
+            ...glob.globSync('assets/js/partials/**/*.js', { cwd: __dirname }).map(file => 
+              resolve(__dirname, file)
+            ),
+            // Agregar blocks al watch
             ...glob.globSync('blocks/**/script.js', { cwd: __dirname }).map(file => 
               resolve(__dirname, file)
             )
@@ -211,6 +229,7 @@ export default defineConfig(() => {
             }
           });
           
+          console.log(`👀 Watching ${sourceFiles.length} JavaScript files`);
         }
       },
       async generateBundle(options, bundle) {
