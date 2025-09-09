@@ -3,6 +3,21 @@
  * (Compilado a JavaScript vanilla para compatibilidad)
  */
 
+/**
+ * Inicializa todos los módulos de página después de navegación
+ * Centraliza la lógica que se ejecuta tanto en once() como en enter()
+ */
+function initPageModules() {
+	// Inicializar scripts básicos
+	contentAnimation();
+	
+	// Inicializar Swipers de eventos
+	callIfExists('inicializarEventosSwiper');
+	
+	// Reproducir videos
+	autoPlayVideos();
+}
+
 function barbaJsInit() {
 	barba.init({
 		sync: true,
@@ -24,14 +39,8 @@ function barbaJsInit() {
 						initSmoothScroll();
 					}
 					
-					// Inicializar scripts básicos
-					contentAnimation();
-					
-					// Inicializar Swipers de eventos en primera carga
-					callIfExists('inicializarEventosSwiper');
-					
-					// Reproducir videos
-					autoPlayVideos();
+					// Inicializar todos los módulos de página
+					initPageModules();
 				},
 				
 				// Antes de salir de la página - animar cierre visual del menú
@@ -56,6 +65,29 @@ function barbaJsInit() {
 						
 						// NO esperar - las transiciones de menú y página ocurren en paralelo
 					}
+					
+					// ✅ CLEANUP BÁSICO: Prevenir memory leaks
+					// Cleanup Swiper instances
+					if (window.swiperInstances && Array.isArray(window.swiperInstances)) {
+						window.swiperInstances.forEach(swiper => {
+							try {
+								swiper.destroy(true, true); // Destroy DOM and events
+							} catch (error) {
+								console.warn('Swiper cleanup failed:', error);
+							}
+						});
+						window.swiperInstances = [];
+					}
+					
+					// Pausar y resetear todos los videos
+					document.querySelectorAll('video').forEach(video => {
+						try {
+							video.pause();
+							video.currentTime = 0;
+						} catch (error) {
+							console.warn('Video cleanup failed:', error);
+						}
+					});
 				},
 				
 				// Salir de la página
@@ -98,18 +130,14 @@ function barbaJsInit() {
 						transition.classList.remove('active');
 					}
 					
-					// Pequeño delay para asegurar que el DOM esté listo
+					// ⏱️ DELAY NECESARIO: Asegurar que el DOM esté completamente listo
+					// Barba.js swapea el contenido del container, pero algunos elementos
+					// pueden necesitar un frame adicional para estar disponibles en selectores
+					// 50ms garantiza que jQuery/vanilla selectors encuentren elementos correctamente
 					setTimeout(() => {
-						// Inicializar scripts
-						contentAnimation();
-						
-						// Reinicializar Swipers de eventos después de navegación Barba.js
-						callIfExists('inicializarEventosSwiper');
-						
-						
-						// Reproducir videos
-						autoPlayVideos();
-					}, 50); // Delay mínimo de 50ms
+						// Reinicializar todos los módulos de página
+						initPageModules();
+					}, 50);
 				}
 			}
 		]
