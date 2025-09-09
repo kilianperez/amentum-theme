@@ -5,6 +5,7 @@ import fs from 'fs';
 import { glob } from 'glob';
 import copy from 'rollup-plugin-copy';
 import { createRequire } from 'module';
+import legacy from '@vitejs/plugin-legacy';
 
 const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
@@ -235,21 +236,24 @@ export default defineConfig(() => {
         ];
         
         // Agregar archivos JS personalizados en ORDEN ESPECÍFICO
-        // ORDEN CRÍTICO: main.js (verificaciones) → general.js (código principal) → otros
+        // ORDEN CRÍTICO: main.js (verificaciones) → general.js (código principal) → módulos → otros
         const orderedCustomFiles = [
           'assets/js/main.js',     // 1. Verificaciones y logs
           'assets/js/general.js'   // 2. Código principal (Barba, animaciones, etc.)
         ];
         
-        // Agregar otros archivos JS personalizados (si los hay, excluyendo los ya ordenados)
+        // Agregar módulos ES6 que necesitan ser transpilados
+        const moduleFiles = glob.globSync('assets/js/modules/**/*.js', { cwd: __dirname });
+        
+        // Agregar otros archivos JS personalizados (excluyendo los ya ordenados y módulos)
         const otherCustomFiles = glob.globSync('assets/js/**/*.js', { cwd: __dirname })
-          .filter(file => !orderedCustomFiles.includes(file));
+          .filter(file => !orderedCustomFiles.includes(file) && !file.includes('/modules/'));
         
         // Agregar archivos de bloques
         const blocksJsFiles = glob.globSync('blocks/**/script.js', { cwd: __dirname });
         
-        // Concatenar en orden correcto
-        filesToConcat.push(...orderedCustomFiles, ...otherCustomFiles, ...blocksJsFiles);
+        // Concatenar en orden correcto: primero ordenados, luego módulos, luego otros, luego bloques
+        filesToConcat.push(...orderedCustomFiles, ...moduleFiles, ...otherCustomFiles, ...blocksJsFiles);
 
         // Leer y concatenar todos los archivos
         let concatenatedContent = '';
@@ -260,7 +264,25 @@ export default defineConfig(() => {
         filesToConcat.forEach((filePath) => {
           const fullPath = resolve(__dirname, filePath);
           if (fs.existsSync(fullPath)) {
-            const fileContent = fs.readFileSync(fullPath, 'utf8');
+            let fileContent = fs.readFileSync(fullPath, 'utf8');
+            
+            // Transpilar sintaxis ES6 de módulos a funciones globales
+            if (filePath.includes('/modules/') || fileContent.includes('export ') || fileContent.includes('import ')) {
+              // Convertir exports a funciones globales
+              fileContent = fileContent.replace(/export\s+function\s+(\w+)/g, 'window.$1 = function');
+              fileContent = fileContent.replace(/export\s+{([^}]+)}/g, (match, exports) => {
+                const exportsList = exports.split(',').map(exp => exp.trim());
+                return exportsList.map(exp => `window.${exp} = ${exp};`).join('\n');
+              });
+              
+              // Eliminar imports (ya que todo será global)
+              fileContent = fileContent.replace(/import\s+.*?from\s+['"][^'"]+['"];?\s*/g, '');
+              fileContent = fileContent.replace(/import\s+['"][^'"]+['"];?\s*/g, '');
+              
+              // Convertir export default
+              fileContent = fileContent.replace(/export\s+default\s+/g, '');
+            }
+            
             const fileSize = fileContent.length;
             totalSize += fileSize;
             filesProcessed++;
@@ -500,6 +522,14 @@ export default defineConfig(() => {
     },
 
     plugins: [
+      // Plugin legacy para transpilación ES6 → ES5 compatible
+      legacy({
+        targets: ['defaults', 'not IE 11'],
+        modernTargets: ['defaults', '> 1%'], // Browsers modernos
+        additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+        renderLegacyChunks: false, // Solo transpilación, sin chunks legacy separados
+        modernPolyfills: true
+      }),
       // Plugin personalizado para concatenar JavaScript
       concatenateJavaScript(),
       // Plugin para generar versiones minificadas de CSS
@@ -536,6 +566,9 @@ export default defineConfig(() => {
       emptyOutDir: false, // No limpiar todo el directorio
       assetsDir: 'assets', // Carpeta para assets estáticos
       reportCompressedSize: false, // No mostrar tamaños comprimidos
+      
+      // TRANSPILACIÓN ES6 → ES5 compatible
+      target: 'es2015', // Target mínimo para compatibilidad
       
       // CORREGIR rutas de assets para WordPress
       assetsInlineLimit: 0, // No inline assets

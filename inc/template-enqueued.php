@@ -43,7 +43,7 @@ function amentum_scripts_styles(){
 
 
 
-    wp_enqueue_script('all', get_template_directory_uri().'/assets/dist/js/all.js', array(),'1.5.4', true);
+    wp_enqueue_script('all', get_template_directory_uri().'/assets/dist/js/all.js', array(),'1.5.6', true);
 
 }
 

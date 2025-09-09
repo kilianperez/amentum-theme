@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test JavaScript Compilado</title>
+</head>
+<body>
+    <h1>Test de JavaScript Compilado</h1>
+    <div id="resultado"></div>
+    
+    <!-- Cargar el JavaScript compilado -->
+    <script src="assets/dist/js/all.js"></script>
+    
+    <script>
+        // Esperar un momento para que se cargue todo
+        setTimeout(function() {
+            var resultado = document.getElementById('resultado');
+            var html = '<h2>Funciones disponibles:</h2><ul>';
+            
+            // Verificar funciones que deberían estar disponibles
+            var funciones = [
+                'initValidationSystem',
+                'initGlobalNotifications',
+                'initTheme',
+                'initSmoothScroll',
+                'barbaJsInit',
+                'contentAnimation',
+                'marquee'
+            ];
+            
+            funciones.forEach(function(fn) {
+                if (typeof window[fn] === 'function') {
+                    html += '<li style="color: green;">✅ ' + fn + ' - Disponible</li>';
+                } else {
+                    html += '<li style="color: red;">❌ ' + fn + ' - No encontrada</li>';
+                }
+            });
+            
+            html += '</ul>';
+            
+            // Verificar librerías
+            html += '<h2>Librerías cargadas:</h2><ul>';
+            var libs = {
+                'jQuery': typeof jQuery !== 'undefined',
+                'Swiper': typeof Swiper !== 'undefined',
+                'gsap': typeof gsap !== 'undefined',
+                'barba': typeof barba !== 'undefined',
+                'Lenis': typeof Lenis !== 'undefined'
+            };
+            
+            for (var lib in libs) {
+                if (libs[lib]) {
+                    html += '<li style="color: green;">✅ ' + lib + ' - Cargada</li>';
+                } else {
+                    html += '<li style="color: red;">❌ ' + lib + ' - No disponible</li>';
+                }
+            }
+            
+            html += '</ul>';
+            resultado.innerHTML = html;
+        }, 1000);
+    </script>
+</body>
+</html>
