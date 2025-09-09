@@ -82,16 +82,33 @@ export default defineConfig(() => {
     
     return {
       name: 'unified-scss-auto-cleanup',
-      // Detectar cambios en archivos SCSS
-      watchChange(id) {
-        if (id.endsWith('.scss') && (
-          id.includes('/assets/sass/') || 
-          id.includes('/blocks/')
+      // Detectar cambios en archivos SCSS y rebuilds inteligentes
+      handleHotUpdate({ file, server }) {
+        if (file.endsWith('.scss') && (
+          file.includes('/assets/sass/') || 
+          file.includes('/blocks/')
         )) {
-          const fileName = id.split('/').slice(-2).join('/');
+          const fileName = file.split('/').slice(-2).join('/');
           const time = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
           console.log(`\n${colors.gray}[${time}]${colors.reset} ${colors.magenta}Cambio detectado:${colors.reset} ${colors.cyan}${fileName}${colors.reset}`);
+          
+          // Regenerar SCSS unificado solo si cambió un SCSS
+          generateUnifiedScss(true);
+          
+          // Solo invalidar módulos CSS, no JS
+          const cssModules = server.moduleGraph.getModulesByFile(file) || new Set();
+          const modules = [...cssModules];
+          
+          // Filtrar solo módulos CSS
+          const cssOnlyModules = modules.filter(module => 
+            module.file && (module.file.endsWith('.scss') || module.file.endsWith('.css'))
+          );
+          
+          return cssOnlyModules;
         }
+        
+        // Para cambios en JS, permitir comportamiento normal
+        return null;
       },
       buildStart() {
         isWatchMode = process.argv.includes('--watch');

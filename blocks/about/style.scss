@@ -12,9 +12,10 @@
     background: var(--amentum-bg, $cor-white);
     
     .container {
-        // max-width: $desktop;
-        margin: 0 auto;
-        padding: 0 $separacion;
+        // Sin limitación de max-width para 100% de ancho
+        width: 100%;
+        margin: 0;
+        padding: 0;
     }
 }
 
@@ -62,7 +63,7 @@
 // Main Image Section (segundo en móvil)
 .about-image-main {
     width: 100%;
-    max-width: 400px;
+    // Eliminar max-width para que crezcan las imágenes
     
     .main-image {
         width: 100%;
@@ -154,16 +155,13 @@
         grid-template-columns: 4fr 4fr 1fr;
         grid-template-areas: "image text decorative";
         gap: 4rem;
-        max-width: $desktop;
     }
     
     .about-text {
         padding-right: 2rem;
     }
     
-    .about-image-main {
-        max-width: 450px;
-        
+    .about-image-main {        
         .main-image {
             aspect-ratio: 3/4;
         }
