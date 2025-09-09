@@ -251,7 +251,7 @@ export default defineConfig(() => {
     
     return {
       name: 'concatenate-javascript',
-      // Hacer que el plugin detecte cambios en archivos JS
+      // Hacer que el plugin detecte cambios en archivos JS y SCSS
       watchChange(id) {
         if (id.endsWith('.js') && (
           id.includes('/assets/js/') || 
@@ -260,6 +260,13 @@ export default defineConfig(() => {
           const fileName = id.split('/').slice(-2).join('/');
           const time = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
           console.log(`\n${colors.gray}[${time}]${colors.reset} ${colors.yellow}Cambio detectado:${colors.reset} ${colors.cyan}${fileName}${colors.reset}`);
+        } else if (id.endsWith('.scss') && (
+          id.includes('/assets/sass/') || 
+          id.includes('/blocks/')
+        )) {
+          const fileName = id.split('/').slice(-2).join('/');
+          const time = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          console.log(`\n${colors.gray}[${time}]${colors.reset} ${colors.magenta}Cambio detectado:${colors.reset} ${colors.cyan}${fileName}${colors.reset}`);
         }
       },
       buildStart() {
@@ -283,6 +290,15 @@ export default defineConfig(() => {
             // Agregar blocks al watch
             ...glob.globSync('blocks/**/script.js', { cwd: __dirname }).map(file => 
               resolve(__dirname, file)
+            ),
+            // IMPORTANTE: Agregar archivos SCSS al watch
+            resolve(__dirname, 'assets/sass/style.scss'),
+            resolve(__dirname, 'assets/sass/admin.scss'),
+            ...glob.globSync('assets/sass/**/*.scss', { cwd: __dirname }).map(file => 
+              resolve(__dirname, file)
+            ),
+            ...glob.globSync('blocks/**/style.scss', { cwd: __dirname }).map(file => 
+              resolve(__dirname, file)
             )
           ];
           
@@ -293,10 +309,13 @@ export default defineConfig(() => {
           });
           
           if (buildCount === 1) {
+            const jsFiles = sourceFiles.filter(file => file.endsWith('.js')).length;
+            const scssFiles = sourceFiles.filter(file => file.endsWith('.scss')).length;
+            
             console.log('\n' + colors.blue + '━'.repeat(60) + colors.reset);
             console.log(colors.bright + colors.cyan + 'VITE BUILD SYSTEM' + colors.reset + colors.gray + ' - Theme Amentum' + colors.reset);
             console.log(colors.blue + '━'.repeat(60) + colors.reset);
-            console.log(colors.gray + 'Monitoreando ' + colors.white + sourceFiles.length + colors.gray + ' archivos JavaScript' + colors.reset);
+            console.log(colors.gray + 'Monitoreando ' + colors.white + jsFiles + colors.gray + ' archivos JS + ' + colors.white + scssFiles + colors.gray + ' archivos SCSS' + colors.reset);
             console.log(colors.dim + 'Esperando cambios...' + colors.reset + '\n');
           }
         } else {
