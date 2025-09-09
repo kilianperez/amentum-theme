@@ -36,6 +36,7 @@ function amentum_load_individual_blocks() {
             // Verificar si existe block.php en la carpeta
             $block_file = $blocks_directory . $folder . '/block.php';
             if (file_exists($block_file)) {
+                error_log('BLOCKS LOADER: Cargando bloque desde ' . $folder);
                 require_once $block_file;
             }
         }
@@ -43,7 +44,9 @@ function amentum_load_individual_blocks() {
 }
 
 // Cargar todos los bloques
+error_log('BLOCKS LOADER: Iniciando carga de bloques individuales');
 amentum_load_individual_blocks();
+error_log('BLOCKS LOADER: Carga de bloques individuales completada');
 
 /**
  * Enqueue variables CSS globales
@@ -58,6 +61,77 @@ function amentum_enqueue_global_block_variables() {
 }
 add_action('wp_enqueue_scripts', 'amentum_enqueue_global_block_variables');
 add_action('enqueue_block_editor_assets', 'amentum_enqueue_global_block_variables');
+
+/**
+ * Enqueue automático de scripts del editor para todos los bloques
+ * Se basa en los nombres de las carpetas y detecta archivos editor.js automáticamente
+ */
+function amentum_enqueue_all_block_editor_assets() {
+    $blocks_directory = get_template_directory() . '/blocks/';
+    $blocks_uri = get_template_directory_uri() . '/blocks/';
+    
+    if (is_dir($blocks_directory)) {
+        $folders = scandir($blocks_directory);
+        
+        foreach ($folders as $folder) {
+            // Saltar directorios especiales
+            if ($folder === '.' || $folder === '..' || $folder === 'shared' || !is_dir($blocks_directory . $folder)) {
+                continue;
+            }
+            
+            $editor_js_file = $blocks_directory . $folder . '/editor.js';
+            
+            // Si existe el archivo editor.js, encolarlo automáticamente
+            if (file_exists($editor_js_file)) {
+                wp_enqueue_script(
+                    'amentum-' . $folder . '-editor',
+                    $blocks_uri . $folder . '/editor.js',
+                    array('wp-blocks', 'wp-element', 'wp-editor', 'wp-components'),
+                    wp_get_theme()->get('Version'),
+                    true
+                );
+            }
+        }
+    }
+}
+add_action('enqueue_block_editor_assets', 'amentum_enqueue_all_block_editor_assets');
+
+/**
+ * Enqueue moderno de CSS para bloques - WordPress 6.3+ Optimizado
+ * Usa add_editor_style para el editor + CSS compilado unificado para frontend
+ */
+function amentum_enqueue_blocks_editor_styles() {
+    // Para el EDITOR: usar add_editor_style con especificidad automática
+    $compiled_blocks_css = get_template_directory() . '/assets/dist/css/blocks.css';
+    
+    if (file_exists($compiled_blocks_css)) {
+        // Esto automáticamente añade la clase .editor-styles-wrapper
+        add_editor_style('assets/dist/css/blocks.css');
+    }
+}
+
+/**
+ * Enqueue CSS unificado para el frontend
+ */
+function amentum_enqueue_blocks_frontend_styles() {
+    // Solo en frontend
+    if (!is_admin()) {
+        $compiled_blocks_css = get_template_directory() . '/assets/dist/css/blocks.css';
+        
+        if (file_exists($compiled_blocks_css)) {
+            wp_enqueue_style(
+                'amentum-blocks-unified',
+                get_template_directory_uri() . '/assets/dist/css/blocks.css',
+                array(),
+                wp_get_theme()->get('Version')
+            );
+        }
+    }
+}
+
+// Hooks específicos para mejor rendimiento
+add_action('after_setup_theme', 'amentum_enqueue_blocks_editor_styles');
+add_action('wp_enqueue_scripts', 'amentum_enqueue_blocks_frontend_styles');
 
 /**
  * Agregar categoría de bloques Amentum

@@ -114,41 +114,4 @@ function amentum_render_magazine_block($attributes) {
     return ob_get_clean();
 }
 
-/**
- * Enqueue assets específicos para Magazine block (Frontend)
- */
-function amentum_enqueue_magazine_block_assets() {
-    // Solo cargar si el bloque está presente en la página
-    if (has_block('amentum/magazine')) {
-        wp_enqueue_style(
-            'amentum-magazine-style',
-            get_template_directory_uri() . '/blocks/magazine/style.css',
-            array(),
-            wp_get_theme()->get('Version')
-        );
-    }
-}
-add_action('wp_enqueue_scripts', 'amentum_enqueue_magazine_block_assets');
 
-/**
- * Enqueue editor assets para Magazine block (Backend)
- */
-function amentum_enqueue_magazine_block_editor_assets() {
-    // JS del editor
-    wp_enqueue_script(
-        'amentum-magazine-editor',
-        get_template_directory_uri() . '/blocks/magazine/editor.js',
-        array('wp-blocks', 'wp-element', 'wp-editor'),
-        wp_get_theme()->get('Version'),
-        true
-    );
-    
-    // CSS del editor (para que se vea bien en el backend)
-    wp_enqueue_style(
-        'amentum-magazine-editor-style',
-        get_template_directory_uri() . '/blocks/magazine/style.css',
-        array(),
-        wp_get_theme()->get('Version')
-    );
-}
-add_action('enqueue_block_editor_assets', 'amentum_enqueue_magazine_block_editor_assets');

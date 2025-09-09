@@ -88,25 +88,3 @@ function amentum_render_eventos_destacados_block($attributes) {
     <?php
     return ob_get_clean();
 }
-
-/**
- * ⚡ SISTEMA OPTIMIZADO DE CSS COMPILADO ⚡
- * Los estilos del bloque se cargan automáticamente desde blocks.css
- * Un solo archivo minificado para TODOS los bloques = mejor SEO
- */
-// NOTA: No es necesario enqueue individual de CSS
-// Los estilos se compilan automáticamente con: npx gulp blocksCss
-
-/**
- * Enqueue editor assets para Eventos Destacados block (Backend)
- */
-function amentum_enqueue_eventos_destacados_block_editor_assets() {
-    wp_enqueue_script(
-        'amentum-eventos-destacados-editor',
-        get_template_directory_uri() . '/blocks/eventos-destacados/editor.js',
-        array('wp-blocks', 'wp-element', 'wp-editor', 'wp-components'),
-        wp_get_theme()->get('Version') . '-' . time(),
-        true
-    );
-}
-add_action('enqueue_block_editor_assets', 'amentum_enqueue_eventos_destacados_block_editor_assets');

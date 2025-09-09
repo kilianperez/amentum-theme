@@ -9,7 +9,6 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-
 /**
  * Registrar el bloque Hero Full
  */
@@ -45,7 +44,6 @@ function amentum_register_hero_full_block() {
     ));
 }
 add_action('init', 'amentum_register_hero_full_block');
-
 /**
  * Función REUTILIZABLE para convertir la primera letra en drop cap con serifa
  * Úsala en cualquier parte del theme pasándole cualquier texto
@@ -95,7 +93,6 @@ function amentum_add_drop_cap($text, $options = array()) {
     
     return $text;
 }
-
 /**
  * Renderizar el bloque Hero Full
  */
@@ -125,42 +122,3 @@ function amentum_render_hero_full_block($attributes) {
     <?php
     return ob_get_clean();
 }
-
-/**
- * Los estilos del bloque ahora se cargan desde blocks.css compilado
- * Mejor rendimiento y SEO - un solo archivo CSS minificado
- */
-// function amentum_enqueue_hero_full_block_assets() {
-//     if (has_block('amentum/hero-full')) {
-//         wp_enqueue_style(
-//             'amentum-hero-full-style',
-//             get_template_directory_uri() . '/blocks/hero-full/style.css',
-//             array(),
-//             wp_get_theme()->get('Version')
-//         );
-//     }
-// }
-// add_action('wp_enqueue_scripts', 'amentum_enqueue_hero_full_block_assets');
-
-/**
- * Enqueue editor assets para Hero Full block (Backend)
- */
-function amentum_enqueue_hero_full_block_editor_assets() {
-    // JS del editor
-    wp_enqueue_script(
-        'amentum-hero-full-editor',
-        get_template_directory_uri() . '/blocks/hero-full/editor.js',
-        array('wp-blocks', 'wp-element', 'wp-editor'),
-        wp_get_theme()->get('Version'),
-        true
-    );
-    
-    // CSS del editor ahora se carga desde blocks.css compilado
-    // wp_enqueue_style(
-    //     'amentum-hero-full-editor-style',
-    //     get_template_directory_uri() . '/blocks/hero-full/style.css',
-    //     array(),
-    //     wp_get_theme()->get('Version')
-    // );
-}
-add_action('enqueue_block_editor_assets', 'amentum_enqueue_hero_full_block_editor_assets');

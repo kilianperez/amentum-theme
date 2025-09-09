@@ -181,22 +181,3 @@ function amentum_render_eventos_swiper_block($attributes) {
     <?php
     return ob_get_clean();
 }
-
-/**
- * ⚡ SISTEMA OPTIMIZADO DE CSS COMPILADO ⚡
- * Los estilos del bloque se cargan automáticamente desde blocks.css
- */
-
-/**
- * Enqueue editor assets para Eventos Swiper block (Backend)
- */
-function amentum_enqueue_eventos_swiper_block_editor_assets() {
-    wp_enqueue_script(
-        'amentum-eventos-swiper-editor',
-        get_template_directory_uri() . '/blocks/eventos-swiper/editor.js',
-        array('wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data'),
-        wp_get_theme()->get('Version') . '-' . time(),
-        true
-    );
-}
-add_action('enqueue_block_editor_assets', 'amentum_enqueue_eventos_swiper_block_editor_assets');
