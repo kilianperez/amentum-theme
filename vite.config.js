@@ -196,11 +196,7 @@ export default defineConfig(() => {
                   });
                   
                   if (purgeResult && purgeResult[0] && purgeResult[0].css) {
-                    const originalSize = cssContent.length;
                     cssContent = purgeResult[0].css;
-                    const newSize = cssContent.length;
-                    const reduction = ((originalSize - newSize) / originalSize * 100).toFixed(1);
-                    console.log(`🧹 PurgeCSS aplicado a ${fileName}: ${originalSize}B → ${newSize}B (${reduction}% reducción)`);
                   }
                 } catch (error) {
                   console.warn(`⚠️ Error aplicando PurgeCSS a ${fileName}:`, error.message);
@@ -268,22 +264,18 @@ export default defineConfig(() => {
     
     return {
       name: 'concatenate-javascript',
-      // Hacer que el plugin detecte cambios en archivos JS y SCSS
+      // Mostrar cambios detectados de forma simple
       watchChange(id) {
-        if (id.endsWith('.js') && (
+        if ((id.endsWith('.js') || id.endsWith('.scss')) && (
           id.includes('/assets/js/') || 
-          id.includes('/blocks/')
-        )) {
-          const fileName = id.split('/').slice(-2).join('/');
-          const time = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-          console.log(`\n${colors.gray}[${time}]${colors.reset} ${colors.yellow}Cambio detectado:${colors.reset} ${colors.cyan}${fileName}${colors.reset}`);
-        } else if (id.endsWith('.scss') && (
           id.includes('/assets/sass/') || 
           id.includes('/blocks/')
         )) {
           const fileName = id.split('/').slice(-2).join('/');
           const time = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-          console.log(`\n${colors.gray}[${time}]${colors.reset} ${colors.magenta}Cambio detectado:${colors.reset} ${colors.cyan}${fileName}${colors.reset}`);
+          const fileType = id.endsWith('.js') ? 'JS' : 'SCSS';
+          const color = id.endsWith('.js') ? colors.yellow : colors.magenta;
+          console.log(`\n${colors.gray}[${time}]${colors.reset} ${color}${fileType} cambio:${colors.reset} ${colors.cyan}${fileName}${colors.reset}`);
         }
       },
       buildStart() {
@@ -620,15 +612,22 @@ export default defineConfig(() => {
     };
   };
 
-  // Configuración de entrada - SIN archivo temporal problemático
-  const input = {
+  // Configuración de entrada - SEPARADA por tipo de archivo
+  const cssEntry = {
     // CSS principal (style.scss directo)
     style: resolve(__dirname, 'assets/sass/style.scss'),
     // CSS de admin
     admin: resolve(__dirname, 'assets/sass/admin.scss'),
+  };
+  
+  const jsEntry = {
     // JavaScript principal
     all: resolve(__dirname, 'assets/js/main.js'),
   };
+  
+  // Variable para controlar qué entry points usar basado en el tipo de cambio
+  const isWatchMode = process.argv.includes('--watch');
+  let currentInput = isWatchMode ? { ...cssEntry, ...jsEntry } : { ...cssEntry, ...jsEntry };
 
   return {
     root: __dirname,
@@ -707,6 +706,8 @@ export default defineConfig(() => {
           });
         }
       },
+      // Plugin para generar SCSS unificado (SOLO para el config principal)
+      unifiedScssPlugin(),
     ],
 
     build: {
@@ -724,7 +725,7 @@ export default defineConfig(() => {
       
       
       rollupOptions: {
-        input,
+        input: currentInput,
         
         output: {
           // Configuración para CSS

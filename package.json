@@ -15,8 +15,12 @@
     "url": "git+https://github.com/Automattic/_s.git"
   },
   "scripts": {
-    "build": "vite build",
-    "dev": "vite build --watch",
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "vite build --config vite.config.css.js",
+    "build:js": "vite build --config vite.config.js.js", 
+    "dev": "npm run dev:css & npm run dev:js & wait",
+    "dev:css": "vite build --watch --config vite.config.css.js",
+    "dev:js": "vite build --watch --config vite.config.js.js",
     "check-dependencies": "depcheck & npm-check -u"
   },
   "devDependencies": {
