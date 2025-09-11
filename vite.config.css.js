@@ -66,17 +66,25 @@ export default defineConfig(() => {
         });
       }
       
-      // 2. Generar contenido SCSS para ADMIN (solo bloques, igual que style)
+      // 2. Generar contenido SCSS para ADMIN (admin.scss + bloques dentro de .wp-block)
       let adminUnifiedContent = `// Archivo temporal admin generado automáticamente
-// Solo bloques SCSS (igual que style pero para admin)
+// admin.scss + bloques envueltos en .wp-block
+
+// Importar admin.scss principal
+@import './admin.scss';
+
+// Estilos de bloques envueltos en .wp-block para el editor
+.wp-block {
 `;
       
       if (blocksScss.length > 0) {
-        adminUnifiedContent += '\n// Bloques SCSS importados automáticamente:\n';
+        adminUnifiedContent += '\n    // Bloques SCSS importados automáticamente dentro de .wp-block:\n';
         blocksScss.forEach(file => {
-          adminUnifiedContent += `@import '../../${file}';\n`;
+          adminUnifiedContent += `    @import '../../${file}';\n`;
         });
       }
+      
+      adminUnifiedContent += '\n}';
       
       // Crear ambos archivos temporales
       fs.writeFileSync(tempStyleFile, styleUnifiedContent);
@@ -179,7 +187,8 @@ export default defineConfig(() => {
             const endTime = Date.now();
             const buildTime = endTime - startTime;
             console.log(`${colors.green}Compilación CSS completada${colors.reset}${colors.gray} en ${buildTime}ms${colors.reset}`);
-            console.log(`   ${colors.cyan}CSS generado:${colors.reset} ${colors.white}style.css${colors.reset} ${colors.gray}(minificado + source map) + ${colors.white}style.min.css${colors.reset} ${colors.gray}(minificado)${colors.reset}`);
+            console.log(`   ${colors.cyan}CSS generado:${colors.reset} ${colors.white}style.css${colors.reset} + ${colors.white}admin.css${colors.reset} ${colors.gray}(minificado + source map)${colors.reset}`);
+            console.log(`   ${colors.cyan}CSS minificado:${colors.reset} ${colors.white}style.min.css${colors.reset} + ${colors.white}admin.min.css${colors.reset} ${colors.gray}(optimizado)${colors.reset}`);
           }, 100);
         }
       }
@@ -310,7 +319,7 @@ export default defineConfig(() => {
       rollupOptions: {
         input: {
           style: resolve(__dirname, 'assets/sass/.temp-unified-style.scss'),
-          admin: resolve(__dirname, 'assets/sass/admin.scss'),
+          admin: resolve(__dirname, 'assets/sass/.temp-unified-admin.scss'),
         },
         
         output: {
