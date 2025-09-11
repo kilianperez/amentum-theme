@@ -108,6 +108,9 @@ function amentum_render_gallery_block($attributes) {
                              loading="lazy">
                     </div>
                 <?php endforeach; ?>
+                
+                <!-- Espacio extra al final -->
+                <div class="gallery-spacer"></div>
             </div>
         </div>
     </section>
@@ -133,7 +136,7 @@ function amentum_render_gallery_block($attributes) {
             
             // Imágenes visibles desde el inicio
             
-            // Scroll horizontal corregido - fórmula simple
+            // Scroll horizontal - fórmula simple que funciona
             gsap.to(galleryWrapper, {
                 x: () => -(galleryWrapper.scrollWidth - galleryContainer.offsetWidth),
                 ease: "none",

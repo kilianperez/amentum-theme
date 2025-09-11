@@ -7,17 +7,14 @@
 
 // Gallery Horizontal Scroll Block Container
 .block-gallery-horizontal {
-    background: #F5F0EA; // Fondo beige como en la imagen
+    // background: #F5F0EA; // Fondo beige como en la imagen
     position: relative;
     overflow: hidden; // Importante para el scroll horizontal
     
-    // Header centrado - posicionado absolutamente para no afectar el layout
+    // Header centrado - posicionado de forma relativa ANTES del scroll
     .gallery-header {
-        position: absolute;
-        top: 5%;
-        left: 50%;
-        transform: translateX(-50%);
         text-align: center;
+        padding: 60px 0 40px;
         z-index: 10;
 
         .gallery-title {
@@ -31,10 +28,10 @@
         }
     }
 
-    // Contenedor principal con altura máxima 100vh
+    // Contenedor principal con altura mínima 100vh
     .gallery-container {
+        min-height: 100vh; // Altura mínima 100vh como solicitado
         height: 100vh;
-        max-height: 100vh; // Altura máxima como solicitado
         overflow: hidden;
         position: relative;
         display: flex;
@@ -49,7 +46,7 @@
         flex-direction: row; // Todas las imágenes en fila horizontal
         align-items: center;
         gap: 2rem; // Espaciado entre imágenes
-        padding: 0 2rem; // Padding lateral
+        padding: 0 30vw; // Padding lateral
     }
 
     // Cada imagen individual
@@ -75,12 +72,18 @@
             object-position: center;
             display: block;
             transition: transform .6s cubic-bezier(.25,.46,.45,.94);
+            max-width: 30vw;
         }
 
         // Efecto hover
         &:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        // Última imagen con margen extra
+        &:last-child {
+
         }
 
         @media (max-width: $desktop) {
@@ -102,6 +105,13 @@
             width: 90vw;
             min-width: 280px;
         }
+    }
+    // Espaciador invisible al final
+    .gallery-spacer {
+        min-width: 4rem; // Usar min-width para flex
+        width: 30vw;
+        flex-shrink: 0;
+        height: 1px; // Altura mínima para que exista
     }
 
     // Animación de entrada (fallback CSS)
@@ -194,7 +204,7 @@
     padding: 40px 20px;
     border-radius: 8px;
     text-align: center;
-    background: #F5F0EA;
+    // background: #F5F0EA;
     position: relative;
 
     .gallery-header {
@@ -317,7 +327,7 @@
 @media (prefers-color-scheme: dark) {
     body.dark-mode {
         .block-gallery-horizontal {
-            background: #1a1a1a;
+            // background: #1a1a1a;
 
             .gallery-header .gallery-title {
                 color: $cor-white;
