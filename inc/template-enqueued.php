@@ -53,25 +53,13 @@ add_action('wp_enqueue_scripts', 'amentum_scripts_styles');
 //! scripts y styles
 function amentum_scripts_styles_editor(){
 
-    // MÉTODO AVANZADO: Desregistrar completamente estilos reset de WordPress
-    wp_deregister_style('wp-reset-editor-styles');
-    wp_deregister_style('wp-block-library-theme');
-    wp_deregister_style('wp-format-library');
-    
-    // Registrar nuestro admin.css con el handle de wp-reset-editor-styles
-    // para mantener dependencias pero con nuestros estilos
-    wp_register_style(
-        'wp-reset-editor-styles',
+    wp_enqueue_style(
+        'amentum-admin-styles',
         get_template_directory_uri() . '/assets/dist/css/admin.css',
         array(),
-        '1.0.0',
+        wp_get_theme()->get('Version'),
         'all'
     );
-    
-    // Volver a enqueue solo estilos esenciales del editor (sin reset)
-    wp_enqueue_style('wp-block-editor-styles', includes_url('css/dist/block-editor/style.css'), false);
-    wp_enqueue_style('wp-edit-post-styles', includes_url('css/dist/edit-post/style.css'), false);
-    
 
 }
 

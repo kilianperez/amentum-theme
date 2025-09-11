@@ -11,7 +11,8 @@ export default defineConfig(() => {
   
   // Plugin para generar SCSS unificado con limpieza automática (como Gulp)
   const unifiedScssPlugin = () => {
-    const tempFile = resolve(__dirname, 'assets/sass/.temp-unified-style.scss');
+    const tempStyleFile = resolve(__dirname, 'assets/sass/.temp-unified-style.scss');
+    const tempAdminFile = resolve(__dirname, 'assets/sass/.temp-unified-admin.scss');
     let isWatchMode = false;
     let lastScssCheck = 0;
     
@@ -52,7 +53,7 @@ export default defineConfig(() => {
       // Buscar todos los archivos style.scss en bloques (como hace Gulp)
       const blocksScss = glob.globSync('blocks/**/style.scss', { cwd: __dirname });
       
-      // Generar contenido SCSS unificado
+      // 1. Generar contenido SCSS unificado para STYLE (frontend)
       let styleUnifiedContent = `// Archivo unificado generado automáticamente (se limpia automáticamente)
 // Replica la funcionalidad de Gulp que compila style.scss + blocks/**/style.scss
 @import './style.scss';
@@ -65,8 +66,21 @@ export default defineConfig(() => {
         });
       }
       
-      // Crear archivo temporal con punto inicial para ocultarlo
-      fs.writeFileSync(tempFile, styleUnifiedContent);
+      // 2. Generar contenido SCSS para ADMIN (solo bloques, igual que style)
+      let adminUnifiedContent = `// Archivo temporal admin generado automáticamente
+// Solo bloques SCSS (igual que style pero para admin)
+`;
+      
+      if (blocksScss.length > 0) {
+        adminUnifiedContent += '\n// Bloques SCSS importados automáticamente:\n';
+        blocksScss.forEach(file => {
+          adminUnifiedContent += `@import '../../${file}';\n`;
+        });
+      }
+      
+      // Crear ambos archivos temporales
+      fs.writeFileSync(tempStyleFile, styleUnifiedContent);
+      fs.writeFileSync(tempAdminFile, adminUnifiedContent);
       return true;
     };
     
@@ -104,11 +118,17 @@ export default defineConfig(() => {
         generateUnifiedScss(true); // Siempre generar en buildStart
       },
       buildEnd() {
-        // Limpiar el archivo temporal al finalizar (build o al terminar watch)
-        if (fs.existsSync(tempFile)) {
-          fs.unlinkSync(tempFile);
+        // Limpiar ambos archivos temporales al finalizar (build o al terminar watch)
+        if (fs.existsSync(tempStyleFile)) {
+          fs.unlinkSync(tempStyleFile);
           if (isWatchMode) {
             console.log(`${colors.gray}Archivo temporal limpiado: .temp-unified-style.scss${colors.reset}`);
+          }
+        }
+        if (fs.existsSync(tempAdminFile)) {
+          fs.unlinkSync(tempAdminFile);
+          if (isWatchMode) {
+            console.log(`${colors.gray}Archivo temporal limpiado: .temp-unified-admin.scss${colors.reset}`);
           }
         }
       },

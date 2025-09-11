@@ -1,11 +1,15 @@
 /**
-* admin.scss
-*
-* Estilos específicos para el área de administración de WordPress.
-*/
+ * admin.scss - Estilos para editor WordPress
+ * Importa archivo temporal con todos los bloques dentro de .wp-block
+ */
 
+// Variables base necesarias
+@import 'base/variables';
 
 // Estilos para el editor de bloques en el admin
 .wp-block {
     max-width: 95% !important;
- }
+    
+    // Importar archivo temporal admin generado automáticamente por Vite
+    // Igual que el proceso de style pero dentro del contexto .wp-block
+}
