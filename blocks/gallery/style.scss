@@ -54,25 +54,27 @@
 
     // Cada imagen individual
     .gallery-image {
-        flex-shrink: 0; // Importante para que no se compriman
-        height: 80vh; // Altura fija para todas las imágenes
-        width: 60vw; // Ancho fijo para mantener consistencia
-        max-width: 800px; // Ancho máximo
-        min-width: 300px; // Ancho mínimo
+        flex-shrink: 0;
+        /* height: 80vh; */
+        /* width: 60vw; */
+        /* max-width: 800px; */
+        /* min-width: 300px; */
         position: relative;
         cursor: pointer;
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: 0 8px 32px #00000026;
+        transition: transform .4s cubic-bezier(.25,.46,.45,.94);
 
         img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; // Object-fit contain para mostrar imagen completa
+            /* width: 100%; */
+            /* height: 100%; */
+            -o-object-fit: contain;
+            object-fit: contain;
+            -o-object-position: center;
             object-position: center;
             display: block;
-            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform .6s cubic-bezier(.25,.46,.45,.94);
         }
 
         // Efecto hover

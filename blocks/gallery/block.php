@@ -113,9 +113,13 @@ function amentum_render_gallery_block($attributes) {
     </section>
     
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    // Función para inicializar galería - compatible con Barba.js
+    function initGallery_<?php echo esc_js(str_replace('-', '_', $unique_id)); ?>() {
         const galleryId = '<?php echo esc_js($unique_id); ?>';
         const container = document.getElementById(galleryId);
+        
+        if (!container) return; // Si no existe el contenedor, salir
+        
         const galleryContainer = container.querySelector('.gallery-container');
         const galleryWrapper = container.querySelector('.gallery-images-wrapper');
         const images = container.querySelectorAll('.gallery-image');
@@ -129,32 +133,23 @@ function amentum_render_gallery_block($attributes) {
             
             // Imágenes visibles desde el inicio
             
-            // Animación para revelar imágenes con scroll horizontal
+            // Scroll horizontal corregido - fórmula simple
             gsap.to(galleryWrapper, {
-                x: () => -(galleryWrapper.scrollWidth - window.innerWidth),
+                x: () => -(galleryWrapper.scrollWidth - galleryContainer.offsetWidth),
                 ease: "none",
                 scrollTrigger: {
                     trigger: galleryContainer,
                     pin: true,
                     scrub: 1,
                     start: "top top",
-                    end: () => `+=${galleryWrapper.scrollWidth - window.innerWidth}`,
-                    invalidateOnRefresh: true,
-                    // Sin animaciones de aparición - scroll horizontal simple
+                    end: () => `+=${galleryWrapper.scrollWidth - galleryContainer.offsetWidth}`,
+                    invalidateOnRefresh: true
                 }
             });
             
-            // Efecto hover con GSAP
+            // Sin efectos hover - solo lightbox
             images.forEach(image => {
                 const img = image.querySelector('img');
-                
-                image.addEventListener('mouseenter', () => {
-                    gsap.to(img, { scale: 1.05, duration: 0.4, ease: "power2.out" });
-                });
-                
-                image.addEventListener('mouseleave', () => {
-                    gsap.to(img, { scale: 1, duration: 0.4, ease: "power2.out" });
-                });
                 
                 // Click para lightbox
                 image.addEventListener('click', () => {
@@ -206,13 +201,28 @@ function amentum_render_gallery_block($attributes) {
                 });
             });
         } else {
-            // Fallback sin GSAP - mostrar todas las imágenes
-            images.forEach((image, index) => {
-                image.style.animationDelay = (index * 0.1) + 's';
-                image.classList.add('animate-in');
-            });
+            // Fallback sin GSAP - imágenes estáticas
+            console.warn('GSAP no está disponible para el scroll horizontal');
         }
-    });
+    }
+    
+    // Ejecutar en múltiples eventos para compatibilidad con Barba.js
+    document.addEventListener('DOMContentLoaded', initGallery_<?php echo esc_js(str_replace('-', '_', $unique_id)); ?>);
+    
+    // Ejecutar inmediatamente si DOM ya está listo
+    if (document.readyState !== 'loading') {
+        initGallery_<?php echo esc_js(str_replace('-', '_', $unique_id)); ?>();
+    }
+    
+    // Compatibilidad con Barba.js
+    if (typeof barba !== 'undefined') {
+        barba.hooks.after(() => {
+            setTimeout(() => initGallery_<?php echo esc_js(str_replace('-', '_', $unique_id)); ?>(), 100);
+        });
+    }
+    
+    // Evento personalizado para recargas manuales
+    document.addEventListener('amentum:pageLoaded', initGallery_<?php echo esc_js(str_replace('-', '_', $unique_id)); ?>);
     </script>
     
     <?php
