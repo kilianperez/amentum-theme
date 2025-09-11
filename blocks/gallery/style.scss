@@ -1,0 +1,329 @@
+/**
+ * GALLERY BLOCK - Scroll Horizontal con Object-fit Cover
+ * Galería con scroll horizontal y todas las imágenes en un contenedor
+ */
+
+@import '../../assets/sass/base/variables';
+
+// Gallery Horizontal Scroll Block Container
+.block-gallery-horizontal {
+    background: #F5F0EA; // Fondo beige como en la imagen
+    position: relative;
+    overflow: hidden; // Importante para el scroll horizontal
+    
+    // Header centrado - posicionado absolutamente para no afectar el layout
+    .gallery-header {
+        position: absolute;
+        top: 5%;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        z-index: 10;
+
+        .gallery-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-family: $cor-title;
+            font-weight: 300;
+            color: var(--amentum-text, $cor-black);
+            margin: 0;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+    }
+
+    // Contenedor principal con altura máxima 100vh
+    .gallery-container {
+        height: 100vh;
+        max-height: 100vh; // Altura máxima como solicitado
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    // Contenedor de todas las imágenes en una fila horizontal
+    .gallery-images-wrapper {
+        display: flex;
+        height: 100%;
+        width: max-content; // Ancho calculado automáticamente según número de imágenes
+        flex-direction: row; // Todas las imágenes en fila horizontal
+        align-items: center;
+        gap: 2rem; // Espaciado entre imágenes
+        padding: 0 2rem; // Padding lateral
+    }
+
+    // Cada imagen individual
+    .gallery-image {
+        flex-shrink: 0; // Importante para que no se compriman
+        height: 80vh; // Altura fija para todas las imágenes
+        width: 60vw; // Ancho fijo para mantener consistencia
+        max-width: 800px; // Ancho máximo
+        min-width: 300px; // Ancho mínimo
+        position: relative;
+        cursor: pointer;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; // Object-fit contain para mostrar imagen completa
+            object-position: center;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        // Efecto hover
+        &:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        @media (max-width: $desktop) {
+            height: 70vh;
+            width: 70vw;
+            
+            img {
+                object-fit: contain;
+            }
+        }
+
+        @media (max-width: $tablet) {
+            height: 60vh;
+            width: 80vw;
+        }
+
+        @media (max-width: $mobile) {
+            height: 50vh;
+            width: 90vw;
+            min-width: 280px;
+        }
+    }
+
+    // Animación de entrada (fallback CSS)
+    .gallery-image.animate-in {
+        animation: slideInFromRight 0.8s ease-out forwards;
+        opacity: 0;
+    }
+}
+
+// Lightbox (mantener igual)
+.gallery-lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+
+    .lightbox-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+
+        @media (max-width: $tablet) {
+            padding: 20px;
+        }
+    }
+
+    .lightbox-content {
+        position: relative;
+        max-width: 90vw;
+        max-height: 90vh;
+        border-radius: 8px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.9);
+            }
+        }
+    }
+}
+
+// Animaciones
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+// Estilos para el editor (actualizado para nueva estructura)
+.gallery-editor-preview {
+    border: 2px dashed #ddd;
+    padding: 40px 20px;
+    border-radius: 8px;
+    text-align: center;
+    background: #F5F0EA;
+    position: relative;
+
+    .gallery-header {
+        margin-bottom: 30px;
+
+        .gallery-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: 20px;
+            font-family: $cor-title;
+        }
+    }
+
+    .gallery-preview {
+        display: flex;
+        gap: 15px;
+        overflow-x: auto;
+        padding: 20px 0;
+        
+        .gallery-image {
+            flex-shrink: 0;
+            width: 200px;
+            height: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+        }
+    }
+
+    .gallery-editor-content {
+        .button {
+            background: $cor-black;
+            color: $cor-white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 6px;
+            font-family: $cor-text;
+            font-weight: 400;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+
+            &:hover {
+                background: $cor-gray;
+                color: $cor-white;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            }
+        }
+    }
+
+    // Indicador de tipo
+    &::after {
+        content: 'Galería Horizontal con Scroll - Vista previa';
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        font-size: 12px;
+        color: #666;
+        font-style: italic;
+    }
+}
+
+// Responsive optimizations
+@media (max-width: $tablet) {
+    .block-gallery-horizontal {
+        .gallery-images-wrapper {
+            gap: 1.5rem;
+            padding: 0 1rem;
+        }
+        
+        .gallery-image {
+            height: 60vh;
+            width: 70vw;
+        }
+    }
+}
+
+@media (max-width: $mobile) {
+    .block-gallery-horizontal {
+        .gallery-header {
+            top: 3%;
+            
+            .gallery-title {
+                font-size: clamp(1.5rem, 5vw, 2rem);
+            }
+        }
+        
+        .gallery-images-wrapper {
+            gap: 1rem;
+            padding: 0 0.5rem;
+        }
+        
+        .gallery-image {
+            height: 50vh;
+            width: 85vw;
+            min-width: 250px;
+        }
+    }
+}
+
+// Performance optimizations
+.block-gallery-horizontal {
+    .gallery-image {
+        backface-visibility: hidden;
+        transform: translateZ(0);
+    }
+
+    .gallery-images-wrapper {
+        will-change: transform;
+    }
+}
+
+// Modo oscuro (opcional)
+@media (prefers-color-scheme: dark) {
+    body.dark-mode {
+        .block-gallery-horizontal {
+            background: #1a1a1a;
+
+            .gallery-header .gallery-title {
+                color: $cor-white;
+            }
+
+            .gallery-image {
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            }
+        }
+    }
+}
