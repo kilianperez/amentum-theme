@@ -30,14 +30,18 @@
 			mainImage: {
 				type: 'object',
 				default: {
-					url: '/wp-content/themes/amentum/assets/img/template/about/chef-beatriz.png',
+					url: (typeof wpGlobalSettings !== 'undefined' && wpGlobalSettings.templateDirectoryUri) ? 
+						wpGlobalSettings.templateDirectoryUri + '/assets/img/template/about/chef-beatriz.png' : 
+						'/wp-content/themes/amentum/assets/img/template/about/chef-beatriz.png',
 					alt: 'Beatriz Llamas - Chef'
 				}
 			},
 			decorativeImage: {
 				type: 'object', 
 				default: {
-					url: '/wp-content/themes/amentum/assets/img/template/about/decorativa-paisaje.png',
+					url: (typeof wpGlobalSettings !== 'undefined' && wpGlobalSettings.templateDirectoryUri) ? 
+						wpGlobalSettings.templateDirectoryUri + '/assets/img/template/about/decorativa-paisaje.png' : 
+						'/wp-content/themes/amentum/assets/img/template/about/decorativa-paisaje.png',
 					alt: 'Imagen decorativa'
 				}
 			},
@@ -72,7 +76,8 @@
 				showButton 
 			} = attributes;
 
-			return el('div', { className: 'block-about-editor' }, [
+			return el('section', { className: 'block-about', id: 'about-block' }, [
+				el('div', { className: 'container' }, [
 				// Inspector Controls
 				el(InspectorControls, { key: 'inspector' }, [
 					el(PanelBody, { 
@@ -124,7 +129,7 @@
 
 				// Block Content
 				el('div', { 
-					className: 'about-content editor-preview',
+					className: 'about-content',
 					key: 'about-content'
 				}, [
 					// About Text
@@ -200,6 +205,7 @@
 										el('img', {
 											src: mainImage.url,
 											alt: mainImage.alt,
+											loading: 'lazy',
 											className: 'main-image',
 											onClick: open,
 											style: { cursor: 'pointer' },
@@ -250,6 +256,7 @@
 										el('img', {
 											src: decorativeImage.url,
 											alt: decorativeImage.alt,
+											loading: 'lazy',
 											className: 'decorative-image',
 											onClick: open,
 											style: { cursor: 'pointer', maxWidth: '100px' },
@@ -275,6 +282,7 @@
 							key: 'decorative-media-upload'
 						})
 					])
+				])
 				])
 			]);
 		},

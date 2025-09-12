@@ -196,13 +196,9 @@
                 ]),
 
                 // Block Content Preview
-                e('div', {
-                    className: 'eventos-swiper-preview',
+                e('section', {
+                    className: 'block-eventos-swiper',
                     style: { 
-                        border: '2px dashed #ddd',
-                        padding: '40px 20px',
-                        backgroundColor: 'transparent',
-                        borderRadius: '8px',
                         position: 'relative',
                         minHeight: '400px',
                         background: eventos.length > 0 && eventos[0].featured_media_src_url ? 
@@ -211,79 +207,96 @@
                     },
                     key: 'eventos-preview'
                 }, [
-                    // Overlay
                     e('div', {
-                        style: {
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundColor: 'rgba(0,0,0,0.4)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexDirection: 'column',
-                            color: '#fff',
-                            textAlign: 'center'
-                        }
+                        className: 'swiper eventos-swiper-preview'
                     }, [
-                        // Título editable directamente
-                        e(RichText, {
-                            tagName: 'h2',
-                            className: 'swiper-titulo-editor',
-                            value: textoInicial,
-                            onChange: function(value) { 
-                                setAttributes({ textoInicial: value }); 
-                            },
-                            placeholder: 'Título del slide inicial...'
-                        }),
-                        
-                        // Descripción editable directamente
-                        e(RichText, {
-                            tagName: 'p',
-                            className: 'swiper-descripcion-editor',
-                            value: descripcionInicial,
-                            onChange: function(value) { 
-                                setAttributes({ descripcionInicial: value }); 
-                            },
-                            placeholder: 'Descripción del slide inicial...'
-                        }),
+                        e('div', {
+                            className: 'swiper-wrapper'
+                        }, [
+                            e('div', {
+                                className: 'swiper-slide slide-inicial'
+                            }, [
+                                e('div', {
+                                    className: 'slide-background'
+                                }),
+                                e('div', {
+                                    className: 'slide-overlay'
+                                }),
+                                e('div', {
+                                    className: 'slide-content'
+                                }, [
+                                    e('div', {
+                                        className: 'slide-inner'
+                                    }, [
+                                        // Título editable directamente
+                                        e(RichText, {
+                                            tagName: 'h2',
+                                            className: 'slide-title',
+                                            value: textoInicial,
+                                            onChange: function(value) { 
+                                                setAttributes({ textoInicial: value }); 
+                                            },
+                                            placeholder: 'Título del slide inicial...',
+                                            style: { color: '#fff' }
+                                        }),
+                                        
+                                        // Descripción editable directamente  
+                                        e(RichText, {
+                                            tagName: 'p',
+                                            className: 'slide-description',
+                                            value: descripcionInicial,
+                                            onChange: function(value) { 
+                                                setAttributes({ descripcionInicial: value }); 
+                                            },
+                                            placeholder: 'Descripción del slide inicial...',
+                                            style: { color: '#fff' }
+                                        }),
 
-                        // Información adicional
-                        mostrarEventos && e('div', {
-                            style: {
-                                marginTop: '20px',
-                                padding: '10px 20px',
-                                backgroundColor: 'rgba(255,255,255,0.2)',
-                                borderRadius: '4px',
-                                fontSize: '14px'
-                            }
-                        }, `+ ${numeroEventos} eventos automáticos`),
+                                        // Información adicional
+                                        mostrarEventos && e('div', {
+                                            style: {
+                                                marginTop: '20px',
+                                                padding: '10px 20px',
+                                                backgroundColor: 'rgba(255,255,255,0.2)',
+                                                borderRadius: '4px',
+                                                fontSize: '14px',
+                                                color: '#fff'
+                                            }
+                                        }, `+ ${numeroEventos} eventos automáticos`),
 
-                        // Información de eventos seleccionados manualmente
-                        !mostrarEventos && eventosSeleccionados.length > 0 && e('div', {
-                            style: {
-                                marginTop: '20px',
-                                padding: '10px 20px',
-                                backgroundColor: 'rgba(255,255,255,0.2)',
-                                borderRadius: '4px',
-                                fontSize: '14px'
-                            }
-                        }, `+ ${eventosSeleccionados.length} eventos seleccionados`),
+                                        // Información de eventos seleccionados manualmente
+                                        !mostrarEventos && eventosSeleccionados.length > 0 && e('div', {
+                                            style: {
+                                                marginTop: '20px',
+                                                padding: '10px 20px',
+                                                backgroundColor: 'rgba(255,255,255,0.2)',
+                                                borderRadius: '4px',
+                                                fontSize: '14px',
+                                                color: '#fff'
+                                            }
+                                        }, `+ ${eventosSeleccionados.length} eventos seleccionados`),
 
-                        // Mensaje cuando no hay eventos seleccionados
-                        !mostrarEventos && eventosSeleccionados.length === 0 && e('div', {
-                            style: {
-                                marginTop: '20px',
-                                padding: '10px 20px',
-                                backgroundColor: 'rgba(255,255,255,0.15)',
-                                borderRadius: '4px',
-                                fontSize: '14px',
-                                border: '1px dashed rgba(255,255,255,0.3)'
-                            }
-                        }, 'Selecciona eventos específicos en el panel lateral →')
-                    ])
+                                        // Mensaje cuando no hay eventos seleccionados
+                                        !mostrarEventos && eventosSeleccionados.length === 0 && e('div', {
+                                            style: {
+                                                marginTop: '20px',
+                                                padding: '10px 20px',
+                                                backgroundColor: 'rgba(255,255,255,0.15)',
+                                                borderRadius: '4px',
+                                                fontSize: '14px',
+                                                border: '1px dashed rgba(255,255,255,0.3)',
+                                                color: '#fff'
+                                            }
+                                        }, 'Selecciona eventos específicos en el panel lateral →')
+                                    ])
+                                ])
+                            ])
+                        ])
+                    ]),
+                    // Navegación del swiper
+                    e('div', { className: 'swiper-pagination' }),
+                    e('div', { className: 'swiper-button-next' }),
+                    e('div', { className: 'swiper-button-prev' })
                 ])
             ]);
         },

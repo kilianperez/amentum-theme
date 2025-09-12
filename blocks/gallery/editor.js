@@ -66,7 +66,7 @@
             const { title, images } = attributes;
 
             const blockProps = useBlockProps({
-                className: 'block-gallery-masonry gallery-editor-preview'
+                className: 'block-gallery-horizontal gallery-editor-preview'
             });
 
             // Usar imágenes predefinidas si no hay imágenes seleccionadas
@@ -98,120 +98,91 @@
                     )
                 ),
                 el(
-                    'div',
+                    'section',
                     blockProps,
+                    el(
+                        'div',
+                        { className: 'gallery-header' },
+                        el(
+                            'h2',
+                            { className: 'gallery-title' },
+                            title
+                        )
+                    ),
                     el(
                         'div',
                         { className: 'gallery-container' },
                         el(
                             'div',
-                            { className: 'gallery-header' },
+                            { className: 'gallery-images-wrapper' },
                             el(
-                                'h2',
-                                { className: 'gallery-title' },
-                                title
-                            ),
-                            el(
-                                'p',
-                                { 
-                                    style: { 
-                                        marginTop: '10px',
-                                        fontSize: '14px',
-                                        color: '#666',
-                                        fontStyle: 'italic'
-                                    }
-                                },
-                                'Layout Masonry Asimétrico con GSAP'
-                            )
-                        ),
-                        el(
-                            MediaUploadCheck,
-                            {},
-                            el(
-                                MediaUpload,
-                                {
-                                    onSelect: onSelectImages,
-                                    allowedTypes: ['image'],
-                                    multiple: true,
-                                    gallery: true,
-                                    value: images.map(img => img.id),
-                                    render: ({ open }) => el(
-                                        'div',
-                                        { className: 'gallery-editor-content' },
-                                        el(
-                                            Button,
-                                            {
-                                                onClick: open,
-                                                className: 'button button-large',
-                                                style: { 
-                                                    marginBottom: '20px',
-                                                    display: 'block',
-                                                    width: '100%'
-                                                }
-                                            },
-                                            images.length === 0 ? 'Seleccionar Imágenes' : 'Cambiar Imágenes'
-                                        ),
-                                        el(
+                                MediaUploadCheck,
+                                {},
+                                el(
+                                    MediaUpload,
+                                    {
+                                        onSelect: onSelectImages,
+                                        allowedTypes: ['image'],
+                                        multiple: true,
+                                        gallery: true,
+                                        value: images.map(img => img.id),
+                                        render: ({ open }) => el(
                                             'div',
-                                            { className: 'gallery-preview' },
-                                            displayImages.length > 0 && el(
-                                                'div',
-                                                { className: 'main-image-preview' },
-                                                el('img', {
-                                                    src: displayImages[0].url,
-                                                    alt: displayImages[0].alt,
-                                                    style: {
-                                                        width: '100%',
-                                                        height: 'auto',
-                                                        borderRadius: '8px',
-                                                        maxHeight: '400px',
-                                                        objectFit: 'cover'
-                                                    }
-                                                })
-                                            ),
-                                            displayImages.length > 1 && el(
-                                                'div',
-                                                { 
-                                                    className: 'thumbnails-preview',
-                                                    style: {
-                                                        display: 'flex',
-                                                        gap: '10px',
-                                                        marginTop: '15px',
-                                                        overflowX: 'auto'
+                                            { className: 'gallery-editor-content' },
+                                            el(
+                                                Button,
+                                                {
+                                                    onClick: open,
+                                                    className: 'button button-large',
+                                                    style: { 
+                                                        marginBottom: '20px',
+                                                        display: 'block',
+                                                        width: '100%'
                                                     }
                                                 },
-                                                displayImages.slice(1, 5).map((image, index) => el(
-                                                    'img',
+                                                images.length === 0 ? 'Seleccionar Imágenes' : 'Cambiar Imágenes'
+                                            ),
+                                            el(
+                                                'div',
+                                                { className: 'gallery-preview' },
+                                                displayImages.map((image, index) => el(
+                                                    'div',
                                                     {
                                                         key: image.id || index,
+                                                        className: 'gallery-image',
+                                                        'data-index': index + 1
+                                                    },
+                                                    el('img', {
                                                         src: image.url,
                                                         alt: image.alt,
+                                                        loading: 'lazy',
                                                         style: {
-                                                            width: '80px',
-                                                            height: '60px',
-                                                            objectFit: 'cover',
+                                                            width: '100%',
+                                                            height: 'auto',
                                                             borderRadius: '4px',
-                                                            opacity: '0.7'
+                                                            margin: '5px',
+                                                            maxWidth: '150px'
                                                         }
-                                                    }
-                                                ))
-                                            ),
-                                            images.length > 0 && el(
-                                                'p',
-                                                { 
-                                                    style: { 
-                                                        marginTop: '15px',
-                                                        textAlign: 'center',
-                                                        color: '#666',
-                                                        fontSize: '14px'
-                                                    }
-                                                },
-                                                `${images.length} imagen${images.length !== 1 ? 'es' : ''} seleccionada${images.length !== 1 ? 's' : ''}`
+                                                    })
+                                                )),
+                                                images.length > 0 && el(
+                                                    'p',
+                                                    { 
+                                                        style: { 
+                                                            marginTop: '15px',
+                                                            textAlign: 'center',
+                                                            color: '#666',
+                                                            fontSize: '14px'
+                                                        }
+                                                    },
+                                                    `${images.length} imagen${images.length !== 1 ? 'es' : ''} seleccionada${images.length !== 1 ? 's' : ''}`
+                                                )
                                             )
                                         )
-                                    )
-                                }
-                            )
+                                    }
+                                )
+                            ),
+                            el('div', { className: 'gallery-spacer' })
                         )
                     )
                 )

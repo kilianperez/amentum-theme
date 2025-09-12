@@ -24,19 +24,27 @@
             },
             imagen1: {
                 type: 'string',
-                default: '/wp-content/themes/amentum/assets/images/galeria-proyecto-1.png'
+                default: (typeof wpGlobalSettings !== 'undefined' && wpGlobalSettings.templateDirectoryUri) ? 
+                    wpGlobalSettings.templateDirectoryUri + '/assets/images/galeria-proyecto-1.png' : 
+                    '/wp-content/themes/amentum/assets/images/galeria-proyecto-1.png'
             },
             imagen2: {
                 type: 'string',
-                default: '/wp-content/themes/amentum/assets/images/galeria-proyecto-2.png'
+                default: (typeof wpGlobalSettings !== 'undefined' && wpGlobalSettings.templateDirectoryUri) ? 
+                    wpGlobalSettings.templateDirectoryUri + '/assets/images/galeria-proyecto-2.png' : 
+                    '/wp-content/themes/amentum/assets/images/galeria-proyecto-2.png'
             },
             imagen3: {
                 type: 'string',
-                default: '/wp-content/themes/amentum/assets/images/galeria-proyecto-3.png'
+                default: (typeof wpGlobalSettings !== 'undefined' && wpGlobalSettings.templateDirectoryUri) ? 
+                    wpGlobalSettings.templateDirectoryUri + '/assets/images/galeria-proyecto-3.png' : 
+                    '/wp-content/themes/amentum/assets/images/galeria-proyecto-3.png'
             },
             imagen4: {
                 type: 'string',
-                default: '/wp-content/themes/amentum/assets/images/galeria-proyecto-4.png'
+                default: (typeof wpGlobalSettings !== 'undefined' && wpGlobalSettings.templateDirectoryUri) ? 
+                    wpGlobalSettings.templateDirectoryUri + '/assets/images/galeria-proyecto-4.png' : 
+                    '/wp-content/themes/amentum/assets/images/galeria-proyecto-4.png'
             },
         },
 
@@ -51,25 +59,16 @@
                 };
             }
 
-            return e('div', {
-                className: 'eventos-destacados-preview',
-                style: { 
-                    border: '2px dashed #ddd',
-                    padding: '40px 20px',
-                    backgroundColor: 'transparent',
-                    borderRadius: '8px'
-                },
+            return e('section', {
+                className: 'block-eventos-destacados',
                 key: 'eventos-preview'
             }, [
+                e('div', {
+                    className: 'container'
+                }, [
                 // Header editable directamente
                 e('div', {
-                    style: {
-                        textAlign: 'center',
-                        marginBottom: '50px',
-                        maxWidth: '600px',
-                        marginLeft: 'auto',
-                        marginRight: 'auto'
-                    }
+                    className: 'eventos-destacados-header'
                 }, [
                     // Título editable directamente
                     e(RichText, {
@@ -93,31 +92,17 @@
                     }),
                     // Enlace estático
                     e('div', {
-                        style: { marginTop: '30px' }
+                        className: 'eventos-link'
                     }, [
                         e('a', {
-                            href: '#',
-                            style: {
-                                display: 'inline-block',
-                                color: '#333',
-                                textDecoration: 'none',
-                                fontWeight: '500',
-                                borderBottom: '2px solid #333',
-                                paddingBottom: '2px'
-                            }
+                            href: '#eventos',
                         }, 'Nuestros eventos')
                     ])
                 ]),
 
                 // Grid de imágenes con controles directos
                 e('div', {
-                    style: {
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(4, 1fr)',
-                        gap: '15px',
-                        maxWidth: '800px',
-                        margin: '0 auto'
-                    }
+                    className: 'eventos-destacados-grid'
                 }, [
                     // Imagen 1 - Click para cambiar
                     e(MediaUpload, {
@@ -126,22 +111,14 @@
                         value: imagen1,
                         render: function(obj) {
                             return e('div', {
-                                style: {
-                                    aspectRatio: '3/4',
-                                    backgroundColor: '#e0e0e0',
-                                    overflow: 'hidden',
-                                    cursor: 'pointer',
-                                    position: 'relative'
-                                },
-                                onClick: obj.open
+                                className: 'imagen-item',
+                                onClick: obj.open,
+                                style: { cursor: 'pointer' }
                             }, [
                                 imagen1 ? e('img', {
                                     src: imagen1,
-                                    style: {
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover'
-                                    }
+                                    alt: 'Evento destacado 1',
+                                    loading: 'lazy'
                                 }) : e('div', {
                                     style: {
                                         height: '100%',
@@ -150,7 +127,8 @@
                                         justifyContent: 'center',
                                         fontSize: '12px',
                                         color: '#999',
-                                        flexDirection: 'column'
+                                        flexDirection: 'column',
+                                        backgroundColor: '#e0e0e0'
                                     }
                                 }, [
                                     e('div', {}, 'Click para'),
@@ -168,22 +146,14 @@
                         value: imagen2,
                         render: function(obj) {
                             return e('div', {
-                                style: {
-                                    aspectRatio: '3/4',
-                                    backgroundColor: '#e0e0e0',
-                                    overflow: 'hidden',
-                                    cursor: 'pointer',
-                                    position: 'relative'
-                                },
-                                onClick: obj.open
+                                className: 'imagen-item',
+                                onClick: obj.open,
+                                style: { cursor: 'pointer' }
                             }, [
                                 imagen2 ? e('img', {
                                     src: imagen2,
-                                    style: {
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover'
-                                    }
+                                    alt: 'Evento destacado 2',
+                                    loading: 'lazy'
                                 }) : e('div', {
                                     style: {
                                         height: '100%',
@@ -192,7 +162,8 @@
                                         justifyContent: 'center',
                                         fontSize: '12px',
                                         color: '#999',
-                                        flexDirection: 'column'
+                                        flexDirection: 'column',
+                                        backgroundColor: '#e0e0e0'
                                     }
                                 }, [
                                     e('div', {}, 'Click para'),
@@ -210,22 +181,14 @@
                         value: imagen3,
                         render: function(obj) {
                             return e('div', {
-                                style: {
-                                    aspectRatio: '3/4',
-                                    backgroundColor: '#e0e0e0',
-                                    overflow: 'hidden',
-                                    cursor: 'pointer',
-                                    position: 'relative'
-                                },
-                                onClick: obj.open
+                                className: 'imagen-item',
+                                onClick: obj.open,
+                                style: { cursor: 'pointer' }
                             }, [
                                 imagen3 ? e('img', {
                                     src: imagen3,
-                                    style: {
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover'
-                                    }
+                                    alt: 'Evento destacado 3',
+                                    loading: 'lazy'
                                 }) : e('div', {
                                     style: {
                                         height: '100%',
@@ -234,7 +197,8 @@
                                         justifyContent: 'center',
                                         fontSize: '12px',
                                         color: '#999',
-                                        flexDirection: 'column'
+                                        flexDirection: 'column',
+                                        backgroundColor: '#e0e0e0'
                                     }
                                 }, [
                                     e('div', {}, 'Click para'),
@@ -252,22 +216,14 @@
                         value: imagen4,
                         render: function(obj) {
                             return e('div', {
-                                style: {
-                                    aspectRatio: '3/4',
-                                    backgroundColor: '#e0e0e0',
-                                    overflow: 'hidden',
-                                    cursor: 'pointer',
-                                    position: 'relative'
-                                },
-                                onClick: obj.open
+                                className: 'imagen-item',
+                                onClick: obj.open,
+                                style: { cursor: 'pointer' }
                             }, [
                                 imagen4 ? e('img', {
                                     src: imagen4,
-                                    style: {
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover'
-                                    }
+                                    alt: 'Evento destacado 4',
+                                    loading: 'lazy'
                                 }) : e('div', {
                                     style: {
                                         height: '100%',
@@ -276,7 +232,8 @@
                                         justifyContent: 'center',
                                         fontSize: '12px',
                                         color: '#999',
-                                        flexDirection: 'column'
+                                        flexDirection: 'column',
+                                        backgroundColor: '#e0e0e0'
                                     }
                                 }, [
                                     e('div', {}, 'Click para'),
@@ -286,6 +243,7 @@
                             ]);
                         }
                     })
+                ])
                 ])
             ]);
         },

@@ -83,13 +83,19 @@ function amentum_enqueue_all_block_editor_assets() {
             
             // Si existe el archivo editor.js, encolarlo automáticamente
             if (file_exists($editor_js_file)) {
+                $script_handle = 'amentum-' . $folder . '-editor';
                 wp_enqueue_script(
-                    'amentum-' . $folder . '-editor',
+                    $script_handle,
                     $blocks_uri . $folder . '/editor.js',
                     array('wp-blocks', 'wp-element', 'wp-editor', 'wp-components'),
                     wp_get_theme()->get('Version'),
                     true
                 );
+                
+                // Localizar variables globales para cada script
+                wp_localize_script($script_handle, 'wpGlobalSettings', array(
+                    'templateDirectoryUri' => get_template_directory_uri()
+                ));
             }
         }
     }

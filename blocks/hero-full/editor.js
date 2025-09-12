@@ -28,7 +28,9 @@
             },
             backgroundImage: {
                 type: 'string',
-                default: '/wp-content/themes/amentum/assets/images/amentum-events-bg.png'
+                default: (typeof wpGlobalSettings !== 'undefined' && wpGlobalSettings.templateDirectoryUri) ? 
+                    wpGlobalSettings.templateDirectoryUri + '/assets/images/hero-full-bg.png' : 
+                    '/wp-content/themes/amentum/assets/images/hero-full-bg.png'
             },
             overlayOpacity: {
                 type: 'number',
@@ -107,43 +109,35 @@
                 ]),
 
                 // Block Content
-                e('div', { 
-                    className: 'hero-full-preview',
+                e('section', { 
+                    className: 'block-hero-full',
                     style: {
-                        minHeight: '400px',
-                        position: 'relative',
                         backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: textColor,
-                        padding: '40px 20px'
+                        minHeight: '400px',
+                        position: 'relative'
                     }
                 }, [
                     // Overlay
                     e('div', {
+                        className: 'hero-full-overlay',
                         style: {
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            background: `rgba(0, 0, 0, ${overlayOpacity})`,
-                            zIndex: 1
+                            opacity: overlayOpacity
                         }
                     }),
 
-                    // Content
+                    // Container
                     e('div', {
-                        style: {
-                            position: 'relative',
-                            zIndex: 2,
-                            textAlign: 'center',
-                            maxWidth: '800px'
-                        }
+                        className: 'container'
                     }, [
+                        // Content
+                        e('div', {
+                            className: 'hero-full-content',
+                            style: {
+                                color: textColor
+                            }
+                        }, [
                         // Super Title
                         e(RichText, {
                             tagName: 'div',
@@ -201,6 +195,7 @@
                             },
                             placeholder: 'Subtítulo...'
                         })
+                        ])
                     ])
                 ])
             ]);

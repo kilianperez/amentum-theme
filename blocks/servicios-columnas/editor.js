@@ -159,16 +159,19 @@
                 ]),
 
                 // Block Content Preview
-                e('div', { 
-                    className: 'servicios-columnas-preview',
+                e('section', { 
+                    className: 'block-servicios-columnas',
                     style: {
                         backgroundColor: backgroundColor,
-                        color: textColor,
-                        padding: '40px 20px',
-                        borderRadius: '8px',
-                        border: '2px solid #e0e0e0'
+                        color: textColor
                     }
                 }, [
+                    e('div', {
+                        className: 'container'
+                    }, [
+                        e('div', {
+                            className: 'servicios-columnas-content'
+                        }, [
                     // Info de distribución
                     e('div', {
                         style: {
@@ -184,7 +187,8 @@
 
                     // Grid de elementos
                     e('div', {
-                        className: 'servicios-grid-preview',
+                        className: 'servicios-grid',
+                        'data-columns': columnasPorFila,
                         style: {
                             display: 'flex',
                             flexWrap: 'wrap',
@@ -195,7 +199,7 @@
                     }, elementos.map((elemento, index) => 
                         e('div', {
                             key: index,
-                            className: 'servicio-columna-preview',
+                            className: 'servicio-columna',
                             style: {
                                 textAlign: 'center',
                                 position: 'relative',
@@ -255,7 +259,7 @@
 
                             e(RichText, {
                                 tagName: 'h3',
-                                className: 'servicio-titulo-preview',
+                                className: 'servicio-titulo',
                                 style: {
                                     fontSize: '18px',
                                     fontWeight: '700',
@@ -270,7 +274,7 @@
 
                             e(RichText, {
                                 tagName: 'div',
-                                className: 'servicio-contenido-preview',
+                                className: 'servicio-contenido',
                                 style: {
                                     fontSize: '16px',
                                     lineHeight: '1.6',
@@ -285,45 +289,33 @@
 
                     // CTA Section
                     e('div', {
-                        className: 'servicios-cta-preview',
-                        style: {
-                            textAlign: 'center',
-                            borderTop: '1px solid rgba(0,0,0,0.1)',
-                            paddingTop: '40px'
-                        }
+                        className: 'servicios-cta'
                     }, [
-                        e(RichText, {
-                            tagName: 'p',
-                            className: 'cta-texto-preview',
-                            style: {
-                                fontSize: '20px',
-                                fontStyle: 'italic',
-                                marginBottom: '20px',
-                                fontWeight: '300'
-                            },
-                            value: ctaTexto,
-                            onChange: (value) => setAttributes({ ctaTexto: value }),
-                            placeholder: 'Texto del CTA...'
-                        }),
+                        e('div', {
+                            className: 'cta-texto'
+                        }, [
+                            e(RichText, {
+                                tagName: 'p',
+                                value: ctaTexto,
+                                onChange: (value) => setAttributes({ ctaTexto: value }),
+                                placeholder: 'Texto del CTA...'
+                            })
+                        ]),
 
-                        e(RichText, {
-                            tagName: 'span',
-                            className: 'cta-boton-preview',
-                            style: {
-                                display: 'inline-block',
-                                padding: '12px 24px',
-                                backgroundColor: '#333',
-                                color: '#fff',
-                                textDecoration: 'none',
-                                borderRadius: '4px',
-                                fontWeight: '600',
-                                border: '2px solid #333'
-                            },
-                            value: ctaBoton,
-                            onChange: (value) => setAttributes({ ctaBoton: value }),
-                            placeholder: 'Texto del botón...'
-                        })
+                        e('div', {
+                            className: 'cta-boton'
+                        }, [
+                            e(RichText, {
+                                tagName: 'a',
+                                className: 'btn-cta',
+                                value: ctaBoton,
+                                onChange: (value) => setAttributes({ ctaBoton: value }),
+                                placeholder: 'Texto del botón...'
+                            })
+                        ])
                     ])
+                ])
+                ])
                 ])
             ]);
         },
