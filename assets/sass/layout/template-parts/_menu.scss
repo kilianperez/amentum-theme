@@ -1,6 +1,6 @@
 .header {
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	align-items: center;
 	height: $menu;
 	position: fixed;
@@ -29,14 +29,14 @@
 		}
 	}
 	&__logo {
-		margin-right: 2rem;
-
+		// Logo centrado
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
 	}
 	&__nav {
 		display: none;
-		@include tabletXl {
-			display: block;
-		}
+		// Navegación normal siempre oculta - solo menú hamburguesa
 	}
 	img {
 		width: auto;
@@ -60,9 +60,9 @@
 		z-index: 100;
 		justify-content: center;
 		align-items: center;
-		@include tabletXl {
-			display: none;
-		}
+		// Hamburguesa posicionada a la izquierda
+		position: absolute;
+		left: 1rem;
 		span {
 			width: 100%;
 			height: 2px;
@@ -112,6 +112,110 @@
 		// border: none;
 	}
 }
+
+// Selector de idiomas
+.language-selector {
+	position: absolute;
+	right: 1rem;
+	cursor: pointer;
+	z-index: 101;
+	
+	.language-current {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: $cor-white;
+		font-family: $cor-text;
+		font-size: 0.875rem;
+		font-weight: 500;
+		text-transform: uppercase;
+		padding: 0.5rem;
+		transition: all 0.3s ease;
+		
+		&:hover {
+			opacity: 0.7;
+		}
+	}
+	
+	.lang-arrow {
+		width: 12px;
+		height: 8px;
+		transition: transform 0.3s ease;
+		color: $cor-white;
+	}
+	
+	.language-dropdown {
+		position: absolute;
+		top: 100%;
+		right: 0;
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(10px);
+		border-radius: 8px;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+		min-width: 140px;
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-10px);
+		transition: all 0.3s ease;
+		overflow: hidden;
+		margin-top: 0.5rem;
+		
+		&::before {
+			content: '';
+			position: absolute;
+			top: -6px;
+			right: 12px;
+			width: 12px;
+			height: 12px;
+			background: rgba(255, 255, 255, 0.95);
+			transform: rotate(45deg);
+		}
+	}
+	
+	.lang-option {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.75rem 1rem;
+		text-decoration: none;
+		color: $cor-black;
+		font-family: $cor-text;
+		font-size: 0.875rem;
+		transition: all 0.2s ease;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		
+		&:last-child {
+			border-bottom: none;
+		}
+		
+		&:hover {
+			background: rgba(0, 0, 0, 0.05);
+		}
+		
+		.lang-code {
+			font-weight: 600;
+			text-transform: uppercase;
+		}
+		
+		.lang-name {
+			font-weight: 300;
+			opacity: 0.7;
+		}
+	}
+	
+	// Estado activo del dropdown
+	&.active {
+		.lang-arrow {
+			transform: rotate(180deg);
+		}
+		
+		.language-dropdown {
+			opacity: 1;
+			visibility: visible;
+			transform: translateY(0);
+		}
+	}
+}
 .menu-mobile {
 	height: 100%;
 	z-index: 90;
@@ -137,9 +241,7 @@
 		opacity: 1 !important;
 	}
 	@include margen();
-	@include tabletXl {
-		display: none;
-	}
+	// Menú móvil ahora disponible en todas las resoluciones
 
 	&__a {
 	}
@@ -173,9 +275,27 @@
 	&__ul {
 		li {
 			text-align: center;
-			font-size: 15vw;
+			font-size: 15vw; // Móvil: 15vw
 			font-family: $cor-title;
 			margin-bottom: 0.5rem;
+			
+			// Ajustar tamaño para tablet y desktop
+			@include tablet {
+				font-size: 8vw;
+			}
+			
+			@include tabletXl {
+				font-size: 6vw;
+			}
+			
+			@include desktop {
+				font-size: 4.5rem;
+			}
+			
+			@include desktopXl {
+				font-size: 5rem;
+			}
+			
 			a {
 			}
 		}
@@ -184,6 +304,20 @@
 		position: absolute;
 		bottom: 0;
 		padding-bottom: 2rem;
+		
+		ul li {
+			font-size: 1.2rem !important; // Tamaño fijo para redes sociales
+			display: inline-block;
+			margin: 0 1rem;
+			
+			@include tablet {
+				font-size: 1.4rem !important;
+			}
+			
+			@include desktop {
+				font-size: 1.6rem !important;
+			}
+		}
 	}
 }
 
