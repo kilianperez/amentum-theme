@@ -1,154 +1,240 @@
 .footer {
-	mix-blend-mode: difference;
+	background-color: rgba(240, 240, 240, 0.95);
 	font-family: $cor-text;
-	padding: 0 1rem; // Padding lateral de 1rem en todos los dispositivos
+	color: $cor-black;
+	padding: 4rem 1rem 2rem;
 	
 	@include tabletXl {
 		@include margen();
+		padding: 6rem 0 3rem;
 	}
 
-	p{
-		color: #fff;
-		margin: 0;
+	&__content {
+		// max-width: 1200px;
+		margin: 0 auto;
 	}
 
-	&__li {
-		display: block;
-		list-style: none;
+	// Sección superior con información de contacto
+	&__info {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 3rem;
+		margin-bottom: 4rem;
+		
+		@include tablet {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		
+		@include tabletXl {
+			grid-template-columns: repeat(3, 1fr);
+			gap: 4rem;
+			margin-bottom: 5rem;
+		}
+	}
+
+	&__info-column {
+		text-align: center;
+		
+		@include tablet {
+			&:nth-child(1) {
+				text-align: left;
+			}
+			&:nth-child(2) {
+				text-align: center; // Teléfono siempre centrado
+			}
+			&:nth-child(3) {
+				text-align: right;
+			}
+		}
+		
+		@include tabletXl {
+			&:nth-child(1) {
+				text-align: left; // EMAIL alineado a la izquierda
+			}
+			&:nth-child(2) {
+				text-align: center; // Teléfono siempre centrado
+			}
+			&:nth-child(3) {
+				text-align: right; // REDES SOCIALES alineadas a la derecha
+			}
+		}
+	}
+
+	&__info-title {
+		font-family: $cor-text;
+		font-size: 0.875rem;
+		font-weight: 600;
 		text-transform: uppercase;
-		text-align: left; // Texto justificado a la izquierda en móvil
-		margin-bottom: 3rem; // 48px convertido a rem para espaciado entre elementos en móvil
+		letter-spacing: 0.1em;
+		margin-bottom: 1rem;
+		color: $cor-black;
+	}
 
-		// Remover margin-bottom del último elemento en móvil
+	&__info-text {
+		font-family: $cor-text;
+		font-size: 0.95rem;
+		font-weight: 300;
+		line-height: 1.6;
+		color: $cor-black;
+		text-decoration: none;
+		display: block;
+		margin-bottom: 0.5rem;
+		
+		&:hover {
+			opacity: 0.7;
+		}
+		
 		&:last-child {
 			margin-bottom: 0;
 		}
-
-		@include tabletXl {		
-			text-align: center;
-			flex: 1;
-			width: 25%;
-			margin: auto;
-			margin-bottom: 0; // Sin margin-bottom en desktop
-		}
-		ul {
-			width: max-content;
-			margin: 0; // Sin centrado automático en móvil para mantener alineación izquierda
-			text-align: left;
-			display: inline;
-			
-			@include tabletXl{
-				margin: 0 auto; // Centrado automático solo en desktop
-				display: inline-block;
-			}
-		}
-		li{
-			
-			display: inline;
-
-			
-
-		}
-		&.copyright {
-			@include tabletXl{
-				order: 1; // Primero en desktop
-				margin-left: 0;
-				text-align: left;
-			}
-		}
-		&.newsletter-item {
-			@include tabletXl{
-				order: 2; // Segundo en desktop
-			}
-			
-			ul {
-				display: inline;
-			}
-		}
-		&.legal {
-			text-align: left; // Alineación izquierda en móvil
-			margin-left: 0; // Sin centrado automático horizontal en móvil
-			margin-right: 0; // Sin centrado automático horizontal en móvil
-			
-			@include tabletXl{
-				order: 4; // Cuarto en desktop
-				text-align: right;
-				margin: auto; // Centrado automático solo en desktop
-			}
-			ul {
-				@include tabletXl {
-					text-align: right;
-					max-width: 23vw;
-				}
-			}
-		}
-		
-		&.social {
-			@include tabletXl {
-				order: 3; // Tercero en desktop
-			}
-		}
-		
-		&.social, &.legal{
-			li {
-				&:last-of-type a:after {
-					content: none;
-				}
-				a:after {
-					content: ",";
-				}
-				@include tabletXl {
-					display: inline-block;
-				}
-			}
-		}
-		&.news {
-			li {
-				@include tabletXl {
-					display: inline-block;
-				}
-			}
-		}
-		&.mobile-only {
-			margin-bottom: 1.875rem; // 30px convertido a rem (30px ÷ 16px = 1.875rem)
-			
-			@include tabletXl {
-				display: none !important; // Ocultar completamente en desktop
-			}
-			
-			&.footer__logo .footer__logo-img {
-				// Para SVG necesitamos dimensiones específicas
-				height: 2rem !important; // Altura fija para SVG
-				width: auto !important;
-				max-width: 8rem; // Ancho máximo por seguridad
-				filter: invert(1); // Invertir colores para que se vea blanco
-				display: block; // Asegurar que se muestre como bloque
-			}
-		}
-		a {
-			color: $cor-white;
-		}
 	}
 
-	&__nav {
-	}
-	&__ul {
-		padding-left: 0;
+	// Lista de redes sociales
+	&__social-list {
+		list-style: none;
 		margin: 0;
-		text-align: left; // Alineación izquierda en móvil
-		padding-top: $separacion * 2;
-		padding-bottom: $separacion * 2;
-		display: flex; // Flex en todos los dispositivos para usar order
-		flex-direction: column; // Columna en móvil
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.5rem;
 		
-		ul {
-			padding: 0;
+		@include tablet {
+			justify-content: flex-end;
 		}
+		
 		@include tabletXl {
-			flex-direction: row; // Fila en desktop
-			justify-content: space-between;
+			justify-content: flex-end; // Alineadas a la derecha en desktop
+		}
+		
+		li {
+			display: inline-block;
+			
+			&:not(:last-child)::after {
+				content: " / ";
+				margin-left: 0.5rem;
+				color: $cor-black;
+			}
+		}
+		
+		a {
+			font-family: $cor-text;
+			font-size: 0.95rem;
+			font-weight: 300;
+			color: $cor-black;
+			text-decoration: none;
+			
+			&:hover {
+				opacity: 0.7;
+			}
+		}
+	}
+
+	// Sección inferior con logo y links
+	&__bottom {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 2rem;
+		align-items: center;
+		padding-top: 2rem;
+		
+		@include tablet {
+			grid-template-columns: 1fr auto 1fr;
+			gap: 3rem;
+		}
+		
+		@include tabletXl {
+			gap: 4rem;
+		}
+	}
+
+	&__bottom-left,
+	&__bottom-right {
+		@include tablet {
+			display: flex;
 			align-items: center;
-			text-align: center; // Centrado solo en desktop
+		}
+	}
+
+	&__bottom-left {
+		order: 2;
+		text-align: center;
+		
+		@include tablet {
+			order: 1;
+			text-align: left;
+			justify-content: flex-start;
+		}
+	}
+
+	&__bottom-center {
+		order: 1;
+		text-align: center;
+		
+		@include tablet {
+			order: 2;
+		}
+	}
+
+	&__bottom-right {
+		order: 3;
+		text-align: center;
+		
+		@include tablet {
+			text-align: right;
+			justify-content: flex-end;
+		}
+	}
+
+	&__copyright {
+		font-family: $cor-text;
+		font-size: 0.875rem;
+		font-weight: 300;
+		color: $cor-black;
+		margin: 0;
+	}
+
+	&__logo-img {
+		height: auto;
+		max-height: 2.5rem;
+		width: auto;
+		opacity: 0.8;
+	}
+
+	// Lista de links legales
+	&__legal-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.25rem;
+		
+		@include tablet {
+			align-items: flex-end;
+		}
+		
+		li {
+			display: block;
+			
+			// Eliminar separadores ya que ahora van en vertical
+			&:not(:last-child)::after {
+				display: none;
+			}
+		}
+		
+		a {
+			font-family: $cor-text;
+			font-size: 0.875rem;
+			font-weight: 300;
+			color: $cor-black;
+			text-decoration: none;
+			display: block;
+			
+			&:hover {
+				opacity: 0.7;
+			}
 		}
 	}
 }

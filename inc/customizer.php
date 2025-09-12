@@ -21,33 +21,8 @@ function amentum_customizer_settings($wp_customize)
         'priority' => 30,
     ));
 
-    // Control de campo de texto para Copyright
-    $wp_customize->add_setting('amentum_copyright', array(
-        'default' => '',
-        'sanitize_callback' => 'sanitize_text_field',
-    ));
 
-    $wp_customize->add_control('amentum_copyright_control', array(
-        'label' => 'Texto Copyright',
-        'section' => 'amentum_custom_section',
-        'settings' => 'amentum_copyright',
-        'type' => 'text',
-    ));
-
-    // Control de campo de texto para Newsletter
-    $wp_customize->add_setting('amentum_newsletter', array(
-        'default' => '',
-        'sanitize_callback' => 'sanitize_text_field',
-    ));
-
-    $wp_customize->add_control('amentum_newsletter_control', array(
-        'label' => 'Texto Newsletter',
-        'section' => 'amentum_custom_section',
-        'settings' => 'amentum_newsletter',
-        'type' => 'text',
-    ));
-
-    // Control de correo electrónico para formularios
+    // Control de correo electrónico para footer
     $wp_customize->add_setting('amentum_email', array(
         'default' => '',
         'sanitize_callback' => 'sanitize_email',
@@ -57,11 +32,37 @@ function amentum_customizer_settings($wp_customize)
         $wp_customize,
         'amentum_email_control',
         array(
-            'label' => 'Email para formularios',
+            'label' => 'Email (Footer)',
             'section' => 'amentum_custom_section',
             'settings' => 'amentum_email',
             'type' => 'email',
         )
+    ));
+
+    // Control de teléfono para footer
+    $wp_customize->add_setting('amentum_phone', array(
+        'default' => '',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+
+    $wp_customize->add_control('amentum_phone_control', array(
+        'label' => 'Teléfono (Footer)',
+        'section' => 'amentum_custom_section',
+        'settings' => 'amentum_phone',
+        'type' => 'text',
+    ));
+
+    // Control de dirección para footer
+    $wp_customize->add_setting('amentum_address', array(
+        'default' => '',
+        'sanitize_callback' => 'sanitize_textarea_field',
+    ));
+
+    $wp_customize->add_control('amentum_address_control', array(
+        'label' => 'Dirección (Footer)',
+        'section' => 'amentum_custom_section',
+        'settings' => 'amentum_address',
+        'type' => 'textarea',
     ));
 
     // Control de logo footer en la sección "Identidad del sitio"
