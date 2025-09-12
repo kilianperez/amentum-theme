@@ -66,27 +66,41 @@
 						);
 						?>
 				</nav>
-				<div class="language-selector">
-					<div class="language-current">
-						<span class="lang-code">ES</span>
-						<svg class="lang-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" fill="none">
-							<path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-						</svg>
-					</div>
-					<div class="language-dropdown">
-						<a href="#" class="lang-option" data-lang="es">
+				<div class="header__right">
+					<div class="language-selector">
+						<div class="language-current">
 							<span class="lang-code">ES</span>
-							<span class="lang-name">Español</span>
-						</a>
-						<a href="#" class="lang-option" data-lang="en">
-							<span class="lang-code">EN</span>
-							<span class="lang-name">English</span>
-						</a>
-						<a href="#" class="lang-option" data-lang="ca">
-							<span class="lang-code">CA</span>
-							<span class="lang-name">Català</span>
-						</a>
+							<svg class="lang-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" fill="none">
+								<path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+						</div>
+						<div class="language-dropdown">
+							<a href="#" class="lang-option" data-lang="es">
+								<span class="lang-code">ES</span>
+								<span class="lang-name">Español</span>
+							</a>
+							<a href="#" class="lang-option" data-lang="en">
+								<span class="lang-code">EN</span>
+								<span class="lang-name">English</span>
+							</a>
+							<a href="#" class="lang-option" data-lang="ca">
+								<span class="lang-code">CA</span>
+								<span class="lang-name">Català</span>
+							</a>
+						</div>
 					</div>
+					<nav class="header__secondary">
+						<?php
+							wp_nav_menu(
+								array(
+									'theme_location' => 'menu-secondary',
+									'menu_class'=> 'header__secondary-ul',
+									'container' => false,
+									'fallback_cb' => false,
+								)
+							);
+							?>
+					</nav>
 				</div>
 			</div>
 			<div class="menu-mobile">
