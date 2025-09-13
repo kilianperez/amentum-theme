@@ -215,3 +215,13 @@ require get_template_directory() . '/inc/formularios-manager.php';
  * INCLUIR SISTEMA DE BLOQUES INDEPENDIENTE
  */
 require_once get_template_directory() . '/inc/blocks-loader.php';
+
+/**
+ * DEBUG TEMPORAL: Incluir bloque de prueba simple
+ */
+if (defined('WP_DEBUG') && WP_DEBUG) {
+    $simple_block_path = get_template_directory() . '/../../tmp/test_simple_block.php';
+    if (file_exists($simple_block_path)) {
+        require_once $simple_block_path;
+    }
+}

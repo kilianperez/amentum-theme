@@ -15,17 +15,7 @@ if (!defined('ABSPATH')) {
  */
 function amentum_register_formulario_selector_block()
 {
-    error_log('FORMULARIO BLOCK: Registrando bloque formulario-selector');
     $block_registered = register_block_type('amentum/formulario-selector', array(
-        'title'             => __('Selector de Formulario', 'amentum'),
-        'description'       => __('Selecciona y muestra un formulario personalizado', 'amentum'),
-        'category'          => 'amentum-blocks',
-        'icon'              => 'feedback',
-        'keywords'          => array('formulario', 'contacto', 'form', 'selector'),
-        'supports'          => array(
-            'align' => array('wide', 'full'),
-            'anchor' => true,
-        ),
         'attributes'        => array(
             'formularioId' => array(
                 'type' => 'number',
@@ -47,12 +37,6 @@ function amentum_register_formulario_selector_block()
         'render_callback'   => 'amentum_render_formulario_selector_block',
         'editor_script'     => 'amentum-formulario-selector-editor',
     ));
-    
-    if ($block_registered) {
-        error_log('FORMULARIO BLOCK: Bloque registrado exitosamente');
-    } else {
-        error_log('FORMULARIO BLOCK: ERROR - No se pudo registrar el bloque');
-    }
 }
 add_action('init', 'amentum_register_formulario_selector_block');
 
@@ -63,11 +47,6 @@ function amentum_render_formulario_selector_block($attributes, $content)
 {
     // Capturar cualquier error fatal para debugging
     try {
-        // Debug temporal para identificar problemas
-        if (defined('WP_DEBUG') && WP_DEBUG) {
-            error_log('FORMULARIO BLOCK DEBUG: Inicio renderizado');
-            error_log('FORMULARIO BLOCK DEBUG: Attributes - ' . print_r($attributes, true));
-        }
     
     $formulario_id = isset($attributes['formularioId']) ? $attributes['formularioId'] : 0;
     $mostrar_titulo = isset($attributes['mostrarTitulo']) ? $attributes['mostrarTitulo'] : true;
@@ -85,9 +64,6 @@ function amentum_render_formulario_selector_block($attributes, $content)
     // Obtener el formulario
     $formulario = get_post($formulario_id);
     if (!$formulario || $formulario->post_type !== 'formularios') {
-        if (defined('WP_DEBUG') && WP_DEBUG) {
-            error_log('FORMULARIO BLOCK DEBUG: Formulario no encontrado o tipo incorrecto. ID: ' . $formulario_id);
-        }
         return '<div style="padding: 2rem; border: 2px solid #dc3545; background: #f8d7da; text-align: center; color: #721c24; border-radius: 4px;">
             <p style="margin: 0 0 0.5rem 0;"><strong>Error</strong></p>
             <p style="margin: 0; font-size: 14px;">Formulario no encontrado (ID: ' . $formulario_id . ')</p>
@@ -97,10 +73,6 @@ function amentum_render_formulario_selector_block($attributes, $content)
     // Obtener configuración del formulario
     $config = get_post_meta($formulario_id, '_amentum_formulario_config', true);
     $config = !empty($config) ? $config : array();
-    
-    if (defined('WP_DEBUG') && WP_DEBUG) {
-        error_log('FORMULARIO BLOCK DEBUG: Config obtenida - ' . print_r($config, true));
-    }
     
     $titulo_formulario = get_the_title($formulario_id);
     $descripcion_formulario = isset($config['descripcion']) ? $config['descripcion'] : '';
@@ -122,10 +94,11 @@ function amentum_render_formulario_selector_block($attributes, $content)
     if ($clase_personalizada) {
         $css_classes .= ' ' . sanitize_html_class($clase_personalizada);
     }
-    
+
+    // Iniciar buffer de salida DENTRO del try para manejo seguro
     ob_start();
     ?>
-    
+
     <div class="<?php echo esc_attr($css_classes); ?>" id="<?php echo esc_attr($form_id); ?>-container">
         
         <?php if ($mostrar_titulo && $titulo_formulario): ?>
@@ -299,6 +272,11 @@ function amentum_render_formulario_selector_block($attributes, $content)
     return ob_get_clean();
 
     } catch (Exception $e) {
+        // Limpiar buffer de salida en caso de error
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
         // En caso de error, devolver mensaje de error amigable
         error_log('FORMULARIO BLOCK ERROR: ' . $e->getMessage());
         return '<div style="padding: 2rem; border: 2px solid #dc3545; background: #f8d7da; text-align: center; color: #721c24; border-radius: 4px;">
@@ -306,6 +284,11 @@ function amentum_render_formulario_selector_block($attributes, $content)
             <p style="margin: 0; font-size: 14px;">No se pudo renderizar el formulario. Revisa los logs para más detalles.</p>
         </div>';
     } catch (Error $e) {
+        // Limpiar buffer de salida en caso de error fatal
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
         // Capturar errores fatales (PHP 7+)
         error_log('FORMULARIO BLOCK FATAL ERROR: ' . $e->getMessage());
         return '<div style="padding: 2rem; border: 2px solid #dc3545; background: #f8d7da; text-align: center; color: #721c24; border-radius: 4px;">

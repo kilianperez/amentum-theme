@@ -5,7 +5,7 @@
 const { registerBlockType } = wp.blocks;
 const { createElement: el, Fragment } = wp.element;
 const { InspectorControls } = wp.blockEditor;
-const { PanelBody, SelectControl, ToggleControl, TextControl, ServerSideRender } = wp.components;
+const { PanelBody, SelectControl, ToggleControl, TextControl } = wp.components;
 const { __ } = wp.i18n;
 
 registerBlockType('amentum/formulario-selector', {
@@ -94,36 +94,71 @@ registerBlockType('amentum/formulario-selector', {
                 )
             ),
             
-            // Preview del bloque
-            formularioId > 0 ? 
-                el(ServerSideRender, {
-                    block: 'amentum/formulario-selector',
-                    attributes: attributes,
-                    EmptyResponsePlaceholder: () => el('div', {
+            // Preview del bloque - Vista estática simple
+            formularioId > 0 ?
+                el('div', {
+                    style: {
+                        padding: '2rem',
+                        border: '2px solid #00a0d2',
+                        background: '#f0f8ff',
+                        textAlign: 'center',
+                        borderRadius: '4px',
+                        marginTop: '1rem'
+                    }
+                },
+                    el('div', {
                         style: {
-                            padding: '2rem',
-                            border: '2px solid #f0ad4e',
-                            background: '#fcf8e3',
-                            textAlign: 'center',
-                            borderRadius: '4px'
+                            fontSize: '24px',
+                            marginBottom: '1rem'
+                        }
+                    }, '📝'),
+                    el('p', {
+                        style: {
+                            fontWeight: 'bold',
+                            marginBottom: '0.5rem',
+                            fontSize: '16px'
+                        }
+                    }, __('Formulario Seleccionado', 'amentum') + ' (ID: ' + formularioId + ')'),
+                    el('p', {
+                        style: {
+                            margin: '0',
+                            fontSize: '14px',
+                            color: '#666'
+                        }
+                    }, __('El formulario se mostrará correctamente en el frontend. Usa la vista previa o visita la página para ver el resultado final.', 'amentum')),
+                    el('div', {
+                        style: {
+                            marginTop: '1rem',
+                            padding: '1rem',
+                            background: '#fff',
+                            borderRadius: '4px',
+                            border: '1px dashed #ccc'
                         }
                     },
-                        el('p', { style: { fontWeight: 'bold' } }, __('Formulario Seleccionado', 'amentum')),
-                        el('p', {}, __('Este formulario no tiene campos configurados o no se puede mostrar.', 'amentum'))
-                    ),
-                    ErrorResponsePlaceholder: ({ response }) => el('div', {
-                        style: {
-                            padding: '2rem',
-                            border: '2px solid #dc3545',
-                            background: '#f8d7da',
-                            textAlign: 'center',
-                            borderRadius: '4px'
-                        }
-                    },
-                        el('p', { style: { fontWeight: 'bold', color: '#721c24' } }, __('Error al cargar el formulario', 'amentum')),
-                        el('p', { style: { color: '#721c24' } }, response && response.message ? response.message : __('Error desconocido', 'amentum'))
+                        el('p', { style: { margin: '0 0 0.5rem 0', fontWeight: 'bold', fontSize: '14px' } }, 'Vista previa del formulario:'),
+                        el('div', { style: { textAlign: 'left', fontSize: '12px', color: '#666' } },
+                            '□ Campo 1: [Texto]',
+                            el('br'),
+                            '□ Campo 2: [Email]',
+                            el('br'),
+                            '□ Campo 3: [Mensaje]',
+                            el('br'),
+                            el('button', {
+                                style: {
+                                    marginTop: '0.5rem',
+                                    padding: '0.25rem 0.5rem',
+                                    fontSize: '12px',
+                                    backgroundColor: '#0073aa',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '3px',
+                                    cursor: 'not-allowed'
+                                },
+                                disabled: true
+                            }, 'Enviar')
+                        )
                     )
-                }) :
+                ) :
                 // Placeholder cuando no hay formulario seleccionado
                 el('div', {
                     style: {
