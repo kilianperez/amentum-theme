@@ -1,0 +1,40 @@
+{
+    "apiVersion": 2,
+    "name": "amentum/formulario-selector",
+    "version": "1.0.0",
+    "title": "Selector de Formulario",
+    "category": "amentum-blocks",
+    "icon": "feedback",
+    "description": "Selecciona y muestra un formulario personalizado creado con el sistema nativo de Amentum",
+    "keywords": [
+        "formulario",
+        "contacto",
+        "form",
+        "selector"
+    ],
+    "supports": {
+        "align": ["wide", "full"],
+        "anchor": true
+    },
+    "attributes": {
+        "formularioId": {
+            "type": "number",
+            "default": 0
+        },
+        "mostrarTitulo": {
+            "type": "boolean",
+            "default": true
+        },
+        "mostrarDescripcion": {
+            "type": "boolean",
+            "default": true
+        },
+        "clasePersonalizada": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "textdomain": "amentum",
+    "editorScript": "file:./editor.js",
+    "style": "file:./style.css"
+}

@@ -25,6 +25,24 @@ function amentum_insert_custom_js()
             'isUserLoggedIn' => is_user_logged_in() ? 'true' : 'false'
         ]
     );
+
+    // Enqueue y configurar script para formularios nativos
+    wp_enqueue_script(
+        'amentum-formularios-handler',
+        get_template_directory_uri() . '/assets/js/formularios-handler.js',
+        array('jquery'),
+        wp_get_theme()->get('Version'),
+        true
+    );
+
+    wp_localize_script(
+        'amentum-formularios-handler',
+        'amentum_ajax',
+        [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('amentum_form_ajax_nonce'),
+        ]
+    );
 }
 
 /**
@@ -78,7 +96,7 @@ function amentum_process_contact_form()
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $nonce = $_POST['nonce'] ?? '';
+        $nonce = isset($_POST['nonce']) ? $_POST['nonce'] : '';
         amentum_validate_nonce($nonce, 'secret-key-form');
 
         $sanitize_data = [];
@@ -90,8 +108,8 @@ function amentum_process_contact_form()
             if (isset($field['type']) && isset($field['value'])) {
                 $value = $field['value'];
                 $type = $field['type'];
-                $placeholder = $field['placeholder'] ?? $key;
-                $option = $field['option'] ?? $type;
+                $placeholder = isset($field['placeholder']) ? $field['placeholder'] : $key;
+                $option = isset($field['option']) ? $field['option'] : $type;
 
                 // Identificar email y nombre para headers
                 if ($type == 'email') {
@@ -211,8 +229,8 @@ function amentum_mailchimp()
 {
     if (!empty($_POST)) {
         $email = $_POST['email'];
-        $nombre = $_POST['nombre'] ?? '';
-        $tipo = $_POST['tipo'] ?? '';
+        $nombre = isset($_POST['nombre']) ? $_POST['nombre'] : '';
+        $tipo = isset($_POST['tipo']) ? $_POST['tipo'] : '';
         $api = 'eb664283d682fbb4b1c3c1584258a2c9-us13';
         $list_id = 'e5895892ea';
         $subscription_page = $_POST['pagina'];
@@ -249,5 +267,186 @@ function amentum_mailchimp()
         // if('OK' === wp_remote_retrieve_response_message($response)) {
         //     echo 'The user has been successfully subscribed.';
         // }
+    }
+}
+
+/**
+ * ===============================================
+ * SISTEMA DE FORMULARIOS NATIVOS AMENTUM
+ * ===============================================
+ */
+
+/**
+ * Procesar formularios nativos de Amentum via AJAX
+ */
+add_action('wp_ajax_amentum_process_form', 'amentum_process_native_form');
+add_action('wp_ajax_nopriv_amentum_process_form', 'amentum_process_native_form');
+function amentum_process_native_form()
+{
+    // Verificar nonce
+    $formulario_id = absint(isset($_POST['formulario_id']) ? $_POST['formulario_id'] : 0);
+    if (!wp_verify_nonce(isset($_POST['amentum_form_nonce']) ? $_POST['amentum_form_nonce'] : '', 'amentum_form_nonce_' . $formulario_id)) {
+        wp_send_json_error(['mensaje' => 'Error de seguridad. Por favor recarga la página.']);
+    }
+
+    if (!$formulario_id) {
+        wp_send_json_error(['mensaje' => 'ID de formulario no válido.']);
+    }
+
+    // Obtener configuración del formulario
+    $config = get_post_meta($formulario_id, '_amentum_formulario_config', true);
+    if (!$config || !isset($config['campos'])) {
+        wp_send_json_error(['mensaje' => 'Configuración de formulario no encontrada.']);
+    }
+
+    $campos = $config['campos'];
+    $titulo_formulario = get_the_title($formulario_id);
+    $mensaje_exito = isset($config['mensaje_exito']) ? $config['mensaje_exito'] : 'Tu mensaje ha sido enviado correctamente.';
+
+    // Validar y sanitizar datos del formulario
+    $datos_formulario = [];
+    $errores = [];
+
+    foreach ($campos as $campo) {
+        $tipo = isset($campo['tipo']) ? $campo['tipo'] : 'text';
+        $nombre = isset($campo['nombre']) ? $campo['nombre'] : '';
+        $requerido = isset($campo['requerido']) ? $campo['requerido'] : false;
+        
+        // Generar nombre del campo para comparar
+        $field_name = 'campo_' . sanitize_title($nombre);
+        $valor = isset($_POST[$field_name]) ? $_POST[$field_name] : '';
+
+        // Validar campos requeridos
+        if ($requerido && empty($valor) && $tipo !== 'titulo_seccion') {
+            $errores[] = sprintf('El campo "%s" es obligatorio.', $nombre);
+            continue;
+        }
+
+        // Saltear títulos de sección
+        if ($tipo === 'titulo_seccion') {
+            continue;
+        }
+
+        // Sanitizar según el tipo de campo
+        $valor_sanitizado = amentum_sanitize_form_field($valor, $tipo);
+        
+        if ($valor_sanitizado !== '' && $valor_sanitizado !== null) {
+            $datos_formulario[$nombre] = [
+                'valor' => $valor_sanitizado,
+                'tipo' => $tipo
+            ];
+        }
+    }
+
+    // Si hay errores de validación
+    if (!empty($errores)) {
+        wp_send_json_error(['mensaje' => implode(' ', $errores)]);
+    }
+
+    // Información adicional del envío
+    $pagina_origen = sanitize_url(isset($_POST['pagina_origen']) ? $_POST['pagina_origen'] : '');
+    $fecha_envio = current_time('mysql');
+    $ip_usuario = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+
+    // Construir mensaje de email
+    $contenido_email = "Nuevo mensaje desde: {$titulo_formulario}\n";
+    $contenido_email .= "Fecha: {$fecha_envio}\n";
+    $contenido_email .= "Página: {$pagina_origen}\n";
+    $contenido_email .= "IP: {$ip_usuario}\n\n";
+    $contenido_email .= str_repeat('-', 50) . "\n\n";
+
+    $email_remitente = '';
+    $nombre_remitente = '';
+
+    foreach ($datos_formulario as $label => $datos) {
+        $contenido_email .= "{$label}: {$datos['valor']}\n";
+        
+        // Capturar email y nombre para headers
+        if ($datos['tipo'] === 'email') {
+            $email_remitente = $datos['valor'];
+        }
+        if (stripos($label, 'nombre') !== false && empty($nombre_remitente)) {
+            $nombre_remitente = $datos['valor'];
+        }
+    }
+
+    // Configurar envío de email
+    $admin_email = get_option('admin_email');
+    $site_name = get_bloginfo('name');
+    $subject = sprintf('[%s] %s', $site_name, $titulo_formulario);
+
+    $headers = ['Content-Type: text/plain; charset=UTF-8'];
+    if ($email_remitente && $nombre_remitente) {
+        $headers[] = "Reply-To: {$nombre_remitente} <{$email_remitente}>";
+    } elseif ($email_remitente) {
+        $headers[] = "Reply-To: {$email_remitente}";
+    }
+
+    // Enviar email
+    $email_enviado = wp_mail($admin_email, $subject, $contenido_email, $headers);
+
+    // Guardar en base de datos (opcional para futuras funcionalidades)
+    amentum_save_form_submission($formulario_id, $datos_formulario, $pagina_origen, $ip_usuario);
+
+    // Respuesta
+    if ($email_enviado) {
+        wp_send_json_success(['mensaje' => $mensaje_exito]);
+    } else {
+        error_log('AMENTUM: Error al enviar email del formulario ID ' . $formulario_id);
+        wp_send_json_error(['mensaje' => 'Hubo un problema al enviar tu mensaje. Por favor intenta de nuevo.']);
+    }
+}
+
+/**
+ * Sanitizar campos de formulario según su tipo
+ */
+function amentum_sanitize_form_field($value, $type)
+{
+    if (is_array($value)) {
+        // Para campos de tags (múltiples valores)
+        return implode(', ', array_map('sanitize_text_field', $value));
+    }
+
+    switch ($type) {
+        case 'email':
+            return sanitize_email($value);
+        case 'textarea':
+            return sanitize_textarea_field($value);
+        case 'url':
+            return esc_url_raw($value);
+        case 'phone':
+            return preg_replace('/[^0-9+\-\(\)\s]/', '', $value);
+        case 'checkbox':
+            return $value ? 'Sí' : 'No';
+        case 'text':
+        case 'select':
+        case 'tags':
+        default:
+            return sanitize_text_field($value);
+    }
+}
+
+/**
+ * Guardar envío de formulario en la base de datos
+ */
+function amentum_save_form_submission($formulario_id, $datos, $pagina_origen, $ip_usuario)
+{
+    // Crear post tipo para almacenar envíos (para futuras funcionalidades como dashboard de envíos)
+    $submission_data = [
+        'post_type' => 'form_submission',
+        'post_status' => 'private',
+        'post_title' => sprintf('Envío formulario %d - %s', $formulario_id, current_time('d/m/Y H:i')),
+        'meta_input' => [
+            '_formulario_id' => $formulario_id,
+            '_datos_formulario' => $datos,
+            '_pagina_origen' => $pagina_origen,
+            '_ip_usuario' => $ip_usuario,
+            '_fecha_envio' => current_time('mysql')
+        ]
+    ];
+
+    // Solo crear el post si el tipo existe (opcional, no es crítico)
+    if (post_type_exists('form_submission')) {
+        wp_insert_post($submission_data);
     }
 }

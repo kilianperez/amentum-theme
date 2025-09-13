@@ -15,28 +15,13 @@ if (!defined('ABSPATH')) {
  */
 function amentum_register_formulario_selector_block()
 {
-    $block_registered = register_block_type('amentum/formulario-selector', array(
-        'attributes'        => array(
-            'formularioId' => array(
-                'type' => 'number',
-                'default' => 0
-            ),
-            'mostrarTitulo' => array(
-                'type' => 'boolean',
-                'default' => true
-            ),
-            'mostrarDescripcion' => array(
-                'type' => 'boolean',
-                'default' => true
-            ),
-            'clasePersonalizada' => array(
-                'type' => 'string',
-                'default' => ''
-            )
-        ),
-        'render_callback'   => 'amentum_render_formulario_selector_block',
-        'editor_script'     => 'amentum-formulario-selector-editor',
-    ));
+    // Registrar usando block.json (método moderno de WordPress 5.5+)
+    $block_registered = register_block_type(
+        __DIR__ . '/block.json',
+        array(
+            'render_callback' => 'amentum_render_formulario_selector_block',
+        )
+    );
 }
 add_action('init', 'amentum_register_formulario_selector_block');
 
