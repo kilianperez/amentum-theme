@@ -136,7 +136,6 @@
                                         justifyContent: 'space-between',
                                         padding: '8px',
                                         margin: '4px 0',
-                                        backgroundColor: '#f9f9f9',
                                         borderRadius: '4px',
                                         border: '1px solid #e0e0e0'
                                     }
@@ -257,7 +256,6 @@
                                             style: {
                                                 marginTop: '20px',
                                                 padding: '10px 20px',
-                                                backgroundColor: 'rgba(255,255,255,0.2)',
                                                 borderRadius: '4px',
                                                 fontSize: '14px',
                                                 color: '#fff'
@@ -269,7 +267,6 @@
                                             style: {
                                                 marginTop: '20px',
                                                 padding: '10px 20px',
-                                                backgroundColor: 'rgba(255,255,255,0.2)',
                                                 borderRadius: '4px',
                                                 fontSize: '14px',
                                                 color: '#fff'
@@ -281,7 +278,6 @@
                                             style: {
                                                 marginTop: '20px',
                                                 padding: '10px 20px',
-                                                backgroundColor: 'rgba(255,255,255,0.15)',
                                                 borderRadius: '4px',
                                                 fontSize: '14px',
                                                 border: '1px dashed rgba(255,255,255,0.3)',

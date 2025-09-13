@@ -77,7 +77,7 @@ function amentum_render_servicios_columnas_block($attributes) {
 
     ob_start();
     ?>
-    <section class="block-servicios-columnas" style="background-color: <?php echo $background_color; ?>; color: <?php echo $text_color; ?>;">
+    <section class="block-servicios-columnas" style="color: <?php echo $text_color; ?>;">
         <div class="container">
             <div class="servicios-columnas-content">
                 <?php if (!empty($elementos)) : ?>

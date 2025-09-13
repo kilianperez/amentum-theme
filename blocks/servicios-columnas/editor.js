@@ -162,7 +162,6 @@
                 e('section', { 
                     className: 'block-servicios-columnas',
                     style: {
-                        backgroundColor: backgroundColor,
                         color: textColor
                     }
                 }, [
@@ -178,7 +177,6 @@
                             textAlign: 'center',
                             marginBottom: '20px',
                             padding: '10px',
-                            backgroundColor: 'rgba(0,0,0,0.05)',
                             borderRadius: '4px',
                             fontSize: '13px',
                             color: '#666'
@@ -207,7 +205,6 @@
                                 padding: '20px',
                                 border: '1px solid rgba(0, 0, 0, 0.1)',
                                 borderRadius: '8px',
-                                background: 'rgba(255, 255, 255, 0.5)',
                                 minHeight: '200px'
                             }
                         }, [
@@ -228,10 +225,8 @@
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    backgroundColor: '#d63638',
                                     color: 'white',
                                     border: '2px solid white',
-                                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
                                 },
                                 title: `Eliminar elemento ${index + 1}`
                             }, '✕'),
@@ -245,7 +240,6 @@
                                     width: '30px',
                                     height: '30px',
                                     borderRadius: '50%',
-                                    backgroundColor: '#007cba',
                                     color: 'white',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -253,7 +247,6 @@
                                     fontSize: '14px',
                                     fontWeight: 'bold',
                                     border: '2px solid white',
-                                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
                                 }
                             }, index + 1),
 

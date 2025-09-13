@@ -70,8 +70,7 @@
 			const editorStyles = {
 				container: {
 					padding: '40px 20px',
-					backgroundColor: '#f8f9fa',
-					border: '1px solid #e9ecef',
+						border: '1px solid #e9ecef',
 					borderRadius: '8px'
 				},
 				content: {
@@ -80,10 +79,8 @@
 					gap: espacioEntreCols,
 					alignItems: 'start',
 					maxWidth: '100%',
-					backgroundColor: '#ffffff',
 					padding: '30px',
 					borderRadius: '8px',
-					boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
 				},
 				textoColumn: {
 					paddingRight: '1rem'
@@ -107,11 +104,9 @@
 					minHeight: '300px'
 				},
 				preview: {
-					background: '#ffffff',
 					border: '1px solid #e9ecef',
 					borderRadius: '8px',
 					padding: '2rem',
-					boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
 					minHeight: '280px',
 					textAlign: 'center',
 					display: 'flex',
@@ -122,7 +117,6 @@
 					position: 'relative'
 				},
 				placeholder: {
-					background: '#f8f9fa',
 					border: '2px dashed #dee2e6',
 					borderRadius: '12px',
 					padding: '3rem 2rem',
@@ -255,8 +249,7 @@
 										left: '20px',
 										right: '20px',
 										height: '1px',
-										backgroundColor: '#2c3e50',
-										opacity: '0.3'
+													opacity: '0.3'
 									}
 								}),
 								el('div', {
@@ -266,8 +259,7 @@
 										left: '20px',
 										width: '60%',
 										height: '2px',
-										backgroundColor: '#667eea'
-									}
+												}
 								})
 							]) :
 							// Placeholder cuando no hay formulario

@@ -148,7 +148,6 @@
                                 lineHeight: '120%',
                                 margin: '0',
                                 fontFamily: "'Adios Script Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'
                             },
                             value: superTitle,
                             onChange: function(value) {
@@ -168,7 +167,6 @@
                                 margin: '0',
                                 fontFamily: "'Adios Script Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
                                 textTransform: 'uppercase',
-                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'
                             },
                             value: title,
                             onChange: function(value) {
@@ -187,7 +185,6 @@
                                 lineHeight: '120%',
                                 margin: '0',
                                 fontFamily: "'Adios Script Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                                textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)'
                             },
                             value: subtitle,
                             onChange: function(value) {

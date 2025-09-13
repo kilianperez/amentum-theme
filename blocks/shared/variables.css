@@ -61,8 +61,6 @@
 .no-content {
 	text-align: center;
 	padding: 60px 40px;
-	background: var(--amentum-bg-light);
-	border-radius: var(--amentum-radius);
 }
 
 .no-content p {

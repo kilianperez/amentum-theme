@@ -56,7 +56,6 @@ body:not(.wp-core-ui) form,
 
 // === CONTENEDOR PRINCIPAL ===
 .amentum-formulario-container {
-    background: $form-background;
     padding: 2rem;
     font-family: $form-font-family;
     color: $form-text-color;
@@ -71,33 +70,40 @@ body:not(.wp-core-ui) form,
     width: 100%;
     max-width: 100%;
     padding: 40px 20px;
-    background-color: #f8f9fa;
 
     @media (max-width: $tablet-xl) {
         padding: 20px 15px;
     }
 
     .container {
-        max-width: 1200px;
         margin: 0 auto;
-        padding: 0;
+        padding: 0 20px;
     }
 
     .texto-formulario-content {
-        display: grid;
-        grid-template-columns: 1fr 1.5fr; // 4/12 vs 6/12 aproximadamente
-        gap: 2rem; // Espacio por defecto
+        display: flex;
+        justify-content: space-between;
         align-items: start;
         max-width: 100%;
-        background-color: #ffffff;
         padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+        .texto-column {
+            flex: 0 0 33.33%; // 4/12 = 33.33%
+        }
+
+        .formulario-column {
+            flex: 0 0 50%; // 6/12 = 50%
+        }
 
         @media (max-width: $tablet-xl) {
-            grid-template-columns: 1fr;
+            flex-direction: column;
             gap: 2rem;
             padding: 20px;
+
+            .texto-column,
+            .formulario-column {
+                flex: 1; // 100% en responsive
+            }
         }
     }
 
@@ -139,9 +145,7 @@ body:not(.wp-core-ui) form,
     }
 
     .formulario-placeholder {
-        background: #f8f9fa;
         border: 2px dashed #dee2e6;
-        border-radius: 12px;
         padding: 3rem 2rem;
         text-align: center;
         min-height: 280px;
@@ -176,7 +180,6 @@ body:not(.wp-core-ui) form,
 
     // Formulario dentro del bloque con padding reducido
     .formulario-en-bloque.amentum-formulario-container {
-        background: #ffffff;
         border: none;
         border-radius: 0;
         padding: 0; // Sin padding para que se integre mejor
@@ -246,7 +249,6 @@ body:not(.wp-core-ui) form,
         left: 0;
         right: 0;
         height: 2px;
-        background-color: $form-accent-color;
         transform: scaleX(0);
         transform-origin: left;
         transition: transform 0.3s ease;
@@ -264,7 +266,6 @@ body:not(.wp-core-ui) form,
 
     // Estado de error - línea roja
     &.input-error::after {
-        background-color: $form-error-color;
         transform: scaleX(1);
     }
 
@@ -367,10 +368,8 @@ body:not(.wp-core-ui) form,
         left: 0;
         width: 100%;
         height: 100%;
-        border-radius: 50%;
         border: 2px solid $form-primary-color;
         box-sizing: border-box;
-        background-color: $form-background;
         transition: all 0.3s ease;
     }
 
@@ -382,8 +381,6 @@ body:not(.wp-core-ui) form,
         left: 0;
         width: 100%;
         height: 100%;
-        border-radius: 50%;
-        background-color: $form-primary-color;
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
         background-position: center;
         background-size: 70%;
@@ -392,7 +389,6 @@ body:not(.wp-core-ui) form,
 
     // Focus
     &:focus:before {
-        box-shadow: 0 0 0 0.2rem rgba($form-primary-color, 0.25);
     }
 }
 
@@ -471,13 +467,11 @@ body:not(.wp-core-ui) form,
             display: inline-block;
             padding: 0.5rem 1rem;
             border: 1px solid $form-primary-color;
-            border-radius: 2rem;
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: max(14px, 3vw);
             margin: 0;
-            background-color: $form-background;
-            color: $form-primary-color;
+                color: $form-primary-color;
             font-family: $form-font-family;
 
             @media (min-width: $tablet-xl) {
@@ -486,14 +480,12 @@ body:not(.wp-core-ui) form,
             }
 
             &:hover {
-                background-color: color.adjust($form-accent-color, $lightness: 40%);
             }
         }
 
         // Estado seleccionado
         input[type="checkbox"]:checked + label {
-            background-color: $form-primary-color;
-            color: $form-background;
+                color: $form-background;
         }
     }
 }
@@ -549,10 +541,8 @@ body:not(.wp-core-ui) form,
     position: fixed !important;
     top: 80px !important;
     right: 1rem !important;
-    background: $form-error-color !important;
     color: white !important;
     padding: 1rem 1.5rem !important;
-    border-radius: 8px !important;
     font-size: 0.9rem !important;
     font-family: $form-font-family !important;
     z-index: 99999 !important;
@@ -560,7 +550,6 @@ body:not(.wp-core-ui) form,
     visibility: hidden !important;
     transform: translateX(400px) !important;
     transition: all 0.3s ease !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
     max-width: 350px !important;
     min-width: 250px !important;
     pointer-events: auto !important;
@@ -573,15 +562,12 @@ body:not(.wp-core-ui) form,
     }
 
     &.success {
-        background: $form-success-color !important;
     }
 
     &.warning {
-        background: $form-warning-color !important;
     }
 
     &.info {
-        background: $form-accent-color !important;
     }
 
     // Responsive
