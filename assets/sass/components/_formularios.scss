@@ -1,0 +1,434 @@
+/**
+ * Estilos para el Sistema de Formularios Nativos de Amentum
+ * =======================================================
+ */
+
+// Variables
+$form-primary-color: #6B46C1;
+$form-primary-hover: #553C9A;
+$form-error-color: #e74c3c;
+$form-success-color: #27ae60;
+$form-border-color: #ddd;
+$form-border-radius: 4px;
+$form-grid-gap: 1rem;
+
+// Contenedor principal del formulario
+.amentum-formulario-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    
+    @media (max-width: 768px) {
+        padding: 1rem;
+    }
+}
+
+// Título del formulario
+.amentum-formulario-titulo {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    color: #333;
+    font-weight: 700;
+    
+    @media (max-width: 768px) {
+        font-size: 1.5rem;
+    }
+}
+
+// Descripción del formulario
+.amentum-formulario-descripcion {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #666;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    
+    p {
+        margin-bottom: 0.5rem;
+        
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+// Grid del formulario
+.amentum-formulario-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: $form-grid-gap;
+    margin-bottom: 2rem;
+}
+
+// Clases de ancho de columnas
+@for $i from 1 through 12 {
+    .col-#{$i} {
+        grid-column: span #{$i};
+    }
+}
+
+// Responsive: todos los campos ocupan el ancho completo en móviles
+@media (max-width: 768px) {
+    .amentum-formulario-grid [class*="col-"] {
+        grid-column: span 12 !important;
+    }
+}
+
+// Fieldsets para agrupación de campos
+.amentum-formulario-fieldset {
+    border: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    background: transparent;
+}
+
+.amentum-formulario-legend {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #333;
+    padding: 0;
+    width: auto;
+    border: none;
+    
+    @media (max-width: 768px) {
+        font-size: 1.25rem;
+    }
+}
+
+// Wrapper de cada campo
+.amentum-campo-wrapper {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+// Labels de los campos
+.amentum-campo-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-size: 0.95rem;
+    
+    .requerido {
+        color: $form-error-color;
+        font-weight: 700;
+    }
+}
+
+// Estilos base para todos los inputs
+.amentum-campo-input,
+.amentum-campo-textarea,
+.amentum-campo-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid $form-border-color;
+    border-radius: $form-border-radius;
+    font-size: 1rem;
+    font-family: inherit;
+    line-height: 1.5;
+    transition: all 0.3s ease;
+    background-color: #fff;
+    
+    &:focus {
+        border-color: $form-primary-color;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba($form-primary-color, 0.1);
+    }
+    
+    &::placeholder {
+        color: #999;
+        opacity: 1;
+    }
+    
+    // Estado de error
+    &.campo-error {
+        border-color: $form-error-color;
+        
+        &:focus {
+            border-color: $form-error-color;
+            box-shadow: 0 0 0 3px rgba($form-error-color, 0.1);
+        }
+    }
+}
+
+// Textarea específico
+.amentum-campo-textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+// Select específico
+.amentum-campo-select {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 8px 10px;
+    padding-right: 2.5rem;
+    appearance: none;
+    
+    &::-ms-expand {
+        display: none;
+    }
+}
+
+// Campos de tags (checkboxes múltiples)
+.amentum-campo-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    
+    &.campo-error {
+        .amentum-tag-label {
+            border-color: $form-error-color;
+        }
+    }
+}
+
+.amentum-tag-item {
+    position: relative;
+    
+    .amentum-campo-checkbox {
+        display: none;
+    }
+}
+
+.amentum-tag-label {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 2px solid $form-border-color;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+    background-color: #fff;
+    user-select: none;
+    
+    &:hover {
+        border-color: lighten($form-primary-color, 20%);
+        background-color: lighten($form-primary-color, 45%);
+    }
+    
+    // Estado seleccionado
+    .amentum-campo-checkbox:checked + & {
+        background-color: $form-primary-color;
+        color: white;
+        border-color: $form-primary-color;
+        
+        &:hover {
+            background-color: $form-primary-hover;
+            border-color: $form-primary-hover;
+        }
+    }
+}
+
+// Checkboxes individuales
+.amentum-campo-checkbox-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    
+    .amentum-campo-checkbox {
+        margin-top: 0.25rem;
+        cursor: pointer;
+    }
+    
+    .amentum-checkbox-label {
+        cursor: pointer;
+        font-weight: 500;
+        color: #333;
+        line-height: 1.4;
+        
+        .requerido {
+            color: $form-error-color;
+            font-weight: 700;
+        }
+    }
+}
+
+// Mensajes de error por campo
+.amentum-campo-error {
+    color: $form-error-color;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    font-weight: 500;
+    display: none;
+    
+    &:not(:empty) {
+        display: block;
+    }
+}
+
+// Área de botón de envío
+.amentum-formulario-submit {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+// Botón de envío
+.amentum-boton-enviar {
+    background-color: $form-primary-color;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: $form-border-radius;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    min-width: 140px;
+    
+    &:hover:not(:disabled) {
+        background-color: $form-primary-hover;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba($form-primary-color, 0.3);
+    }
+    
+    &:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba($form-primary-color, 0.3);
+    }
+    
+    &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+    
+    // Estados del botón
+    .amentum-boton-loading {
+        display: none;
+    }
+    
+    &:disabled .amentum-boton-texto {
+        display: none;
+    }
+    
+    &:disabled .amentum-boton-loading {
+        display: inline;
+    }
+}
+
+// Mensajes de resultado del formulario
+.amentum-formulario-mensaje {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: $form-border-radius;
+    text-align: center;
+    font-weight: 600;
+    display: none;
+    
+    &.exito {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    
+    &.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    
+    // Animación de entrada
+    &.show {
+        animation: slideInFromTop 0.5s ease-out;
+    }
+}
+
+// Animaciones
+@keyframes slideInFromTop {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Estados de carga
+.amentum-formulario.enviando {
+    .amentum-campo-input,
+    .amentum-campo-textarea,
+    .amentum-campo-select,
+    .amentum-campo-checkbox {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+}
+
+// Mejoras de accesibilidad
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+// Tema oscuro (si el sitio lo soporta)
+@media (prefers-color-scheme: dark) {
+    .amentum-formulario-container {
+        .amentum-formulario-titulo {
+            color: #f0f0f0;
+        }
+        
+        .amentum-formulario-descripcion {
+            color: #ccc;
+        }
+        
+        .amentum-formulario-legend {
+            color: #f0f0f0;
+        }
+        
+        .amentum-campo-label {
+            color: #f0f0f0;
+        }
+        
+        .amentum-campo-input,
+        .amentum-campo-textarea,
+        .amentum-campo-select {
+            background-color: #2a2a2a;
+            border-color: #444;
+            color: #f0f0f0;
+            
+            &::placeholder {
+                color: #aaa;
+            }
+        }
+        
+        .amentum-tag-label {
+            background-color: #2a2a2a;
+            border-color: #444;
+            color: #f0f0f0;
+        }
+        
+        .amentum-checkbox-label {
+            color: #f0f0f0;
+        }
+    }
+}
+
+// Print styles
+@media print {
+    .amentum-formulario-container {
+        .amentum-boton-enviar {
+            display: none;
+        }
+        
+        .amentum-campo-input,
+        .amentum-campo-textarea,
+        .amentum-campo-select {
+            border-color: #000;
+            background: transparent;
+        }
+    }
+}
