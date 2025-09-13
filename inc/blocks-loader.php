@@ -37,7 +37,17 @@ function amentum_load_individual_blocks() {
             $block_file = $blocks_directory . $folder . '/block.php';
             if (file_exists($block_file)) {
                 error_log('BLOCKS LOADER: Cargando bloque desde ' . $folder);
+                if ($folder === 'formulario-selector') {
+                    error_log('🎯 BLOCKS LOADER: CARGANDO FORMULARIO-SELECTOR desde: ' . $block_file);
+                }
                 require_once $block_file;
+                if ($folder === 'formulario-selector') {
+                    error_log('✅ BLOCKS LOADER: FORMULARIO-SELECTOR cargado exitosamente');
+                }
+            } else {
+                if ($folder === 'formulario-selector') {
+                    error_log('❌ BLOCKS LOADER: block.php NO encontrado para formulario-selector en: ' . $block_file);
+                }
             }
         }
     }

@@ -15,13 +15,31 @@ if (!defined('ABSPATH')) {
  */
 function amentum_register_formulario_selector_block()
 {
+    error_log('🔄 FORMULARIO BLOCK DEBUG: Iniciando registro del bloque...');
+
+    // Verificar que el archivo block.json existe
+    $block_json_path = __DIR__ . '/block.json';
+    if (!file_exists($block_json_path)) {
+        error_log('❌ FORMULARIO BLOCK ERROR: No se encuentra block.json en: ' . $block_json_path);
+        return;
+    }
+
+    error_log('✅ FORMULARIO BLOCK DEBUG: block.json encontrado en: ' . $block_json_path);
+
     // Registrar usando block.json (método moderno de WordPress 5.5+)
     $block_registered = register_block_type(
-        __DIR__ . '/block.json',
+        $block_json_path,
         array(
             'render_callback' => 'amentum_render_formulario_selector_block',
         )
     );
+
+    if ($block_registered) {
+        error_log('✅ FORMULARIO BLOCK DEBUG: Bloque registrado exitosamente');
+        error_log('📋 FORMULARIO BLOCK DEBUG: Tipo de bloque: ' . $block_registered->name);
+    } else {
+        error_log('❌ FORMULARIO BLOCK ERROR: Falló el registro del bloque');
+    }
 }
 add_action('init', 'amentum_register_formulario_selector_block');
 
@@ -30,15 +48,25 @@ add_action('init', 'amentum_register_formulario_selector_block');
  */
 function amentum_render_formulario_selector_block($attributes, $content)
 {
+    error_log('🎯 FORMULARIO BLOCK RENDER: Iniciando renderizado...');
+    error_log('📥 FORMULARIO BLOCK RENDER: Attributes recibidos: ' . print_r($attributes, true));
+
     // Capturar cualquier error fatal para debugging
     try {
-    
+
     $formulario_id = isset($attributes['formularioId']) ? $attributes['formularioId'] : 0;
     $mostrar_titulo = isset($attributes['mostrarTitulo']) ? $attributes['mostrarTitulo'] : true;
     $mostrar_descripcion = isset($attributes['mostrarDescripcion']) ? $attributes['mostrarDescripcion'] : true;
     $clase_personalizada = isset($attributes['clasePersonalizada']) ? $attributes['clasePersonalizada'] : '';
+
+    error_log('🔧 FORMULARIO BLOCK RENDER: Variables procesadas:');
+    error_log('   - formulario_id: ' . $formulario_id);
+    error_log('   - mostrar_titulo: ' . ($mostrar_titulo ? 'true' : 'false'));
+    error_log('   - mostrar_descripcion: ' . ($mostrar_descripcion ? 'true' : 'false'));
+    error_log('   - clase_personalizada: ' . $clase_personalizada);
     
     if (!$formulario_id) {
+        error_log('⚠️ FORMULARIO BLOCK RENDER: formulario_id es 0, mostrando placeholder');
         // En el editor siempre mostrar placeholder
         return '<div style="padding: 2rem; border: 2px dashed #ccc; text-align: center; color: #666; border-radius: 4px;">
             <p style="margin: 0 0 0.5rem 0;"><strong>Selector de Formulario</strong></p>
@@ -47,24 +75,48 @@ function amentum_render_formulario_selector_block($attributes, $content)
     }
     
     // Obtener el formulario
+    error_log('🔍 FORMULARIO BLOCK RENDER: Buscando formulario con ID: ' . $formulario_id);
     $formulario = get_post($formulario_id);
-    if (!$formulario || $formulario->post_type !== 'formularios') {
+
+    if (!$formulario) {
+        error_log('❌ FORMULARIO BLOCK RENDER: get_post() devolvió null para ID: ' . $formulario_id);
         return '<div style="padding: 2rem; border: 2px solid #dc3545; background: #f8d7da; text-align: center; color: #721c24; border-radius: 4px;">
             <p style="margin: 0 0 0.5rem 0;"><strong>Error</strong></p>
             <p style="margin: 0; font-size: 14px;">Formulario no encontrado (ID: ' . $formulario_id . ')</p>
         </div>';
     }
+
+    error_log('✅ FORMULARIO BLOCK RENDER: Formulario encontrado: ' . $formulario->post_title);
+    error_log('📋 FORMULARIO BLOCK RENDER: Post type: ' . $formulario->post_type);
+
+    if ($formulario->post_type !== 'formularios') {
+        error_log('❌ FORMULARIO BLOCK RENDER: Post type incorrecto. Esperado: formularios, Encontrado: ' . $formulario->post_type);
+        return '<div style="padding: 2rem; border: 2px solid #dc3545; background: #f8d7da; text-align: center; color: #721c24; border-radius: 4px;">
+            <p style="margin: 0 0 0.5rem 0;"><strong>Error</strong></p>
+            <p style="margin: 0; font-size: 14px;">El post seleccionado no es un formulario (ID: ' . $formulario_id . ', Tipo: ' . $formulario->post_type . ')</p>
+        </div>';
+    }
     
     // Obtener configuración del formulario
+    error_log('⚙️ FORMULARIO BLOCK RENDER: Obteniendo configuración para ID: ' . $formulario_id);
     $config = get_post_meta($formulario_id, '_amentum_formulario_config', true);
+    error_log('🔧 FORMULARIO BLOCK RENDER: Config raw: ' . print_r($config, true));
+
     $config = !empty($config) ? $config : array();
-    
+
     $titulo_formulario = get_the_title($formulario_id);
     $descripcion_formulario = isset($config['descripcion']) ? $config['descripcion'] : '';
     $campos_formulario = isset($config['campos']) ? $config['campos'] : array();
     $boton_texto = isset($config['boton_texto']) ? $config['boton_texto'] : 'Enviar';
-    
+
+    error_log('📋 FORMULARIO BLOCK RENDER: Configuración procesada:');
+    error_log('   - titulo: ' . $titulo_formulario);
+    error_log('   - descripcion: ' . $descripcion_formulario);
+    error_log('   - campos_count: ' . count($campos_formulario));
+    error_log('   - boton_texto: ' . $boton_texto);
+
     if (empty($campos_formulario)) {
+        error_log('⚠️ FORMULARIO BLOCK RENDER: No hay campos configurados, mostrando mensaje de error');
         return '<div style="padding: 2rem; border: 2px solid #f0ad4e; background: #fcf8e3; text-align: center; border-radius: 4px;">
             <p style="margin: 0 0 0.5rem 0;"><strong>Formulario: ' . esc_html($titulo_formulario) . '</strong></p>
             <p style="margin: 0; font-size: 14px;">Este formulario no tiene campos configurados.</p>
@@ -254,7 +306,10 @@ function amentum_render_formulario_selector_block($attributes, $content)
     </div>
     
     <?php
-    return ob_get_clean();
+    $output = ob_get_clean();
+    error_log('✅ FORMULARIO BLOCK RENDER: Renderizado completado exitosamente');
+    error_log('📄 FORMULARIO BLOCK RENDER: HTML generado (primeros 200 chars): ' . substr($output, 0, 200) . '...');
+    return $output;
 
     } catch (Exception $e) {
         // Limpiar buffer de salida en caso de error
@@ -288,32 +343,49 @@ function amentum_render_formulario_selector_block($attributes, $content)
  */
 function amentum_enqueue_formulario_selector_editor_assets()
 {
+    error_log('📜 FORMULARIO BLOCK EDITOR: Encolando scripts del editor...');
+
+    $editor_js_path = get_template_directory_uri() . '/blocks/formulario-selector/editor.js';
+    error_log('📂 FORMULARIO BLOCK EDITOR: Ruta del script: ' . $editor_js_path);
+
     wp_enqueue_script(
         'amentum-formulario-selector-editor',
-        get_template_directory_uri() . '/blocks/formulario-selector/editor.js',
+        $editor_js_path,
         array('wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data'),
         wp_get_theme()->get('Version'),
         true
     );
-    
+
+    error_log('✅ FORMULARIO BLOCK EDITOR: Script encolado correctamente');
+
     // Localizar datos de formularios para el editor
+    error_log('🔍 FORMULARIO BLOCK EDITOR: Buscando formularios disponibles...');
     $formularios = get_posts(array(
         'post_type' => 'formularios',
         'post_status' => 'publish',
         'numberposts' => -1,
         'fields' => 'ids'
     ));
-    
+
+    error_log('📋 FORMULARIO BLOCK EDITOR: Formularios encontrados: ' . count($formularios));
+    if (!empty($formularios)) {
+        error_log('🗂️ FORMULARIO BLOCK EDITOR: IDs encontrados: ' . implode(', ', $formularios));
+    }
+
     $formularios_options = array();
     foreach ($formularios as $id) {
+        $titulo = get_the_title($id);
         $formularios_options[] = array(
             'value' => $id,
-            'label' => get_the_title($id)
+            'label' => $titulo
         );
+        error_log('📄 FORMULARIO BLOCK EDITOR: Agregado - ID: ' . $id . ', Título: ' . $titulo);
     }
-    
+
     wp_localize_script('amentum-formulario-selector-editor', 'amentumFormularios', array(
         'formularios' => $formularios_options
     ));
+
+    error_log('🌍 FORMULARIO BLOCK EDITOR: Variables localizadas enviadas al JavaScript');
 }
 add_action('enqueue_block_editor_assets', 'amentum_enqueue_formulario_selector_editor_assets');
