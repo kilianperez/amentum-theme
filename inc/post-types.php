@@ -107,3 +107,62 @@ function amentum_eventos_taxonomy()
     register_taxonomy('tipo_evento', array( 'eventos' ), $args);
 }
 add_action('init', 'amentum_eventos_taxonomy', 0);
+
+// Post type Formularios
+function amentum_formularios_post_type()
+{
+    $labels = array(
+        'name'                  => _x('Formularios', 'amentum-text'),
+        'singular_name'         => _x('Formulario', 'amentum-text'),
+        'menu_name'             => __('Formularios', 'amentum-text'),
+        'name_admin_bar'        => __('Formulario', 'amentum-text'),
+        'archives'              => __('Archivos de formularios', 'amentum-text'),
+        'attributes'            => __('Atributos de formularios', 'amentum-text'),
+        'parent_item_colon'     => __('Formulario padre', 'amentum-text'),
+        'all_items'             => __('Todos los formularios', 'amentum-text'),
+        'add_new_item'          => __('Añadir nuevo formulario', 'amentum-text'),
+        'add_new'               => __('Añadir nuevo', 'amentum-text'),
+        'new_item'              => __('Nuevo formulario', 'amentum-text'),
+        'edit_item'             => __('Editar formulario', 'amentum-text'),
+        'update_item'           => __('Actualizar formulario', 'amentum-text'),
+        'view_item'             => __('Ver formulario', 'amentum-text'),
+        'view_items'            => __('Ver formularios', 'amentum-text'),
+        'search_items'          => __('Buscar formulario', 'amentum-text'),
+        'not_found'             => __('No se han encontrado formularios', 'amentum-text'),
+        'not_found_in_trash'    => __('No se han encontrado formularios en la papelera', 'amentum-text'),
+        'featured_image'        => __('Imagen destacada', 'amentum-text'),
+        'set_featured_image'    => __('Establecer imagen destacada', 'amentum-text'),
+        'remove_featured_image' => __('Eliminar imagen destacada', 'amentum-text'),
+        'use_featured_image'    => __('Usar como imagen destacada', 'amentum-text'),
+        'insert_into_item'      => __('Insertar en formulario', 'amentum-text'),
+        'uploaded_to_this_item' => __('Subir formulario', 'amentum-text'),
+        'items_list'            => __('Lista de formularios', 'amentum-text'),
+        'items_list_navigation' => __('Navegar en los formularios', 'amentum-text'),
+        'filter_items_list'     => __('Filtrar formularios', 'amentum-text'),
+    );
+    
+    $args = array(
+        'label'                 => __('Formulario', 'amentum-text'),
+        'description'           => __('Crea y gestiona formularios personalizados', 'amentum-text'),
+        'labels'                => $labels,
+        'supports'              => array('title'),
+        'taxonomies'            => array(),
+        'hierarchical'          => false,
+        'public'                => false,
+        'show_ui'               => true,
+        'show_in_menu'          => true,
+        'menu_position'         => 25,
+        'menu_icon'             => 'dashicons-feedback',
+        'show_in_admin_bar'     => true,
+        'show_in_nav_menus'     => false,
+        'can_export'            => true,
+        'has_archive'           => false,
+        'exclude_from_search'   => true,
+        'publicly_queryable'    => false,
+        'capability_type'       => 'page',
+        'show_in_rest'          => true,
+    );
+    
+    register_post_type('formularios', $args);
+}
+add_action('init', 'amentum_formularios_post_type', 0);

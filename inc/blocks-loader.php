@@ -80,7 +80,12 @@ function amentum_enqueue_all_block_editor_assets() {
             }
             
             $editor_js_file = $blocks_directory . $folder . '/editor.js';
-            
+
+            // Saltar formulario-selector ya que maneja su propio enqueue con datos específicos
+            if ($folder === 'formulario-selector') {
+                continue;
+            }
+
             // Si existe el archivo editor.js, encolarlo automáticamente
             if (file_exists($editor_js_file)) {
                 $script_handle = 'amentum-' . $folder . '-editor';

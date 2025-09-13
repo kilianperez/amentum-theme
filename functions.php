@@ -171,6 +171,23 @@ if (defined('JETPACK__VERSION')) {
  */
 require get_template_directory() . '/inc/ajax-forms.php';
 
+// DEBUG TEMPORAL: Shortcode para probar bloque
+function amentum_test_formulario_block($atts) {
+    $atts = shortcode_atts(array(
+        'id' => 19,
+    ), $atts);
+    
+    $attributes = array(
+        'formularioId' => (int) $atts['id'],
+        'mostrarTitulo' => true,
+        'mostrarDescripcion' => true,
+        'clasePersonalizada' => ''
+    );
+    
+    return amentum_render_formulario_selector_block($attributes, '');
+}
+add_shortcode('test_formulario', 'amentum_test_formulario_block');
+
 /**
  * Funciones de soporte para imágenes y archivos SVG.
  */
@@ -188,6 +205,11 @@ require get_template_directory() . '/inc/post-utils.php';
 
 // Incluir post types personalizados
 require get_template_directory() . '/inc/post-types.php';
+
+/**
+ * INCLUIR SISTEMA NATIVO DE GESTIÓN DE FORMULARIOS
+ */
+require get_template_directory() . '/inc/formularios-manager.php';
 
 /**
  * INCLUIR SISTEMA DE BLOQUES INDEPENDIENTE
