@@ -3,6 +3,7 @@
 ## 📋 Plan Completo de Implementación
 
 ### ✅ **Objetivo Principal**
+
 Migrar de Gulp a Vite manteniendo compatibilidad con `SCRIPT_DEBUG` de WordPress, generando archivos `.css/.js` para desarrollo y `.min.css/.min.js` para producción.
 
 ---
@@ -12,25 +13,31 @@ Migrar de Gulp a Vite manteniendo compatibilidad con `SCRIPT_DEBUG` de WordPress
 ### 📦 1.1 Instalación de Dependencias
 
 ```bash
+
 # Core de Vite
+
 npm install --save-dev vite
 
 # Procesamiento CSS/SCSS
+
 npm install --save-dev sass
 npm install --save-dev postcss autoprefixer
 npm install --save-dev @fullhuman/postcss-purgecss
 
 # Optimización de imágenes
+
 npm install --save-dev vite-plugin-imagemin
 
 # Utilidades
+
 npm install --save-dev vite-plugin-static-copy
 npm install --save-dev terser
-```
 
+```text
 ### 📁 1.2 Estructura de Archivos Objetivo
 
 ```
+
 wordpress/themes/amentum/
 ├── vite.config.js              # Configuración principal
 ├── postcss.config.js           # PostCSS + PurgeCSS
@@ -49,8 +56,8 @@ wordpress/themes/amentum/
 │       │   ├── style.css      # Desarrollo
 │       │   ├── style.css.map  # Sourcemap
 │       │   ├── style.min.css  # Producción (con PurgeCSS)
-│       │   ├── blocks.css     
-│       │   └── blocks.min.css 
+│       │   ├── blocks.css
+│       │   └── blocks.min.css
 │       └── js/
 │           ├── main.js        # Desarrollo
 │           ├── main.js.map    # Sourcemap
@@ -58,16 +65,17 @@ wordpress/themes/amentum/
 └── inc/
     └── template-enqueued.php  # Enqueue con SCRIPT_DEBUG
 
-```
-
+```text
 ---
 
 ## 🎨 **FASE 2: Migración CSS → SCSS para Bloques**
 
 ### 📋 2.1 Análisis de Bloques Actuales
 
-**Bloques detectados con CSS:**
+### Bloques detectados con CSS
+
 ```
+
 blocks/
 ├── hero/style.css
 ├── servicios/style.css
@@ -79,11 +87,12 @@ blocks/
 ├── hero-full/style.css
 ├── eventos-destacados/style.css
 └── eventos-swiper/style.css
-```
 
+```text
 ### ✅ TODO 2.1: Crear Sistema de Design Tokens
 
 ```scss
+
 // assets/sass/base/_tokens.scss
 // Design System centralizado para todos los bloques
 
@@ -93,7 +102,7 @@ $colors: (
   'primary': #3B82F6,
   'secondary': #8B5CF6,
   'accent': #F59E0B,
-  
+
   // Neutral colors
   'gray-50': #F9FAFB,
   'gray-100': #F3F4F6,
@@ -105,7 +114,7 @@ $colors: (
   'gray-700': #374151,
   'gray-800': #1F2937,
   'gray-900': #111827,
-  
+
   // Semantic colors
   'success': #10B981,
   'warning': #F59E0B,
@@ -136,7 +145,7 @@ $typography: (
     'serif': ('Georgia', 'serif'),
     'mono': ('JetBrains Mono', 'monospace')
   ),
-  
+
   'font-size': (
     'xs': 0.75rem,   // 12px
     'sm': 0.875rem,  // 14px
@@ -150,7 +159,7 @@ $typography: (
     '6xl': 3.75rem,  // 60px
     '7xl': 4.5rem,   // 72px
   ),
-  
+
   'font-weight': (
     'light': 300,
     'normal': 400,
@@ -159,7 +168,7 @@ $typography: (
     'bold': 700,
     'extrabold': 800
   ),
-  
+
   'line-height': (
     'tight': 1.25,
     'snug': 1.375,
@@ -178,12 +187,12 @@ $layout: (
     'xl': 1280px,
     '2xl': 1536px
   ),
-  
+
   'container': (
     'max-width': 1200px,
     'padding': map-get($spacing, 'lg')
   ),
-  
+
   'border-radius': (
     'none': 0,
     'sm': 0.125rem,
@@ -193,7 +202,7 @@ $layout: (
     '2xl': 1rem,
     'full': 9999px
   ),
-  
+
   'shadow': (
     'sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
     'md': '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
@@ -210,7 +219,7 @@ $animations: (
     'normal': 0.3s,
     'slow': 0.5s
   ),
-  
+
   'easing': (
     'ease': cubic-bezier(0.4, 0, 0.2, 1),
     'ease-in': cubic-bezier(0.4, 0, 1, 1),
@@ -218,11 +227,12 @@ $animations: (
     'bounce': cubic-bezier(0.68, -0.55, 0.265, 1.55)
   )
 );
-```
 
+```text
 ### ✅ TODO 2.2: Crear Funciones y Mixins Útiles
 
 ```scss
+
 // assets/sass/base/_functions.scss
 
 // Función para obtener colores del mapa
@@ -252,9 +262,10 @@ $animations: (
   @warn "Font #{$property} `#{$value}` no encontrado.";
   @return null;
 }
-```
 
+```text
 ```scss
+
 // assets/sass/base/_mixins.scss
 
 // Mixin para responsive breakpoints
@@ -295,13 +306,13 @@ $animations: (
 @mixin aspect-ratio($width: 1, $height: 1) {
   position: relative;
   overflow: hidden;
-  
+
   &::before {
     content: '';
     display: block;
     padding-top: percentage($height / $width);
   }
-  
+
   > * {
     position: absolute;
     top: 0;
@@ -316,15 +327,16 @@ $animations: (
 @mixin animate($property: all, $duration: normal, $easing: ease) {
   transition: $property map-get(map-get($animations, 'duration'), $duration) map-get(map-get($animations, 'easing'), $easing);
 }
-```
 
+```text
 ### ✅ TODO 2.3: Migrar Bloques CSS → SCSS
 
-**Plan de migración por bloque:**
+### Plan de migración por bloque
 
 #### Ejemplo: Hero Block
 
 ```scss
+
 // assets/sass/blocks/_hero.scss
 // Migración de blocks/hero/style.css
 
@@ -334,7 +346,7 @@ $animations: (
   position: relative;
   margin: space('4xl') 0;
   @include container;
-  
+
   // Responsive
   @include breakpoint('md') {
     min-height: 90vh;
@@ -345,18 +357,18 @@ $animations: (
 .hero-content {
   text-align: center;
   z-index: 2;
-  
+
   h1 {
     font-size: font('font-size', '4xl');
     font-weight: font('font-weight', 'bold');
     color: color('gray-900');
     margin-bottom: space('xl');
-    
+
     @include breakpoint('md') {
       font-size: font('font-size', '6xl');
     }
   }
-  
+
   p {
     font-size: font('font-size', 'lg');
     color: color('gray-600');
@@ -365,34 +377,34 @@ $animations: (
     margin-left: auto;
     margin-right: auto;
   }
-  
+
   .hero-buttons {
     display: flex;
     gap: space('lg');
     justify-content: center;
     flex-wrap: wrap;
-    
+
     .btn {
       @include animate;
       padding: space('lg') space('2xl');
       border-radius: map-get(map-get($layout, 'border-radius'), 'lg');
       font-weight: font('font-weight', 'medium');
-      
+
       &--primary {
         background: color('primary');
         color: white;
-        
+
         &:hover {
           background: darken(color('primary'), 10%);
           transform: translateY(-2px);
         }
       }
-      
+
       &--secondary {
         background: transparent;
         color: color('primary');
         border: 2px solid color('primary');
-        
+
         &:hover {
           background: color('primary');
           color: white;
@@ -401,8 +413,8 @@ $animations: (
     }
   }
 }
-```
 
+```text
 #### Bloque por Bloque
 
 - [ ] **Hero Block** → `_hero.scss`
@@ -419,6 +431,7 @@ $animations: (
 ### ✅ TODO 2.4: Archivo Master de Bloques
 
 ```scss
+
 // assets/sass/blocks/_index.scss
 // Importa todos los bloques SCSS
 
@@ -437,11 +450,12 @@ $animations: (
 // Event blocks
 @import 'eventos-destacados';
 @import 'eventos-swiper';
-```
 
+```text
 ### ✅ TODO 2.5: Actualizar style.scss Principal
 
 ```scss
+
 // assets/sass/style.scss
 // Archivo principal que incluye todo
 
@@ -478,8 +492,8 @@ $animations: (
 // Vendor overrides
 @import 'vendor/bootstrap-overrides';
 @import 'vendor/swiper-overrides';
-```
 
+```text
 ---
 
 ## 🔧 **FASE 3: Configuración de Vite**
@@ -487,6 +501,7 @@ $animations: (
 ### 📝 2.1 vite.config.js - Configuración Dual Output
 
 ```javascript
+
 // vite.config.js
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
@@ -497,7 +512,7 @@ import { VitePluginStaticCopy } from 'vite-plugin-static-copy';
 const baseConfig = {
   root: '.',
   base: './',
-  
+
   resolve: {
     alias: {
       '@': resolve(__dirname, './assets'),
@@ -505,14 +520,14 @@ const baseConfig = {
       '@sass': resolve(__dirname, './assets/sass'),
     }
   },
-  
+
   server: {
     port: 5173,
     hot: true,
     // Proxy para WordPress local
     proxy: {
       '/': {
-        target: 'http://localhost:8001',
+        target: '<http://localhost:8001',>
         changeOrigin: true
       }
     }
@@ -527,7 +542,7 @@ const devBuildConfig = {
     emptyOutDir: false,
     sourcemap: true,
     minify: false,
-    
+
     rollupOptions: {
       input: {
         style: resolve(__dirname, 'assets/sass/style.scss'), // Incluye bloques
@@ -550,7 +565,7 @@ const devBuildConfig = {
         }
       }
     },
-    
+
     cssCodeSplit: false,
   }
 };
@@ -563,7 +578,7 @@ const prodBuildConfig = {
     emptyOutDir: false,
     sourcemap: 'hidden',
     minify: 'terser',
-    
+
     rollupOptions: {
       input: {
         style: resolve(__dirname, 'assets/sass/style.scss'), // Incluye bloques
@@ -580,7 +595,7 @@ const prodBuildConfig = {
         }
       }
     },
-    
+
     terserOptions: {
       compress: {
         drop_console: true,
@@ -590,7 +605,7 @@ const prodBuildConfig = {
         comments: false
       }
     },
-    
+
     cssCodeSplit: false,
     cssMinify: 'lightningcss'
   }
@@ -599,7 +614,7 @@ const prodBuildConfig = {
 // Exportar configuración basada en modo
 export default defineConfig(({ mode }) => {
   const config = mode === 'production' ? prodBuildConfig : devBuildConfig;
-  
+
   // Añadir plugins comunes
   config.plugins = [
     // Copiar fuentes
@@ -611,7 +626,7 @@ export default defineConfig(({ mode }) => {
         }
       ]
     }),
-    
+
     // Optimizar imágenes solo en producción
     mode === 'production' && imagemin({
       gifsicle: { optimizationLevel: 3 },
@@ -626,14 +641,15 @@ export default defineConfig(({ mode }) => {
       }
     })
   ].filter(Boolean);
-  
+
   return config;
 });
-```
 
+```text
 ### 📝 2.2 postcss.config.js - Con PurgeCSS
 
 ```javascript
+
 // postcss.config.js
 import autoprefixer from 'autoprefixer';
 import purgecss from '@fullhuman/postcss-purgecss';
@@ -641,7 +657,7 @@ import purgecss from '@fullhuman/postcss-purgecss';
 export default {
   plugins: [
     autoprefixer(),
-    
+
     // Solo aplicar PurgeCSS a archivos .min.css
     process.env.BUILD_MODE === 'production' && purgecss({
       content: [
@@ -651,23 +667,23 @@ export default {
         '!./node_modules/**',
         '!./vendor/**'
       ],
-      
+
       safelist: {
         standard: [
           // WordPress Core
           'wp-block', 'wp-caption', 'wp-caption-text', 'sticky',
           'screen-reader-text', 'gallery', 'bypostauthor',
           'alignleft', 'alignright', 'aligncenter', 'alignwide', 'alignfull',
-          
+
           // Bootstrap esenciales
           'container', 'container-fluid', 'row', 'col',
           'btn', 'alert', 'modal', 'dropdown', 'collapse',
           'show', 'hide', 'active', 'disabled',
-          
+
           // Estados comunes
           'loading', 'loaded', 'error', 'success', 'open', 'closed'
         ],
-        
+
         deep: [
           // WordPress patterns
           /^wp-block-/,
@@ -681,7 +697,7 @@ export default {
           /^current/,
           /^widget/,
           /^comment/,
-          
+
           // Bootstrap patterns
           /^col-(xs|sm|md|lg|xl|xxl)-/,
           /^[mp][trblxy]?-[0-5]/,
@@ -689,14 +705,14 @@ export default {
           /^bg-/,
           /^border-/,
           /^btn-/,
-          
+
           // Librerías
           /^swiper/,
           /^lightbox/,
           /^sticky/,
           /^lenis/
         ],
-        
+
         greedy: [
           // Plugins WordPress
           /^woocommerce/,
@@ -705,7 +721,7 @@ export default {
           /^elementor/
         ]
       },
-      
+
       // Extractor personalizado para PHP
       defaultExtractor: content => {
         // Para archivos PHP
@@ -714,22 +730,23 @@ export default {
           const innerMatches = content.match(/[^<>"'`\s.()]*[^<>"'`\s.():]/g) || [];
           return broadMatches.concat(innerMatches);
         }
-        
+
         // Para JS/CSS
         return content.match(/[\w-/:]+(?<!:)/g) || [];
       },
-      
+
       variables: true,
       keyframes: true,
       fontFace: true
     })
   ].filter(Boolean)
 };
-```
 
+```text
 ### 📝 2.3 package.json - Scripts de Build
 
 ```json
+
 {
   "name": "amentum-theme",
   "version": "1.0.0",
@@ -755,8 +772,8 @@ export default {
     "terser": "^5.24.0"
   }
 }
-```
 
+```text
 ---
 
 ## 🔌 **FASE 3: Integración con WordPress**
@@ -764,6 +781,7 @@ export default {
 ### 📝 3.1 assets/js/main.js - Entry Point
 
 ```javascript
+
 // assets/js/main.js
 // Importar dependencias NPM
 import 'bootstrap';
@@ -785,11 +803,11 @@ import.meta.glob('../blocks/**/script.js', { eager: true });
 document.addEventListener('DOMContentLoaded', () => {
   // Detectar modo debug
   const isDebug = window.amentumData?.isDebug || false;
-  
+
   if (isDebug) {
     console.log('🔧 SCRIPT_DEBUG está activo');
   }
-  
+
   // Inicializar componentes
   initSwiper();
   initLightbox();
@@ -817,41 +835,50 @@ function initStickyElements() {
 
 function initSmoothScroll() {
   const lenis = new Lenis();
-  
+
   function raf(time) {
     lenis.raf(time);
     requestAnimationFrame(raf);
   }
-  
+
   requestAnimationFrame(raf);
 }
-```
 
+```text
 ### 📝 3.2 inc/template-enqueued.php - Enqueue con SCRIPT_DEBUG
 
 ```php
+
 <?php
 /**
+
  * Enqueue scripts y styles con soporte SCRIPT_DEBUG
  * Compatible con Vite para desarrollo y producción
+
  */
 
 /**
+
  * Detectar si Vite dev server está activo
+
  */
 function amentum_is_vite_dev() {
     return defined('WP_DEBUG') && WP_DEBUG && file_exists(get_template_directory() . '/.vite-dev');
 }
 
 /**
+
  * Obtener sufijo para archivos según SCRIPT_DEBUG
+
  */
 function amentum_get_asset_suffix() {
     return defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
 }
 
 /**
+
  * Obtener versión para cache busting
+
  */
 function amentum_get_asset_version($file = '') {
     // En desarrollo, usar timestamp del archivo
@@ -861,13 +888,15 @@ function amentum_get_asset_version($file = '') {
         }
         return time();
     }
-    
+
     // En producción, usar versión del theme
     return wp_get_theme()->get('Version');
 }
 
 /**
+
  * Enqueue principal de scripts y styles
+
  */
 function amentum_scripts_styles() {
     // Si Vite dev server está activo (desarrollo con HMR)
@@ -875,34 +904,34 @@ function amentum_scripts_styles() {
         // Vite client para HMR
         wp_enqueue_script(
             'vite-client',
-            'http://localhost:5173/@vite/client',
+            '<http://localhost:5173/@vite/client',>
             [],
             null,
             false
         );
-        
+
         // Main module
         wp_enqueue_module(
             'amentum-main',
-            'http://localhost:5173/assets/js/main.js'
+            '<http://localhost:5173/assets/js/main.js'>
         );
-        
+
         // Styles via Vite
         add_action('wp_head', function() {
             echo '<script type="module">
-                import "http://localhost:5173/assets/sass/style.scss";
-                import "http://localhost:5173/assets/sass/blocks.scss";
+                import "<http://localhost:5173/assets/sass/style.scss";>
+                import "<http://localhost:5173/assets/sass/blocks.scss";>
             </script>';
         });
-        
+
         return; // Salir temprano en modo dev
     }
-    
+
     // Producción/Staging - usar archivos buildados
     $suffix = amentum_get_asset_suffix();
     $dist_uri = get_template_directory_uri() . '/assets/dist';
     $dist_path = '/assets/dist';
-    
+
     // CSS Principal
     wp_enqueue_style(
         'amentum-style',
@@ -911,9 +940,9 @@ function amentum_scripts_styles() {
         amentum_get_asset_version($dist_path . '/css/style' . $suffix . '.css'),
         'all'
     );
-    
+
     // Los bloques ya están incluidos en style.css - No necesario archivo separado
-    
+
     // JavaScript Principal
     wp_enqueue_script(
         'amentum-main',
@@ -922,7 +951,7 @@ function amentum_scripts_styles() {
         amentum_get_asset_version($dist_path . '/js/main' . $suffix . '.js'),
         true // En footer
     );
-    
+
     // Localize script - pasar datos PHP a JS
     wp_localize_script('amentum-main', 'amentumData', [
         'ajaxUrl' => admin_url('admin-ajax.php'),
@@ -936,7 +965,7 @@ function amentum_scripts_styles() {
             'success' => __('Operación exitosa', 'amentum')
         ]
     ]);
-    
+
     // Scripts condicionales
     if (is_singular() && comments_open() && get_option('thread_comments')) {
         wp_enqueue_script('comment-reply');
@@ -945,18 +974,20 @@ function amentum_scripts_styles() {
 add_action('wp_enqueue_scripts', 'amentum_scripts_styles');
 
 /**
+
  * Preload de recursos críticos
+
  */
 function amentum_preload_assets() {
     $suffix = amentum_get_asset_suffix();
     $dist_uri = get_template_directory_uri() . '/assets/dist';
-    
+
     // Preload de fuentes
     echo '<link rel="preload" href="' . $dist_uri . '/fonts/main-font.woff2" as="font" type="font/woff2" crossorigin>';
-    
+
     // Preload de CSS crítico
     echo '<link rel="preload" href="' . $dist_uri . '/css/style' . $suffix . '.css" as="style">';
-    
+
     // DNS Prefetch para recursos externos
     echo '<link rel="dns-prefetch" href="//fonts.googleapis.com">';
     echo '<link rel="dns-prefetch" href="//fonts.gstatic.com">';
@@ -964,28 +995,30 @@ function amentum_preload_assets() {
 add_action('wp_head', 'amentum_preload_assets', 2);
 
 /**
+
  * Atributos adicionales para scripts
+
  */
 function amentum_script_attributes($tag, $handle) {
     // Añadir defer a scripts no críticos
     $defer_scripts = ['amentum-main'];
-    
+
     if (in_array($handle, $defer_scripts)) {
         return str_replace(' src', ' defer src', $tag);
     }
-    
+
     // Añadir async a scripts de analytics
     $async_scripts = ['google-analytics'];
-    
+
     if (in_array($handle, $async_scripts)) {
         return str_replace(' src', ' async src', $tag);
     }
-    
+
     return $tag;
 }
 add_filter('script_loader_tag', 'amentum_script_attributes', 10, 2);
-```
 
+```text
 ---
 
 ## 🚀 **FASE 4: Comandos y Workflow**
@@ -993,29 +1026,37 @@ add_filter('script_loader_tag', 'amentum_script_attributes', 10, 2);
 ### 🔨 4.1 Build Script (build.sh)
 
 ```bash
+
 #!/bin/bash
+
+
 # build.sh - Script de build completo
 
 echo "🚀 Building Amentum Theme Assets with Vite"
 echo "==========================================="
 
 # Limpiar directorio dist
+
 echo "🧹 Limpiando directorio dist..."
 rm -rf assets/dist/*
 
 # Build de desarrollo (sin minificar, con sourcemaps)
+
 echo "📦 Building development files (.css, .js con sourcemaps)..."
 BUILD_MODE=development npm run build:dev
 
 # Build de producción (minificado, con PurgeCSS)
+
 echo "📦 Building production files (.min.css, .min.js)..."
 BUILD_MODE=production npm run build:prod
 
 # Optimizar imágenes
+
 echo "🖼️ Optimizando imágenes..."
 npm run optimize:images
 
 # Resumen
+
 echo ""
 echo "✅ Build completado!"
 echo "📁 Archivos generados:"
@@ -1029,11 +1070,12 @@ echo "  - style.css: $(wc -c < assets/dist/css/style.css | awk '{print $1/1024"K
 echo "  - style.min.css: $(wc -c < assets/dist/css/style.min.css | awk '{print $1/1024"KB"}')"
 REDUCTION=$(echo "scale=2; 100 - ($(wc -c < assets/dist/css/style.min.css) * 100 / $(wc -c < assets/dist/css/style.css))" | bc)
 echo "  - Reducción: ${REDUCTION}%"
-```
 
+```text
 ### 🔧 4.2 wp-config.php - Configuraciones
 
 ```php
+
 // wp-config-development.php
 define('WP_DEBUG', true);
 define('WP_DEBUG_LOG', true);
@@ -1054,8 +1096,8 @@ define('WP_DEBUG_LOG', false);
 define('WP_DEBUG_DISPLAY', false);
 define('SCRIPT_DEBUG', false);        // Usa archivos .min.css y .min.js
 define('WP_ENVIRONMENT_TYPE', 'production');
-```
 
+```text
 ---
 
 ## ✅ **FASE 5: Testing y Validación**
@@ -1107,6 +1149,7 @@ define('WP_ENVIRONMENT_TYPE', 'production');
 ### 💡 **Mejora 1: Sistema de Componentes Modulares**
 
 ```scss
+
 // assets/sass/components/_button.scss
 // Componente button reutilizable en todos los bloques
 
@@ -1121,49 +1164,49 @@ define('WP_ENVIRONMENT_TYPE', 'production');
   border: none;
   cursor: pointer;
   @include animate;
-  
+
   // Variantes
   &--primary {
     background: color('primary');
     color: white;
-    
+
     &:hover {
       background: darken(color('primary'), 8%);
       transform: translateY(-1px);
     }
   }
-  
+
   &--secondary {
     background: color('gray-100');
     color: color('gray-700');
-    
+
     &:hover {
       background: color('gray-200');
     }
   }
-  
+
   &--outline {
     background: transparent;
     color: color('primary');
     border: 2px solid color('primary');
-    
+
     &:hover {
       background: color('primary');
       color: white;
     }
   }
-  
+
   // Tamaños
   &--sm {
     padding: space('sm') space('lg');
     font-size: font('font-size', 'sm');
   }
-  
+
   &--lg {
     padding: space('lg') space('2xl');
     font-size: font('font-size', 'lg');
   }
-  
+
   // Estados
   &:disabled {
     opacity: 0.6;
@@ -1171,11 +1214,12 @@ define('WP_ENVIRONMENT_TYPE', 'production');
     transform: none !important;
   }
 }
-```
 
+```text
 ### 💡 **Mejora 2: Utility Classes Responsive**
 
 ```scss
+
 // assets/sass/base/_utilities.scss
 // Clases utilitarias estilo Tailwind pero con nuestros tokens
 
@@ -1186,27 +1230,27 @@ define('WP_ENVIRONMENT_TYPE', 'production');
   .mb-#{$name} { margin-bottom: $value !important; }
   .ml-#{$name} { margin-left: $value !important; }
   .mr-#{$name} { margin-right: $value !important; }
-  .mx-#{$name} { 
-    margin-left: $value !important; 
-    margin-right: $value !important; 
+  .mx-#{$name} {
+    margin-left: $value !important;
+    margin-right: $value !important;
   }
-  .my-#{$name} { 
-    margin-top: $value !important; 
-    margin-bottom: $value !important; 
+  .my-#{$name} {
+    margin-top: $value !important;
+    margin-bottom: $value !important;
   }
-  
+
   .p-#{$name} { padding: $value !important; }
   .pt-#{$name} { padding-top: $value !important; }
   .pb-#{$name} { padding-bottom: $value !important; }
   .pl-#{$name} { padding-left: $value !important; }
   .pr-#{$name} { padding-right: $value !important; }
-  .px-#{$name} { 
-    padding-left: $value !important; 
-    padding-right: $value !important; 
+  .px-#{$name} {
+    padding-left: $value !important;
+    padding-right: $value !important;
   }
-  .py-#{$name} { 
-    padding-top: $value !important; 
-    padding-bottom: $value !important; 
+  .py-#{$name} {
+    padding-top: $value !important;
+    padding-bottom: $value !important;
   }
 }
 
@@ -1234,28 +1278,29 @@ define('WP_ENVIRONMENT_TYPE', 'production');
       .#{$breakpoint-name}\:m-#{$name} { margin: $value !important; }
       .#{$breakpoint-name}\:p-#{$name} { padding: $value !important; }
     }
-    
+
     // Typography responsive
     @each $name, $value in map-get($typography, 'font-size') {
       .#{$breakpoint-name}\:text-#{$name} { font-size: $value !important; }
     }
   }
 }
-```
 
+```text
 ### 💡 **Mejora 3: Sistema de Grid Personalizado**
 
 ```scss
+
 // assets/sass/layout/_grid.scss
 // Grid system más flexible que Bootstrap
 
 .container {
   @include container;
-  
+
   &--fluid {
     max-width: none;
   }
-  
+
   &--narrow {
     max-width: 800px;
   }
@@ -1264,13 +1309,13 @@ define('WP_ENVIRONMENT_TYPE', 'production');
 .grid {
   display: grid;
   gap: space('lg');
-  
+
   // Grid templates predefinidos
   &--cols-1 { grid-template-columns: 1fr; }
   &--cols-2 { grid-template-columns: repeat(2, 1fr); }
   &--cols-3 { grid-template-columns: repeat(3, 1fr); }
   &--cols-4 { grid-template-columns: repeat(4, 1fr); }
-  
+
   // Responsive grids
   @include breakpoint('md') {
     &--md-cols-1 { grid-template-columns: 1fr; }
@@ -1278,14 +1323,14 @@ define('WP_ENVIRONMENT_TYPE', 'production');
     &--md-cols-3 { grid-template-columns: repeat(3, 1fr); }
     &--md-cols-4 { grid-template-columns: repeat(4, 1fr); }
   }
-  
+
   @include breakpoint('lg') {
     &--lg-cols-1 { grid-template-columns: 1fr; }
     &--lg-cols-2 { grid-template-columns: repeat(2, 1fr); }
     &--lg-cols-3 { grid-template-columns: repeat(3, 1fr); }
     &--lg-cols-4 { grid-template-columns: repeat(4, 1fr); }
   }
-  
+
   // Gaps
   &--gap-sm { gap: space('sm'); }
   &--gap-md { gap: space('md'); }
@@ -1298,7 +1343,7 @@ define('WP_ENVIRONMENT_TYPE', 'production');
   &--span-2 { grid-column: span 2; }
   &--span-3 { grid-column: span 3; }
   &--span-4 { grid-column: span 4; }
-  
+
   // Responsive spans
   @include breakpoint('md') {
     &--md-span-2 { grid-column: span 2; }
@@ -1306,11 +1351,12 @@ define('WP_ENVIRONMENT_TYPE', 'production');
     &--md-span-4 { grid-column: span 4; }
   }
 }
-```
 
+```text
 ### 💡 **Mejora 4: Dark Mode Ready**
 
 ```scss
+
 // assets/sass/base/_tokens.scss (actualizado)
 // Preparar para dark mode
 
@@ -1347,11 +1393,12 @@ define('WP_ENVIRONMENT_TYPE', 'production');
   color: var(--color-text);
   border: 1px solid var(--color-border);
 }
-```
 
+```text
 ### 💡 **Mejora 5: Performance Optimization**
 
 ```scss
+
 // assets/sass/base/_critical.scss
 // CSS crítico que se puede inlinear
 
@@ -1373,11 +1420,12 @@ define('WP_ENVIRONMENT_TYPE', 'production');
 }
 
 // Este archivo se puede extraer y incluir inline en <head>
-```
 
+```text
 ### 💡 **Mejora 6: Linting y Formatting**
 
 ```json
+
 // .stylelintrc.json
 {
   "extends": [
@@ -1393,9 +1441,10 @@ define('WP_ENVIRONMENT_TYPE', 'production');
     "declaration-no-important": null
   }
 }
-```
 
+```text
 ```json
+
 // package.json scripts
 {
   "scripts": {
@@ -1404,6 +1453,7 @@ define('WP_ENVIRONMENT_TYPE', 'production');
     "build:critical": "critical --src assets/dist/css/style.css --css assets/dist/css/critical.css"
   }
 }
+
 ```
 
 ---
@@ -1411,15 +1461,18 @@ define('WP_ENVIRONMENT_TYPE', 'production');
 ## 📚 **Recursos y Referencias**
 
 ### Documentación Oficial
+
 - [Vite Documentation](https://vitejs.dev/)
 - [WordPress SCRIPT_DEBUG](https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/)
 - [PostCSS PurgeCSS](https://purgecss.com/guides/wordpress.html)
 
 ### Ejemplos de Configuración
+
 - [Vite + WordPress Starter](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-vanilla)
 - [WordPress Modern Development](https://roots.io/sage/)
 
 ### Herramientas de Testing
+
 - [Chrome DevTools Coverage](https://developer.chrome.com/docs/devtools/coverage/)
 - [Bundle Analyzer](https://www.npmjs.com/package/vite-bundle-visualizer)
 
@@ -1434,17 +1487,17 @@ define('WP_ENVIRONMENT_TYPE', 'production');
    - 🔥 HMR instantáneo
    - 📦 Bundles más pequeños
 
-2. **Developer Experience**
+1. **Developer Experience**
    - 🎨 Mejor debugging con sourcemaps
    - 🔧 Configuración más simple
    - 🚀 Workflow moderno
 
-3. **Compatibilidad WordPress**
+1. **Compatibilidad WordPress**
    - ✅ Respeta SCRIPT_DEBUG
    - ✅ Mantiene estructura de archivos
    - ✅ Compatible con plugins/themes
 
-4. **Optimizaciones**
+1. **Optimizaciones**
    - 🎯 PurgeCSS integrado
    - 🖼️ Imágenes optimizadas
    - 🌳 Tree-shaking automático
@@ -1458,10 +1511,10 @@ define('WP_ENVIRONMENT_TYPE', 'production');
 
 ---
 
-**📅 Creado:** 2025-01-02  
-**👤 Para:** Theme Amentum  
-**🎯 Objetivo:** Migración Gulp → Vite con SCRIPT_DEBUG  
-**⏱️ Tiempo Estimado:** 20-30 horas  
+**📅 Creado:** 2025-01-02
+**👤 Para:** Theme Amentum
+**🎯 Objetivo:** Migración Gulp → Vite con SCRIPT_DEBUG
+**⏱️ Tiempo Estimado:** 20-30 horas
 
 ---
 

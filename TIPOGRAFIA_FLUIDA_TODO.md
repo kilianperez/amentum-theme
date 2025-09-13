@@ -4,7 +4,8 @@
 
 Implementar un sistema completo de tipografía fluida que escale automáticamente entre dispositivos usando CSS `clamp()`, integrado con el sistema SCSS de Vite + WordPress.
 
-**Especificaciones del usuario:**
+### Especificaciones del usuario
+
 - **Desktop width**: 1900px
 - **H1 Desktop**: 40px
 - **Escalado proporcional** en todos los viewports
@@ -16,34 +17,39 @@ Implementar un sistema completo de tipografía fluida que escale automáticament
 ### ✅ TODO 1.1: Crear Funciones SCSS Base
 
 ```scss
+
 // assets/sass/base/_fluid-functions.scss
 // Sistema de cálculo automático para tipografía fluida
 
 /**
+
  * Función principal para calcular clamp() automáticamente
  * @param {Number} $min-size - Tamaño mínimo (mobile)
  * @param {Number} $max-size - Tamaño máximo (desktop)
  * @param {Number} $min-vw - Viewport mínimo en px (default: 320)
  * @param {Number} $max-vw - Viewport máximo en px (default: 1900)
  * @return {String} - clamp() CSS válido
+
  */
 @function fluid-size($min-size, $max-size, $min-vw: 320, $max-vw: 1900) {
   // Convertir a rem si están en px para accesibilidad
   $min-size-rem: if(unit($min-size) == 'px', $min-size / 16 * 1rem, $min-size);
   $max-size-rem: if(unit($max-size) == 'px', $max-size / 16 * 1rem, $max-size);
-  
+
   // Calcular slope (pendiente) y intersection
   $slope: (strip-unit($max-size) - strip-unit($min-size)) / ($max-vw - $min-vw);
   $intersection: strip-unit($min-size) - $slope * $min-vw;
-  
+
   // Generar preferred value: slope * 100vw + intersection
   $preferred: calc(#{$slope * 100}vw + #{$intersection / 16}rem);
-  
+
   @return clamp(#{$min-size-rem}, #{$preferred}, #{$max-size-rem});
 }
 
 /**
+
  * Función helper para quitar unidades CSS
+
  */
 @function strip-unit($number) {
   @if type-of($number) == 'number' and not unitless($number) {
@@ -53,37 +59,44 @@ Implementar un sistema completo de tipografía fluida que escale automáticament
 }
 
 /**
+
  * Función para calcular escalado proporcional automático
  * Basado en H1 como referencia (40px desktop)
+
  */
 @function calc-proportional-size($desktop-reference: 40, $scale-factor: 1, $mobile-reference: null) {
   $desktop-size: $desktop-reference * $scale-factor;
-  
+
   // Si no se proporciona mobile, calcular automáticamente (60% del desktop)
   $mobile-size: if($mobile-reference, $mobile-reference, $desktop-size * 0.6);
-  
+
   @return fluid-size(#{$mobile-size}px, #{$desktop-size}px, 320, 1900);
 }
-```
 
+```text
 ### ✅ TODO 1.2: Crear Mixins de Tipografía Fluida
 
 ```scss
+
 // assets/sass/base/_fluid-mixins.scss
 
 /**
+
  * Mixin principal para aplicar tipografía fluida
+
  */
 @mixin fluid-type($property: font-size, $min-size, $max-size, $min-vw: 320, $max-vw: 1900) {
   // Fallback para navegadores sin soporte clamp()
   #{$property}: $max-size;
-  
+
   // Tipografía fluida moderna
   #{$property}: fluid-size($min-size, $max-size, $min-vw, $max-vw);
 }
 
 /**
+
  * Mixin para tipografía fluida con line-height automático
+
  */
 @mixin fluid-typography($min-size, $max-size, $line-height: 1.2, $min-vw: 320, $max-vw: 1900) {
   @include fluid-type(font-size, $min-size, $max-size, $min-vw, $max-vw);
@@ -91,12 +104,14 @@ Implementar un sistema completo de tipografía fluida que escale automáticament
 }
 
 /**
+
  * Mixin para headings con configuración completa
+
  */
 @mixin fluid-heading($level: 1, $weight: 600, $line-height: 1.2, $margin-bottom: null) {
   font-weight: $weight;
   line-height: $line-height;
-  
+
   // Aplicar font-size según nivel
   @if $level == 1 {
     font-size: fluid-font('h1');
@@ -111,18 +126,20 @@ Implementar un sistema completo de tipografía fluida que escale automáticament
   } @else if $level == 6 {
     font-size: fluid-font('h6');
   }
-  
+
   @if $margin-bottom {
     margin-bottom: $margin-bottom;
   }
 }
 
 /**
+
  * Mixin para debug durante desarrollo
+
  */
 @mixin debug-fluid-size($label: 'Size') {
   position: relative;
-  
+
   &::before {
     content: '#{$label}: ' attr(data-debug-size);
     position: absolute;
@@ -139,17 +156,18 @@ Implementar un sistema completo de tipografía fluida que escale automáticament
     z-index: 9999;
   }
 }
-```
 
+```text
 ---
 
 ## 🎯 **FASE 2: Configuración de Design Tokens**
 
 ### ✅ TODO 2.1: Recopilar Medidas del Usuario
 
-**⚠️ REQUERIDO: Proporcionar medidas mobile para cada elemento**
+### ⚠️ REQUERIDO: Proporcionar medidas mobile para cada elemento
 
 ```scss
+
 // PENDIENTE: Usuario debe proporcionar estas medidas
 $typography-scale: (
   'h1': (
@@ -185,11 +203,12 @@ $typography-scale: (
     'desktop': ?px,
   )
 );
-```
 
+```text
 ### ✅ TODO 2.2: Crear Design Tokens Fluidos
 
 ```scss
+
 // assets/sass/base/_fluid-tokens.scss
 // Design tokens con tipografía fluida integrada
 
@@ -208,7 +227,7 @@ $fluid-typography: (
     'display-xl': fluid-size(32px, 80px),   // 2rem → 5rem
     'display-lg': fluid-size(28px, 64px),   // 1.75rem → 4rem
     'display': fluid-size(26px, 56px),      // 1.625rem → 3.5rem
-    
+
     // Headings principales
     'h1': fluid-size(24px, 40px),           // Usuario: completar mobile
     'h2': fluid-size(?px, ?px),             // Usuario: completar ambos
@@ -216,18 +235,18 @@ $fluid-typography: (
     'h4': fluid-size(?px, ?px),
     'h5': fluid-size(?px, ?px),
     'h6': fluid-size(?px, ?px),
-    
+
     // Texto base
     'body': fluid-size(?px, ?px),           // Usuario: completar ambos
     'body-lg': fluid-size(?px, ?px),        // Texto destacado
     'body-sm': fluid-size(?px, ?px),        // Texto pequeño
     'caption': fluid-size(?px, ?px),        // Captions, metadata
-    
+
     // Especialidades
     'quote': fluid-size(20px, 32px),        // Citas destacadas
     'lead': fluid-size(18px, 22px),         // Párrafos de introducción
   ),
-  
+
   'weights': (
     'thin': 100,
     'light': 300,
@@ -238,7 +257,7 @@ $fluid-typography: (
     'extrabold': 800,
     'black': 900
   ),
-  
+
   'line-heights': (
     'none': 1,
     'tight': 1.1,
@@ -247,7 +266,7 @@ $fluid-typography: (
     'relaxed': 1.6,
     'loose': 2
   ),
-  
+
   'letter-spacing': (
     'tighter': -0.05em,
     'tight': -0.025em,
@@ -272,8 +291,8 @@ $fluid-typography: (
 @function line-height($lh-name) {
   @return map-get(map-get($fluid-typography, 'line-heights'), $lh-name);
 }
-```
 
+```text
 ---
 
 ## 🏗️ **FASE 3: Implementación en Componentes**
@@ -281,6 +300,7 @@ $fluid-typography: (
 ### ✅ TODO 3.1: Aplicar a Elementos Base
 
 ```scss
+
 // assets/sass/base/_typography.scss
 // Aplicar tipografía fluida a elementos HTML base
 
@@ -321,7 +341,7 @@ p {
   font-size: fluid-font('body');
   line-height: line-height('relaxed');
   margin-bottom: space('md');
-  
+
   &.lead {
     font-size: fluid-font('lead');
     font-weight: font-weight('medium');
@@ -346,7 +366,7 @@ blockquote {
   font-style: italic;
   line-height: line-height('relaxed');
   margin: space('xl') 0;
-  
+
   cite {
     font-size: fluid-font('body-sm');
     font-style: normal;
@@ -358,11 +378,12 @@ blockquote {
 small, .small {
   font-size: fluid-font('caption');
 }
-```
 
+```text
 ### ✅ TODO 3.2: Integrar en Bloques Gutenberg
 
 ```scss
+
 // assets/sass/blocks/_hero.scss
 // Ejemplo de aplicación en bloque hero
 
@@ -370,11 +391,11 @@ small, .small {
   @include container;
   @include flex-center;
   min-height: 80vh;
-  
+
   .hero-content {
     text-align: center;
     z-index: 2;
-    
+
     .hero-title {
       // Usar display para títulos muy grandes
       font-size: fluid-font('display');
@@ -383,13 +404,13 @@ small, .small {
       letter-spacing: letter-spacing('tight');
       margin-bottom: space('lg');
       color: color('gray-900');
-      
+
       @include breakpoint('md') {
         // Opcional: ajustes específicos en tablet+
         letter-spacing: letter-spacing('tighter');
       }
     }
-    
+
     .hero-subtitle {
       font-size: fluid-font('h3');
       font-weight: font-weight('medium');
@@ -400,7 +421,7 @@ small, .small {
       margin-left: auto;
       margin-right: auto;
     }
-    
+
     .hero-description {
       font-size: fluid-font('body-lg');
       line-height: line-height('relaxed');
@@ -412,11 +433,12 @@ small, .small {
     }
   }
 }
-```
 
+```text
 ### ✅ TODO 3.3: Crear Clases Utilitarias Fluidas
 
 ```scss
+
 // assets/sass/utilities/_fluid-typography.scss
 // Clases utilitarias para tipografía fluida
 
@@ -478,8 +500,8 @@ small, .small {
   line-height: line-height('normal') !important;
   color: color('gray-500') !important;
 }
-```
 
+```text
 ---
 
 ## 🧪 **FASE 4: Testing y Optimización**
@@ -487,6 +509,7 @@ small, .small {
 ### ✅ TODO 4.1: Herramientas de Testing
 
 ```scss
+
 // assets/sass/dev/_debug-typography.scss
 // Solo para desarrollo - importar condicionalmente
 
@@ -494,7 +517,7 @@ small, .small {
   // Overlay para mostrar tamaños actuales
   .debug-typography {
     position: relative;
-    
+
     &::after {
       content: 'Font: ' attr(data-font-size) ' | VW: ' attr(data-viewport-width);
       position: absolute;
@@ -513,7 +536,7 @@ small, .small {
       line-height: 1 !important;
     }
   }
-  
+
   // Aplicar automáticamente a headings durante debug
   h1, h2, h3, h4, h5, h6 {
     @extend .debug-typography;
@@ -532,16 +555,17 @@ if (window.location.search.includes('debug=typography')) {
       el.setAttribute('data-viewport-width', viewportWidth + 'px');
     });
   }
-  
+
   updateTypographyDebug();
   window.addEventListener('resize', updateTypographyDebug);
 }
 */
-```
 
+```text
 ### ✅ TODO 4.2: Validación en Múltiples Dispositivos
 
 ```scss
+
 // assets/sass/dev/_breakpoint-testing.scss
 // Estilos para validar comportamiento en breakpoints
 
@@ -560,33 +584,33 @@ if (window.location.search.includes('debug=typography')) {
     font-weight: bold !important;
     z-index: 99999;
     font-family: monospace !important;
-    
+
     @include breakpoint('sm') {
       content: 'SM: ≥640px';
       background: #10B981;
     }
-    
+
     @include breakpoint('md') {
       content: 'MD: ≥768px';
       background: #F59E0B;
     }
-    
+
     @include breakpoint('lg') {
       content: 'LG: ≥1024px';
       background: #EF4444;
     }
-    
+
     @include breakpoint('xl') {
       content: 'XL: ≥1280px';
       background: #8B5CF6;
     }
-    
+
     @include breakpoint('2xl') {
       content: '2XL: ≥1536px';
       background: #EC4899;
     }
   }
-  
+
   // Grid overlay para alineación
   .debug-grid {
     position: fixed;
@@ -597,23 +621,26 @@ if (window.location.search.includes('debug=typography')) {
     pointer-events: none;
     z-index: 9998;
     opacity: 0.1;
-    background-image: 
+    background-image:
       linear-gradient(rgba(255,0,0,1) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255,0,0,1) 1px, transparent 1px);
     background-size: 20px 20px;
   }
 }
-```
 
+```text
 ### ✅ TODO 4.3: Performance y Accesibilidad
 
 ```scss
+
 // assets/sass/base/_accessibility-typography.scss
 // Asegurar accesibilidad en tipografía fluida
 
 // Respetar preferencias de usuario para movimiento reducido
 @media (prefers-reduced-motion: reduce) {
+
   * {
+
     // Deshabilitar transiciones en texto si el usuario prefiere menos movimiento
     transition-property: color, background-color, border-color !important;
     transition-duration: 0.01ms !important;
@@ -624,7 +651,7 @@ if (window.location.search.includes('debug=typography')) {
 .text-contrast-aa {
   // WCAG AA compliant contrast ratios
   color: color('gray-700');
-  
+
   &.on-dark {
     color: color('gray-200');
   }
@@ -633,7 +660,7 @@ if (window.location.search.includes('debug=typography')) {
 .text-contrast-aaa {
   // WCAG AAA compliant contrast ratios
   color: color('gray-900');
-  
+
   &.on-dark {
     color: color('gray-50');
   }
@@ -644,7 +671,7 @@ if (window.location.search.includes('debug=typography')) {
   // Usar más rem que vw para mejor zoom
   $vw-component: 2vw;
   $rem-component: ($max-size - $min-size) / 16 * 1rem * 0.6;
-  
+
   font-size: clamp(
     #{$min-size / 16 * 1rem},
     calc(#{$rem-component} + #{$vw-component}),
@@ -660,8 +687,8 @@ a, button, input, textarea, select {
     border-radius: 2px;
   }
 }
-```
 
+```text
 ---
 
 ## 📊 **FASE 5: Integración con Vite**
@@ -669,12 +696,13 @@ a, button, input, textarea, select {
 ### ✅ TODO 5.1: Actualizar style.scss Principal
 
 ```scss
+
 // assets/sass/style.scss
 // Integrar sistema de tipografía fluida
 
 // Base system (orden importante)
 @import 'base/tokens';           // Design tokens base
-@import 'base/fluid-functions';  // Funciones de cálculo fluido  
+@import 'base/fluid-functions';  // Funciones de cálculo fluido
 @import 'base/fluid-tokens';     // Tokens tipográficos fluidos
 @import 'base/fluid-mixins';     // Mixins para tipografía fluida
 @import 'base/functions';        // Funciones legacy
@@ -719,18 +747,19 @@ a, button, input, textarea, select {
   @import 'dev/debug-typography';
   @import 'dev/breakpoint-testing';
 }
-```
 
+```text
 ### ✅ TODO 5.2: Configurar Variables de Entorno
 
 ```javascript
+
 // vite.config.js - añadir configuración para debug
 export default defineConfig(({ mode }) => {
   const isDev = mode === 'development';
-  
+
   return {
     // ... configuración existente
-    
+
     css: {
       preprocessorOptions: {
         scss: {
@@ -742,11 +771,11 @@ export default defineConfig(({ mode }) => {
         }
       }
     },
-    
+
     // Plugin para mostrar información de tipografía en dev
     plugins: [
       // ... plugins existentes
-      
+
       isDev && {
         name: 'typography-debug',
         transformIndexHtml(html) {
@@ -762,8 +791,8 @@ export default defineConfig(({ mode }) => {
     ].filter(Boolean)
   };
 });
-```
 
+```text
 ---
 
 ## ✅ **FASE 6: Testing y Documentación**
@@ -771,6 +800,7 @@ export default defineConfig(({ mode }) => {
 ### ✅ TODO 6.1: Checklist de Validación
 
 #### Funcionalidad Básica
+
 - [ ] **Función `fluid-size()`** calcula correctamente
 - [ ] **Mixins** se aplican sin errores
 - [ ] **Design tokens** son accesibles vía funciones helper
@@ -778,20 +808,23 @@ export default defineConfig(({ mode }) => {
 - [ ] **Clases utilitarias** funcionan correctamente
 
 #### Responsive Testing
+
 - [ ] **370px (Mobile)**: Tamaños mínimos correctos
 - [ ] **768px (Tablet)**: Escalado proporcional
 - [ ] **1024px (Desktop S)**: Escalado proporcional
-- [ ] **1440px (Desktop M)**: Escalado proporcional  
+- [ ] **1440px (Desktop M)**: Escalado proporcional
 - [ ] **1900px (Desktop L)**: Tamaños máximos correctos
 - [ ] **>1900px**: No crece más del máximo
 
 #### Accesibilidad
+
 - [ ] **Zoom 200%**: Texto sigue siendo legible
 - [ ] **Contraste**: Cumple WCAG AA mínimo
 - [ ] **Focus states**: Visibles y accesibles
 - [ ] **Movimiento reducido**: Respetado
 
 #### Performance
+
 - [ ] **CSS Build**: No errores de compilación
 - [ ] **Bundle size**: Incremento aceptable
 - [ ] **Runtime performance**: Sin lag en resize
@@ -799,50 +832,61 @@ export default defineConfig(({ mode }) => {
 ### ✅ TODO 6.2: Documentación para el Equipo
 
 ```scss
+
 // assets/sass/docs/_typography-guide.scss
 // Documentación inline para desarrolladores
 
 /*
+
 # 📖 Guía de Uso - Tipografía Fluida
 
 ## 🎯 Funciones Principales
 
 ### fluid-font($size-name)
+
 Obtiene un tamaño fluido predefinido
 Uso: `font-size: fluid-font('h1');`
 
 ### fluid-size($min-size, $max-size, $min-vw, $max-vw)
+
 Calcula clamp() personalizado
 Uso: `font-size: fluid-size(16px, 24px, 320, 1900);`
 
 ## 🎨 Mixins Útiles
 
 ### @include fluid-type($property, $min, $max)
+
 Aplica tipografía fluida a cualquier propiedad
 Uso: `@include fluid-type(font-size, 14px, 18px);`
 
 ### @include fluid-heading($level, $weight, $line-height)
+
 Configura heading completo con valores fluidos
 Uso: `@include fluid-heading(2, 600, 1.2);`
 
 ## 🔧 Clases Utilitarias
 
-### Tamaños fluidos:
+### Tamaños fluidos
+
 .text-fluid-h1, .text-fluid-h2, etc.
 .text-fluid-body, .text-fluid-caption
 
-### Combinaciones:
+### Combinaciones
+
 .text-hero, .text-title, .text-subtitle
 
 ## 🐛 Debug
 
-### Activar modo debug:
+### Activar modo debug
+
 $debug-mode: true;
 
-### Ver tamaños actuales:
+### Ver tamaños actuales
+
 ?debug=typography en URL
 
-### Indicadores visuales:
+### Indicadores visuales
+
 Breakpoint actual (esquina superior derecha)
 Grid overlay disponible
 
@@ -852,9 +896,10 @@ Grid overlay disponible
 2. Combinar vw + rem en preferred value
 3. Testing en zoom 200%
 4. Validar contraste de colores
-*/
-```
 
+*/
+
+```text
 ---
 
 ## 📊 **Comparación Before/After**
@@ -874,21 +919,25 @@ Grid overlay disponible
 ## 🚦 **Plan de Implementación**
 
 ### Semana 1: Fundamentos
+
 - Crear funciones y mixins base
 - Configurar design tokens fluidos
 - Setup básico en Vite
 
-### Semana 2: Aplicación  
+### Semana 2: Aplicación
+
 - Migrar elementos HTML base
 - Actualizar bloques principales
 - Crear clases utilitarias
 
 ### Semana 3: Testing
+
 - Validación en dispositivos
 - Pruebas de accesibilidad
 - Optimización de performance
 
 ### Semana 4: Documentación
+
 - Guía para desarrolladores
 - Ejemplos de uso
 - Best practices
@@ -897,9 +946,10 @@ Grid overlay disponible
 
 ## ✅ **Sistema Completado**
 
-**Especificaciones finales:**
+### Especificaciones finales
 
 ```
+
 Mobile: 370px | Desktop: 1900px
 
 H1: Mobile 28px → Desktop 40px ✅
@@ -911,9 +961,10 @@ H6: Mobile 14px → Desktop 16px ✅
 Body: Mobile 15px → Desktop 16px ✅
 Body Large: Mobile 17px → Desktop 20px ✅
 Small: Mobile 12px → Desktop 13px ✅
+
 ```
 
-**Características del sistema:**
+### Características del sistema
 
 1. ✅ **Escalado Proporcional**: Basado en ratio áureo y mejores prácticas
 2. ✅ **Accesible**: Combina rem + vw para zoom 200%
@@ -923,11 +974,11 @@ Small: Mobile 12px → Desktop 13px ✅
 
 ---
 
-**📅 Creado**: 2025-01-02  
-**🎯 Objetivo**: Sistema completo de tipografía fluida  
-**⏱️ Estimación**: 15-20 horas  
-**📊 Estado**: ✅ Listo para implementar  
-**📏 Rango**: 370px - 1900px con escalado perfecto  
+**📅 Creado**: 2025-01-02
+**🎯 Objetivo**: Sistema completo de tipografía fluida
+**⏱️ Estimación**: 15-20 horas
+**📊 Estado**: ✅ Listo para implementar
+**📏 Rango**: 370px - 1900px con escalado perfecto
 
 ---
 

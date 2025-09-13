@@ -2,7 +2,7 @@
 
 ## 📋 Resumen de la Migración
 
-La migración del sistema de build de Gulp a Vite se ha completado exitosamente. 
+La migración del sistema de build de Gulp a Vite se ha completado exitosamente.
 
 ### 🎯 Objetivos Alcanzados
 
@@ -16,29 +16,36 @@ La migración del sistema de build de Gulp a Vite se ha completado exitosamente.
 ## 🚀 Comandos Disponibles
 
 ### Desarrollo
+
 ```bash
+
 npm run dev      # Servidor de desarrollo con HMR (puerto 3000)
 npm run serve    # Servidor de desarrollo accesible en red local
 npm run watch    # Alias para npm run dev
-```
 
+```text
 ### Producción
+
 ```bash
+
 npm run build    # Build optimizado para producción
 npm run prod     # Alias para npm run build
 npm run preview  # Previsualizar build de producción
-```
 
+```text
 ### Utilidades
+
 ```bash
+
 npm run lint          # Revisar código con ESLint
 npm run lint:fix      # Corregir errores de ESLint automáticamente
 npm run check-dependencies  # Revisar dependencias del proyecto
-```
 
+```text
 ## 📁 Estructura de Archivos Generados
 
 ```text
+
 assets/dist/
 ├── css/
 │   ├── style.min.css      # CSS principal compilado
@@ -51,23 +58,27 @@ assets/dist/
 ├── img/                   # Imágenes optimizadas
 └── .vite/
     └── manifest.json      # Manifest para WordPress
+
 ```
 
 ## 🔧 Archivos de Configuración
 
 ### vite.config.js
+
 - Configuración completa de Vite
 - Múltiples puntos de entrada (main.js, style.scss, bloques)
 - Optimización de imágenes con imagemin
 - Compatibilidad con browsers antiguos (@vitejs/plugin-legacy)
 
 ### inc/vite-helpers.php
+
 - Funciones helper para WordPress
 - Manejo de manifest.json
 - Soporte para HMR en desarrollo
 - Detección automática de modo desarrollo/producción
 
 ### inc/template-enqueued.php
+
 - Scripts y estilos registrados con Vite
 - Integración completa con WordPress
 - CDNs externos mantenidos (GSAP, etc.)
@@ -75,12 +86,14 @@ assets/dist/
 ## 🎨 Características de Vite
 
 ### Desarrollo
+
 - **HMR instantáneo**: Cambios en CSS/JS sin recargar página
 - **Error overlay**: Errores mostrados en el navegador
 - **Sourcemaps**: Debug fácil del código
 - **Network access**: Accesible desde dispositivos móviles
 
 ### Producción
+
 - **Tree shaking**: Elimina código no utilizado
 - **Minificación**: CSS y JS optimizados
 - **Code splitting**: Carga eficiente de recursos
@@ -89,14 +102,17 @@ assets/dist/
 ## 🔄 Cambios Importantes
 
 ### JavaScript
+
 - **Antes**: Archivos concatenados con Gulp
 - **Ahora**: ES6 modules con imports en `main.js`
 
 ### SCSS/CSS
+
 - **Antes**: Compilación con gulp-sass
 - **Ahora**: Sass nativo de Vite con autoprefixer
 
 ### Assets
+
 - **Antes**: Copiados manualmente
 - **Ahora**: Gestionados automáticamente por Vite
 
@@ -122,14 +138,17 @@ assets/dist/
 ## 🐛 Solución de Problemas
 
 ### El CSS no se carga en desarrollo
+
 - Verifica que el servidor de Vite esté corriendo (`npm run dev`)
 - Revisa que `WP_DEBUG` esté en `true`
 
 ### Build falla con error de imports
+
 - Verifica que todas las dependencias estén instaladas
 - Revisa la sintaxis de imports en `main.js`
 
 ### HMR no funciona
+
 - Asegúrate de que el puerto 3000 esté accesible
 - Verifica la consola del navegador por errores
 

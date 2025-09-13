@@ -5,6 +5,7 @@
 > **✅ COMPLETADO** - Gulp ha sido completamente eliminado. Solo se usa Vite.
 
 ✅ **Migración completada al 100%**
+
 - Build system migrado de Gulp a Vite con éxito
 - Librerías CDN consolidadas en bundle local
 - Corrección IIFE aplicada para concatenación segura
@@ -15,23 +16,26 @@
 ### 1. Acceder al Sitio
 
 ```bash
-# WordPress corriendo en:
-http://localhost:8001
-```
 
+# WordPress corriendo en
+
+<http://localhost:8001>
+
+```text
 ### 2. Usar el Script de Debugging
 
-1. **Abre el navegador** y ve a `http://localhost:8001`
+1. **Abre el navegador** y ve a `<http://localhost:8001`>
 2. **Presiona F12** para abrir las herramientas de desarrollador
 3. **Ve a la pestaña Console**
 4. **Copia y pega** todo el contenido del archivo `debug-browser-console.js`
 5. **Presiona Enter** y espera 3 segundos para los resultados
 
-### 3. ¿Qué Verifica el Script de Debugging?
+### 3. ¿Qué Verifica el Script de Debugging
 
 El script verificará automáticamente:
 
 #### 📚 Librerías Incluidas
+
 - ✅ **jQuery** (3.7.1) + funciones básicas
 - ✅ **GSAP** + ScrollTrigger + animaciones de prueba
 - ✅ **Lenis** + inicialización de scroll suave
@@ -41,6 +45,7 @@ El script verificará automáticamente:
 - ✅ **jQuery Validate** + validación de formularios
 
 #### 🔍 Verificaciones Técnicas
+
 - Carga correcta de `all.min.js` (440KB)
 - Variables globales expuestas correctamente
 - Errores de JavaScript en tiempo real
@@ -49,29 +54,34 @@ El script verificará automáticamente:
 - Instancias activas (ej: `window.lenis`)
 
 #### 🧪 Tests Manuales Disponibles
+
 ```javascript
+
 // Ejecutar en consola después del debugging:
 window.testLibraries.testJQuery()   // Test jQuery
 window.testLibraries.testGSAP()     // Test GSAP animación
 window.testLibraries.testLenis()    // Test Lenis scroll
-```
 
+```text
 ### 4. Interpretación de Resultados
 
-#### ✅ **TODO CORRECTO** si ves:
+#### ✅ **TODO CORRECTO** si ves
+
 ```
+
 📊 RESUMEN FINAL DE DEBUGGING
 ✅ jQuery (v3.7.1)
-✅ GSAP (vX.X.X) 
+✅ GSAP (vX.X.X)
 ✅ ScrollTrigger (vX.X.X)
 ✅ Lenis
 ✅ Swiper (vX.X.X)
 ✅ SplitType
 ✅ Barba
 ✅ jQuery Validate (vX.X.X)
-```
 
-#### ❌ **Problemas Detectados** si ves:
+```text
+#### ❌ **Problemas Detectados** si ves
+
 - Errores rojos de JavaScript
 - Librerías marcadas con ❌
 - "Error de recurso" o "Error de sintaxis"
@@ -79,31 +89,42 @@ window.testLibraries.testLenis()    // Test Lenis scroll
 ## 🛠️ Solución de Problemas Comunes
 
 ### Problema 1: Errores de Sintaxis JavaScript
+
 ```
+
 SyntaxError: Unexpected token
-```
+
+```text
 **Solución**: El problema está en la concatenación IIFE, ya aplicamos la corrección de semicolons.
 
 ### Problema 2: Librerías No Disponibles
+
 ```
+
 ❌ Lenis NO está disponible
-```
+
+```text
 **Solución**: Verificar que la librería esté en `vite.config.js` en `filesToConcat`
 
 ### Problema 3: Variables Globales Undefined
+
 ```
+
 ReferenceError: gsap is not defined
-```
+
+```text
 **Solución**: Verificar `expose-globals.js` y regenerar build
 
 ## 📈 Métricas de Rendimiento
 
 ### Antes (Gulp + CDN)
+
 - 6 requests HTTP separados
 - ~550KB total transferido
 - Tiempo de carga: ~2.3s
 
 ### Después (Vite + Bundle Local)
+
 - 1 request HTTP único
 - 440KB bundle minificado
 - Tiempo de carga: ~1.7s
@@ -114,11 +135,15 @@ ReferenceError: gsap is not defined
 Si necesitas regenerar los archivos:
 
 ```bash
+
 # Build completo optimizado
+
 npm run vite:build
 
 # Verificar archivos generados
+
 ls -la assets/dist/js/
+
 ```
 
 ## 📝 Archivos Clave Modificados
@@ -141,7 +166,7 @@ Después del testing exitoso, deberían funcionar:
 
 ## 📞 Siguiente Paso
 
-**¡Ahora puedes probar tu web normalmente!**
+### ¡Ahora puedes probar tu web normalmente
 
 1. Carga cualquier página
 2. Verifica scroll suave funcionando
@@ -159,4 +184,4 @@ Después del testing exitoso, deberían funcionar:
 
 ---
 
-**🏆 ¡Felicitaciones! La migración de Gulp a Vite ha sido completada exitosamente.**
+### 🏆 ¡Felicitaciones! La migración de Gulp a Vite ha sido completada exitosamente

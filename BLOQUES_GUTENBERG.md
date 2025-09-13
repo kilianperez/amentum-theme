@@ -20,9 +20,10 @@ blocks/
 ### Archivos Estándar de Bloques
 
 - **`block.php`**: Registro y renderizado server-side (obligatorio)
-- **`editor.js`**: Editor de Gutenberg con React (obligatorio)  
+- **`editor.js`**: Editor de Gutenberg con React (obligatorio)
 - **`style.css`**: Estilos frontend y editor (obligatorio)
 - **`script.js`**: JavaScript frontend para interactividad (opcional)
+
 ### Convenciones de Naming
 
 - **Directorio:** `kebab-case` (ejemplo: `hero-full`, `servicios-columnas`)
@@ -441,14 +442,16 @@ e(ColorPalette, {
 ```javascript
 
 /**
+
  * [Nombre] Block - JavaScript Frontend
  * Maneja la interactividad del bloque en el frontend
+
  */
 
 document.addEventListener('DOMContentLoaded', function() {
     // Buscar todos los bloques de este tipo en la página
     const bloqueElements = document.querySelectorAll('.block-nombre-bloque');
-    
+
     if (bloqueElements.length === 0) {
         return; // No hay bloques de este tipo, salir
     }
@@ -561,6 +564,7 @@ touch blocks/nombre-bloque/script.js  # Opcional: solo si necesita JS frontend
 npm run build
 
 ```text
+
 ### 8. Testing y Refinamiento
 
 ```bash
@@ -571,12 +575,9 @@ python3 logs/debug.py
 
 # Verificar en WordPress admin
 
-
 # Probar responsive design
 
-
 # Verificar funcionamiento en frontend
-
 
 # Validar que blocks.css se genera correctamente
 
@@ -616,6 +617,7 @@ function blocksCss() {
 }
 
 ```text
+
 Y se registra en `inc/template-enqueued.php`:
 
 ```php
@@ -628,6 +630,7 @@ wp_enqueue_style('amentum-blocks',
 );
 
 ```text
+
 ### 🚀 Comandos de Compilación
 
 ```bash
@@ -641,6 +644,7 @@ npm run build
 npm run dev
 
 ```text
+
 ### ✅ Beneficios SEO
 
 1. **Menos peticiones HTTP** - Una sola descarga vs múltiples
@@ -733,8 +737,7 @@ function amentum_register_block_category($categories) {
 }
 add_filter('block_categories_all', 'amentum_register_block_category', 10, 2);
 
-```
-
+```text
 ---
 
 ## 📚 Recursos y Referencias
@@ -768,7 +771,9 @@ Para insertar bloques automáticamente en páginas concretas sin hacerlo manualm
 #### 📋 Comandos Básicos de Inserción
 
 ```bash
+
 # Insertar bloque al final de una página existente
+
 docker compose exec wordpress-cli wp post update [POST_ID] --post_content="$(docker compose exec wordpress-cli wp post get [POST_ID] --field=content)
 
 <!-- wp:amentum/nombre-bloque -->
@@ -776,17 +781,20 @@ docker compose exec wordpress-cli wp post update [POST_ID] --post_content="$(doc
 "
 
 # Ejemplo real - Insertar bloque eventos-swiper en página principal (ID=2)
+
 docker compose exec wordpress-cli wp post update 2 --post_content="$(docker compose exec wordpress-cli wp post get 2 --field=content)
 
 <!-- wp:amentum/eventos-swiper -->
 <!-- /wp:amentum/eventos-swiper -->
 "
-```
 
+```text
 #### 🎯 Inserción con Configuración Específica
 
 ```bash
+
 # Bloque con atributos personalizados (formato JSON)
+
 docker compose exec wordpress-cli wp post update [POST_ID] --post_content="$(docker compose exec wordpress-cli wp post get [POST_ID] --field=content)
 
 <!-- wp:amentum/nombre-bloque {\"atributo1\":\"valor1\",\"atributo2\":\"valor2\"} -->
@@ -794,17 +802,20 @@ docker compose exec wordpress-cli wp post update [POST_ID] --post_content="$(doc
 "
 
 # Ejemplo real - Bloque servicios-columnas con 4 columnas
+
 docker compose exec wordpress-cli wp post update 2 --post_content="$(docker compose exec wordpress-cli wp post get 2 --field=content)
 
 <!-- wp:amentum/servicios-columnas {\"columnasPorFila\":4} -->
 <!-- /wp:amentum/servicios-columnas -->
 "
-```
 
+```text
 #### 📄 Crear Página Nueva con Bloque Incluido
 
 ```bash
+
 # Crear página nueva con bloque desde el principio
+
 docker compose exec wordpress-cli wp post create \
     --post_type=page \
     --post_title="Mi Nueva Página" \
@@ -813,47 +824,60 @@ docker compose exec wordpress-cli wp post create \
 <!-- /wp:amentum/nombre-bloque -->"
 
 # Ejemplo - Página de eventos con swiper incluido
+
 docker compose exec wordpress-cli wp post create \
     --post_type=page \
     --post_title="Galería de Eventos" \
     --post_status=publish \
     --post_content="<!-- wp:amentum/eventos-swiper {\"textoInicial\":\"Nuestros Eventos\",\"descripcionInicial\":\"Descubre más\"} -->
 <!-- /wp:amentum/eventos-swiper -->"
-```
 
+```text
 #### 🔍 Verificar Contenido Actual de una Página
 
 ```bash
+
 # Ver el contenido actual antes de modificar
+
 docker compose exec wordpress-cli wp post get [POST_ID] --field=content
 
 # Listar todas las páginas para encontrar el ID correcto
-docker compose exec wordpress-cli wp post list --post_type=page --fields=ID,post_title,post_status
-```
 
+docker compose exec wordpress-cli wp post list --post_type=page --fields=ID,post_title,post_status
+
+```text
 ### ⚙️ Casos de Uso Avanzados
 
 #### Reemplazar Bloque Existente
 
 ```bash
+
 # 1. Obtener contenido actual
+
 CURRENT_CONTENT=$(docker compose exec wordpress-cli wp post get [POST_ID] --field=content)
 
 # 2. Usar sed para reemplazar bloque específico
+
 NEW_CONTENT=$(echo "$CURRENT_CONTENT" | sed 's/<!-- wp:amentum\/old-block -->/<!-- wp:amentum\/new-block -->/g')
 
 # 3. Actualizar la página con el nuevo contenido
-docker compose exec wordpress-cli wp post update [POST_ID] --post_content="$NEW_CONTENT"
-```
 
+docker compose exec wordpress-cli wp post update [POST_ID] --post_content="$NEW_CONTENT"
+
+```text
 #### Insertar Múltiples Bloques Secuencialmente
 
 ```bash
+
 # Script para insertar varios bloques en orden
+
+
 #!/bin/bash
+
 POST_ID=2
 
 # Bloque 1: Hero
+
 docker compose exec wordpress-cli wp post update $POST_ID --post_content="$(docker compose exec wordpress-cli wp post get $POST_ID --field=content)
 
 <!-- wp:amentum/hero-full -->
@@ -861,6 +885,7 @@ docker compose exec wordpress-cli wp post update $POST_ID --post_content="$(dock
 "
 
 # Bloque 2: Servicios
+
 docker compose exec wordpress-cli wp post update $POST_ID --post_content="$(docker compose exec wordpress-cli wp post get $POST_ID --field=content)
 
 <!-- wp:amentum/servicios-columnas -->
@@ -868,31 +893,38 @@ docker compose exec wordpress-cli wp post update $POST_ID --post_content="$(dock
 "
 
 # Bloque 3: Eventos Swiper
+
 docker compose exec wordpress-cli wp post update $POST_ID --post_content="$(docker compose exec wordpress-cli wp post get $POST_ID --field=content)
 
 <!-- wp:amentum/eventos-swiper -->
 <!-- /wp:amentum/eventos-swiper -->
 "
-```
 
+```text
 ### 🛠️ Tips de Automatización
 
 #### Crear Script de Deploy Completo
 
 ```bash
+
 #!/bin/bash
+
+
 # deploy-blocks.sh - Automatizar despliegue de bloques
 
 # Variables
+
 HOME_PAGE_ID=2
 ABOUT_PAGE_ID=3
 
 echo "🚀 Desplegando bloques automáticamente..."
 
 # Compilar CSS de bloques
+
 npm run build
 
 # Insertar bloque hero en página principal
+
 docker compose exec wordpress-cli wp post update $HOME_PAGE_ID --post_content="<!-- wp:amentum/hero-full {\"backgroundImage\":\"/wp-content/themes/amentum/assets/images/hero-bg.jpg\"} -->
 <!-- /wp:amentum/hero-full -->
 
@@ -905,64 +937,83 @@ docker compose exec wordpress-cli wp post update $HOME_PAGE_ID --post_content="<
 echo "✅ Bloques insertados correctamente"
 
 # Verificar resultado
-docker compose exec wordpress-cli wp post get $HOME_PAGE_ID --field=post_title
-```
 
+docker compose exec wordpress-cli wp post get $HOME_PAGE_ID --field=post_title
+
+```text
 #### Validar Inserción de Bloques
 
 ```bash
+
 # Comprobar que el bloque se insertó correctamente
+
 docker compose exec wordpress-cli wp post get [POST_ID] --field=content | grep "wp:amentum/nombre-bloque"
 
 # Resultado esperado: debe mostrar la línea del bloque si existe
-```
 
+```text
 ### ⚠️ Consideraciones Importantes
 
 #### Formato de Bloques Gutenberg
+
 - **Obligatorio:** Usar formato exacto `<!-- wp:namespace/block-name -->`
 - **Atributos:** JSON válido entre llaves `{\"key\":\"value\"}`
 - **Cierre:** Siempre cerrar con `<!-- /wp:namespace/block-name -->`
 
 #### Caracteres de Escape
+
 ```bash
+
 # En atributos JSON, escapar comillas dobles
+
 {\"texto\":\"Mi texto con \\\"comillas\\\" internas\"}
 
 # URLs deben usar barras escapadas si es necesario
-{\"backgroundImage\":\"/wp-content/themes/amentum/assets/images/bg.jpg\"}
-```
 
+{\"backgroundImage\":\"/wp-content/themes/amentum/assets/images/bg.jpg\"}
+
+```text
 #### Backup Antes de Automatizar
+
 ```bash
+
 # Crear backup de la página antes de modificar
+
 docker compose exec wordpress-cli wp db export backup-pre-automation.sql
 
 # En caso de error, restaurar
-docker compose exec mysql mysql -u wp_dev_user -pwp_dev_pass_2024 wordpress_dev_db < backup-pre-automation.sql
-```
 
+docker compose exec mysql mysql -u wp_dev_user -pwp_dev_pass_2024 wordpress_dev_db < backup-pre-automation.sql
+
+```text
 ### 📊 Monitoreo y Testing
 
 ```bash
+
 # Script de verificación post-despliegue
+
+
 #!/bin/bash
+
 echo "🔍 Verificando bloques insertados..."
 
 # Comprobar bloques en página principal
+
 BLOCKS_COUNT=$(docker compose exec wordpress-cli wp post get 2 --field=content | grep -c "wp:amentum")
 echo "📊 Bloques encontrados: $BLOCKS_COUNT"
 
 # Testing con debug.py
+
 python3 logs/debug.py web
 
 echo "✅ Verificación completada"
+
 ```
 
 ---
 
 **Creado:** 29/08/2025
-**Actualizado:** 01/09/2025  
+**Actualizado:** 01/09/2025
 **Autor:** Theme Amentum Development Team
 **Versión:** 1.1.0
 **Estado:** ✅ Documentación Completa + Automatización

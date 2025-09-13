@@ -1,8 +1,8 @@
 # 📋 Análisis Completo: Implementación de Barba.js en Theme Amentum
 
-**Fecha del análisis:** 09/09/2025  
-**Versión analizada:** Theme Amentum v1.0  
-**Scope:** Sistema de transiciones de página con Barba.js  
+**Fecha del análisis:** 09/09/2025
+**Versión analizada:** Theme Amentum v1.0
+**Scope:** Sistema de transiciones de página con Barba.js
 
 ---
 
@@ -20,37 +20,45 @@
 ## ✅ **Aspectos Positivos Identificados**
 
 ### 1. **Separación Lógica Correcta**
+
 ```javascript
+
 // core.js - Líneas 28-34
 if (typeof ajax_forms !== 'undefined' && ajax_forms.isUserLoggedIn === 'false') {
     barbaJsInit(); // Usuario no logueado: SPA experience
 } else {
     initUserLoggedMode(); // Usuario logueado: funcionalidad completa
 }
-```
+
+```text
 **✅ Buena práctica**: Diferencia entre usuarios logueados y no logueados para optimizar experiencia.
 
 ### 2. **Configuración de Barba.js Sólida**
+
 ```javascript
+
 // barba-transitions.js - Líneas 7-9
 barba.init({
     sync: true,    // ✅ Transiciones fluidas
     debug: false,  // ✅ Performance en producción
     transitions: [...]
 });
-```
 
+```text
 ### 3. **Integración Correcta con Lenis Smooth Scroll**
+
 ```javascript
+
 // barba-transitions.js - Líneas 119-124
 barba.hooks.enter(() => {
     if (window.lenis) {
         window.lenis.scrollTo(0, { immediate: true });
     }
 });
-```
 
+```text
 ### 4. **Manejo de Estados de Menú**
+
 - Correcta limpieza de estados de transición del menú móvil
 - Gestión visual del cierre de menú durante navegación
 
@@ -63,6 +71,7 @@ barba.hooks.enter(() => {
 **Problema**: El mismo código se ejecuta tanto en `once()` como en `enter()`:
 
 ```javascript
+
 // barba-transitions.js - DUPLICACIÓN
 once(data) {
     // Líneas 28-34
@@ -78,9 +87,10 @@ enter(data) {
         autoPlayVideos();
     }, 50);
 }
-```
 
-**Impacto**: 
+```text
+**Impacto**:
+
 - Violación del principio DRY (Don't Repeat Yourself)
 - Posibles inicializaciones dobles en primera carga
 - Dificulta mantenimiento
@@ -90,13 +100,15 @@ enter(data) {
 **Problema**: No se destruyen instancias previas antes de crear nuevas:
 
 ```javascript
+
 // ❌ FALTANTE: No hay cleanup
 beforeLeave(data) {
     // Solo maneja menú, no limpia JS instances
 }
-```
 
+```text
 **Consecuencias**:
+
 - Memory leaks con event listeners acumulados
 - Múltiples instancias de Swiper corriendo
 - Timers/animaciones GSAP sin cleanup
@@ -107,36 +119,40 @@ beforeLeave(data) {
 **Problema**: Llamadas hardcoded en lugar de sistema modular:
 
 ```javascript
+
 // ❌ Hard-coded function calls
 callIfExists('inicializarEventosSwiper');
 contentAnimation();
 autoPlayVideos();
-```
 
+```text
 **Limitaciones**:
+
 - Difícil agregar nuevos módulos
-- No hay registro dinámico de componentes  
+- No hay registro dinámico de componentes
 - Cada nueva función requiere editar core files
 
 ### 4. **🟡 MEDIO: Delays Arbitrarios**
 
 ```javascript
+
 // barba-transitions.js - Línea 102
 setTimeout(() => {
     // Inicializar scripts
     contentAnimation();
 }, 50); // ❌ Magic number sin justificación
-```
 
+```text
 ---
 
 ## 🎯 **Mejores Prácticas de la Comunidad 2025**
 
 ### **Patrón 1: Event-Driven Architecture**
 
-**Estado actual vs Best Practice:**
+### Estado actual vs Best Practice
 
 ```javascript
+
 // ❌ TU IMPLEMENTACIÓN ACTUAL
 once(data) { contentAnimation(); }
 enter(data) { setTimeout(() => contentAnimation(), 50); }
@@ -150,24 +166,25 @@ barba.hooks.after(() => {
 window.addEventListener('amentum:page-ready', () => {
     swiper.reinit();
 });
-```
 
+```text
 ### **Patrón 2: Module Manager System**
 
 ```javascript
+
 // ✅ ARQUITECTURA RECOMENDADA
 class AmentumModuleManager {
     constructor() {
         this.modules = new Map();
         this.initialized = false;
     }
-    
+
     register(name, module) {
         if (module.init && module.destroy) {
             this.modules.set(name, module);
         }
     }
-    
+
     async initAll() {
         for (const [name, module] of this.modules) {
             try {
@@ -178,7 +195,7 @@ class AmentumModuleManager {
             }
         }
     }
-    
+
     async destroyAll() {
         for (const [name, module] of this.modules) {
             try {
@@ -189,11 +206,12 @@ class AmentumModuleManager {
         }
     }
 }
-```
 
+```text
 ### **Patrón 3: Global Hooks Centralizados**
 
 ```javascript
+
 // ✅ HOOKS GLOBALES RECOMENDADOS
 barba.hooks.beforeLeave(async () => {
     console.log('🧹 Cleaning up page...');
@@ -204,8 +222,8 @@ barba.hooks.after(async () => {
     console.log('🚀 Initializing new page...');
     await amentumModules.initAll();
 });
-```
 
+```text
 ---
 
 ## 📊 **Comparativa Detallada**
@@ -227,7 +245,9 @@ barba.hooks.after(async () => {
 ### **Fase 1: Refactorización Core (Prioridad Crítica)**
 
 #### 1.1 Eliminar Duplicación
+
 ```javascript
+
 // ✅ SOLUCIÓN INMEDIATA
 function initPageModules() {
     contentAnimation();
@@ -237,13 +257,15 @@ function initPageModules() {
 
 // Usar en ambos hooks:
 once(data) { initPageModules(); }
-enter(data) { 
-    setTimeout(() => initPageModules(), 50); 
+enter(data) {
+    setTimeout(() => initPageModules(), 50);
 }
-```
 
+```text
 #### 1.2 Implementar Cleanup Básico
+
 ```javascript
+
 // ✅ CLEANUP INMEDIATO
 beforeLeave(data) {
     // Cleanup Swiper instances
@@ -251,30 +273,32 @@ beforeLeave(data) {
         window.swiperInstances.forEach(swiper => swiper.destroy());
         window.swiperInstances = [];
     }
-    
+
     // Stop videos
     document.querySelectorAll('video').forEach(video => video.pause());
-    
+
     // Clear timeouts/intervals (si los hay)
     // clearTimeout/clearInterval según sea necesario
 }
-```
 
+```text
 ### **Fase 2: Module Manager Implementation (Mejora Arquitectónica)**
 
 #### 2.1 Crear Module Manager
+
 ```javascript
+
 // assets/js/modules/module-manager.js
 export class AmentumModuleManager {
     constructor() {
         this.modules = new Map();
     }
-    
+
     register(name, module) {
         this.modules.set(name, module);
         return this;
     }
-    
+
     async init() {
         const results = [];
         for (const [name, module] of this.modules) {
@@ -287,7 +311,7 @@ export class AmentumModuleManager {
         }
         return results;
     }
-    
+
     async destroy() {
         for (const [name, module] of this.modules) {
             try {
@@ -298,48 +322,53 @@ export class AmentumModuleManager {
         }
     }
 }
-```
 
+```text
 #### 2.2 Refactorizar Módulos Existentes
+
 ```javascript
+
 // assets/js/modules/swiper-module.js
 export const swiperModule = {
     instances: [],
-    
+
     async init() {
         // Inicializar Swipers
         const swiperElements = document.querySelectorAll('.swiper');
-        this.instances = Array.from(swiperElements).map(el => 
+        this.instances = Array.from(swiperElements).map(el =>
             new Swiper(el, { /* config */ })
         );
     },
-    
+
     async destroy() {
         this.instances.forEach(instance => instance.destroy());
         this.instances = [];
     }
 };
-```
 
+```text
 ### **Fase 3: Event-Driven Architecture (Optimización Avanzada)**
 
 #### 3.1 Sistema de Eventos Personalizado
+
 ```javascript
+
 // assets/js/modules/event-system.js
 export const AmentumEvents = {
     PAGE_BEFORE_LEAVE: 'amentum:before-leave',
     PAGE_READY: 'amentum:page-ready',
     PAGE_ENTER: 'amentum:page-enter',
-    
+
     emit(eventName, data = {}) {
         window.dispatchEvent(new CustomEvent(eventName, { detail: data }));
     },
-    
+
     on(eventName, callback) {
         window.addEventListener(eventName, callback);
         return () => window.removeEventListener(eventName, callback);
     }
 };
+
 ```
 
 ---
@@ -347,18 +376,21 @@ export const AmentumEvents = {
 ## 📋 **Checklist de Implementación**
 
 ### **✅ Mejoras Inmediatas (1-2 horas)**
+
 - [ ] Eliminar código duplicado en `once()` y `enter()`
 - [ ] Crear función `initPageModules()` centralizada
 - [ ] Agregar cleanup básico en `beforeLeave()`
 - [ ] Documentar delays con comentarios explicativos
 
-### **⚠️ Mejoras Estructurales (4-6 horas)**  
+### **⚠️ Mejoras Estructurales (4-6 horas)**
+
 - [ ] Implementar `AmentumModuleManager`
 - [ ] Refactorizar módulos existentes con `init/destroy`
 - [ ] Centralizar configuración en archivo de config
 - [ ] Agregar logging estructurado
 
 ### **🚀 Optimizaciones Avanzadas (8-10 horas)**
+
 - [ ] Sistema de eventos personalizado
 - [ ] Lazy loading de módulos
 - [ ] Testing unitario para módulos
@@ -369,17 +401,19 @@ export const AmentumEvents = {
 ## 🎯 **Métricas de Éxito**
 
 ### **Antes (Estado Actual)**
+
 - Memory leaks: ⚠️ Probables
 - Maintainability: ❌ 4/10
-- Performance: ⚠️ 6/10  
+- Performance: ⚠️ 6/10
 - Code duplication: ❌ Alta
 - Scalability: ❌ 3/10
 
 ### **Después (Objetivo)**
+
 - Memory leaks: ✅ Eliminados
 - Maintainability: ✅ 9/10
 - Performance: ✅ 9/10
-- Code duplication: ✅ Eliminada  
+- Code duplication: ✅ Eliminada
 - Scalability: ✅ 9/10
 
 ---
@@ -388,13 +422,15 @@ export const AmentumEvents = {
 
 ### **Puntuación Actual: 6.5/10**
 
-**Fortalezas:**
+### Fortalezas
+
 - ✅ Funcionalidad completa y estable
 - ✅ Integración correcta con Lenis
 - ✅ Separación lógica usuario logueado/no logueado
 - ✅ Configuración básica de Barba.js correcta
 
-**Debilidades:**
+### Debilidades
+
 - ❌ Arquitectura no escalable
 - ❌ Memory leaks potenciales
 - ❌ Código duplicado (violación DRY)
@@ -405,13 +441,13 @@ export const AmentumEvents = {
 Tu implementación **funciona correctamente** pero no está optimizada para maintainability y performance a largo plazo. Las mejoras propuestas son **altamente recomendadas** especialmente para:
 
 1. **Proyectos que crecerán** - Module Manager será crucial
-2. **Performance crítica** - Memory cleanup es esencial  
+2. **Performance crítica** - Memory cleanup es esencial
 3. **Múltiples desarrolladores** - Architecture patterns facilitarán colaboración
 
 **¿Implementamos las mejoras paso a paso?** Las Fases 1-2 darán el mayor impacto con menor esfuerzo.
 
 ---
 
-**Análisis realizado por:** Claude Code  
-**Siguiente revisión recomendada:** Post-implementación de mejoras  
+**Análisis realizado por:** Claude Code
+**Siguiente revisión recomendada:** Post-implementación de mejoras
 **Contacto:** Disponible para implementación guiada de las mejoras propuestas
