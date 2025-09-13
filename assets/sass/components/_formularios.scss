@@ -238,35 +238,35 @@ body:not(.wp-core-ui) form,
 .input-wrapper {
     position: relative;
     display: flex;
-    margin-bottom: 2rem;
-    border-bottom: solid 1px $form-primary-color;
+    margin-bottom: 0.5rem; // Espaciado compacto
+    // Sin border-bottom - solo la línea animada del ::after
 
-    // Línea animada que crece en focus
+    // Línea animada (igual que botones) - visible al 100% por defecto
     &::after {
         content: '';
         position: absolute;
         bottom: 0px;
         left: 0;
-        right: 0;
-        height: 2px;
-        transform: scaleX(0);
+        width: 100%; // Línea visible al 100% como botones
+        height: 1px; // Línea más sutil
+        background-color: $form-primary-color; // Color definitivo igual que botones
         transform-origin: left;
-        transition: transform 0.3s ease;
+        transition: none; // Sin transition, solo animación on-demand
     }
 
-    // Estado focus - línea crece
+    // Focus - activar animación de regeneración como botones
     &:focus-within::after {
-        transform: scaleX(1);
+        animation: lineRegenerate 0.5s ease;
     }
 
-    // Estado con contenido - línea visible
+    // Estado con contenido - mantener línea visible
     &.input-filled::after {
-        transform: scaleX(1);
+        width: 100%;
     }
 
-    // Estado de error - línea roja
+    // Estado de error - línea roja con animación
     &.input-error::after {
-        transform: scaleX(1);
+        animation: lineRegenerate 0.5s ease;
     }
 
     &.input-error {

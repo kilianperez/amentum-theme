@@ -189,27 +189,7 @@ body:not(.wp-core-ui) form {
 		}
 	}
 	
-	// Wrapper global para efecto de línea creciente en inputs y textareas
-	.input-wrapper {
-		position: relative;
-		display: flex;
-		margin-bottom: 1rem;
-		border-bottom: solid 1px #000; // Border base del wrapper
-
-		// Línea animada por encima del border base
-		&::after {
-			content: '';
-			position: absolute;
-			bottom: 0px;
-			left: 0;
-			right: 0;
-			height: 2px!important;
-			background-color: #000;
-			transform: scaleX(0);
-			transform-origin: left;
-			transition: transform 0.3s ease;
-		}
-	}
+	// NOTA: .input-wrapper se define ahora en _formularios.scss para evitar duplicación
 
 	// Sobrescribir colores para formularios de Amentum con mayor especificidad
 	.amentum-formulario-container .input-wrapper {
@@ -361,7 +341,7 @@ body:not(.wp-core-ui) form {
 		&[type='email'],
 		&[type='text'] {
 			background: transparent;
-			border-bottom: solid 1px #000;
+			border: none; // Sin bordes - el wrapper añade la línea animada
 			@include tabletXl {
 				padding-top: 1rem;
 				padding-bottom: 1rem;
