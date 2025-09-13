@@ -107,18 +107,19 @@
 					minHeight: '300px'
 				},
 				preview: {
-					background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+					background: '#ffffff',
 					border: '1px solid #e9ecef',
-					borderRadius: '12px',
-					padding: '2.5rem',
-					boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+					borderRadius: '8px',
+					padding: '2rem',
+					boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
 					minHeight: '280px',
 					textAlign: 'center',
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
 					justifyContent: 'center',
-					color: '#ffffff'
+					color: '#2c3e50',
+					position: 'relative'
 				},
 				placeholder: {
 					background: '#f8f9fa',
@@ -232,18 +233,42 @@
 								el('h3', {
 									style: {
 										margin: '0 0 1rem 0',
-										color: '#ffffff',
+										color: '#2c3e50',
 										fontSize: '1.5rem',
-										fontWeight: '600'
+										fontWeight: '600',
+										fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
 									}
 								}, 'Formulario ID: ' + formularioId),
 								el('p', {
 									style: {
 										margin: '0',
-										color: 'rgba(255,255,255,0.9)',
-										fontSize: '1rem'
+										color: '#4a5568',
+										fontSize: '1rem',
+										fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
 									}
-								}, 'El formulario se renderizará en el frontend')
+								}, 'Formulario estilo Avellana'),
+								// Simular línea animada de Avellana
+								el('div', {
+									style: {
+										position: 'absolute',
+										bottom: '20px',
+										left: '20px',
+										right: '20px',
+										height: '1px',
+										backgroundColor: '#2c3e50',
+										opacity: '0.3'
+									}
+								}),
+								el('div', {
+									style: {
+										position: 'absolute',
+										bottom: '20px',
+										left: '20px',
+										width: '60%',
+										height: '2px',
+										backgroundColor: '#667eea'
+									}
+								})
 							]) :
 							// Placeholder cuando no hay formulario
 							el('div', {
