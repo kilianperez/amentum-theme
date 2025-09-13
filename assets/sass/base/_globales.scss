@@ -195,7 +195,7 @@ body:not(.wp-core-ui) form {
 		display: flex;
 		margin-bottom: 1rem;
 		border-bottom: solid 1px #000; // Border base del wrapper
-		
+
 		// Línea animada por encima del border base
 		&::after {
 			content: '';
@@ -208,6 +208,15 @@ body:not(.wp-core-ui) form {
 			transform: scaleX(0);
 			transform-origin: left;
 			transition: transform 0.3s ease;
+		}
+	}
+
+	// Sobrescribir colores para formularios de Amentum con mayor especificidad
+	.amentum-formulario-container .input-wrapper {
+		border-bottom: solid 1px #2c3e50; // Azul Amentum
+
+		&::after {
+			background-color: #667eea; // Azul accent Amentum
 		}
 		
 		// Inputs y textareas dentro del wrapper no necesitan border

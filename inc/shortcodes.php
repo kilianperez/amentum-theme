@@ -140,42 +140,48 @@ function amentum_formulario_shortcode($atts)
                                 case 'email':
                                 case 'phone':
                                 case 'url': ?>
-                                    <input
-                                        type="<?php echo $tipo === 'phone' ? 'tel' : ($tipo === 'url' ? 'url' : ($tipo === 'email' ? 'email' : 'text')); ?>"
-                                        id="<?php echo esc_attr($field_id); ?>"
-                                        name="<?php echo esc_attr($field_name); ?>"
-                                        class="amentum-campo-input"
-                                        placeholder="<?php echo esc_attr($placeholder); ?>"
-                                        <?php echo $requerido ? 'required' : ''; ?>
-                                    >
+                                    <div class="input-wrapper">
+                                        <input
+                                            type="<?php echo $tipo === 'phone' ? 'tel' : ($tipo === 'url' ? 'url' : ($tipo === 'email' ? 'email' : 'text')); ?>"
+                                            id="<?php echo esc_attr($field_id); ?>"
+                                            name="<?php echo esc_attr($field_name); ?>"
+                                            class="amentum-campo-input"
+                                            placeholder="<?php echo esc_attr($placeholder); ?>"
+                                            <?php echo $requerido ? 'required' : ''; ?>
+                                        >
+                                    </div>
                                     <?php break;
 
                                 case 'textarea': ?>
-                                    <textarea
-                                        id="<?php echo esc_attr($field_id); ?>"
-                                        name="<?php echo esc_attr($field_name); ?>"
-                                        class="amentum-campo-textarea"
-                                        placeholder="<?php echo esc_attr($placeholder); ?>"
-                                        rows="4"
-                                        <?php echo $requerido ? 'required' : ''; ?>
-                                    ></textarea>
+                                    <div class="input-wrapper">
+                                        <textarea
+                                            id="<?php echo esc_attr($field_id); ?>"
+                                            name="<?php echo esc_attr($field_name); ?>"
+                                            class="amentum-campo-textarea"
+                                            placeholder="<?php echo esc_attr($placeholder); ?>"
+                                            rows="4"
+                                            <?php echo $requerido ? 'required' : ''; ?>
+                                        ></textarea>
+                                    </div>
                                     <?php break;
 
                                 case 'select': ?>
-                                    <select
-                                        id="<?php echo esc_attr($field_id); ?>"
-                                        name="<?php echo esc_attr($field_name); ?>"
-                                        class="amentum-campo-select"
-                                        <?php echo $requerido ? 'required' : ''; ?>
-                                    >
-                                        <option value="">Selecciona una opción</option>
-                                        <?php foreach ($opciones as $opcion):
-                                            $opcion_valor = !empty($opcion['valor']) ? $opcion['valor'] : $opcion['nombre']; ?>
-                                            <option value="<?php echo esc_attr($opcion_valor); ?>">
-                                                <?php echo esc_html($opcion['nombre']); ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <div class="input-wrapper">
+                                        <select
+                                            id="<?php echo esc_attr($field_id); ?>"
+                                            name="<?php echo esc_attr($field_name); ?>"
+                                            class="amentum-campo-select"
+                                            <?php echo $requerido ? 'required' : ''; ?>
+                                        >
+                                            <option value="">Selecciona una opción</option>
+                                            <?php foreach ($opciones as $opcion):
+                                                $opcion_valor = !empty($opcion['valor']) ? $opcion['valor'] : $opcion['nombre']; ?>
+                                                <option value="<?php echo esc_attr($opcion_valor); ?>">
+                                                    <?php echo esc_html($opcion['nombre']); ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
                                     <?php break;
 
                                 case 'tags': ?>
