@@ -212,6 +212,11 @@ require get_template_directory() . '/inc/post-types.php';
 require get_template_directory() . '/inc/formularios-manager.php';
 
 /**
+ * INCLUIR SHORTCODES DE FORMULARIOS
+ */
+require get_template_directory() . '/inc/shortcodes.php';
+
+/**
  * INCLUIR SISTEMA DE BLOQUES INDEPENDIENTE
  */
 require_once get_template_directory() . '/inc/blocks-loader.php';

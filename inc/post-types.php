@@ -166,3 +166,157 @@ function amentum_formularios_post_type()
     register_post_type('formularios', $args);
 }
 add_action('init', 'amentum_formularios_post_type', 0);
+
+/**
+ * Personalizar las columnas del listado de formularios
+ */
+function amentum_formularios_columns($columns)
+{
+    // Remover columnas que no necesitamos
+    unset($columns['date']);
+
+    // Agregar nuestras columnas personalizadas
+    $columns['shortcode'] = 'Shortcode';
+    $columns['campos_count'] = 'Campos';
+    $columns['status'] = 'Estado';
+    $columns['date'] = 'Fecha'; // Volver a agregar la fecha al final
+
+    return $columns;
+}
+add_filter('manage_formularios_posts_columns', 'amentum_formularios_columns');
+
+/**
+ * Mostrar contenido de las columnas personalizadas
+ */
+function amentum_formularios_column_content($column, $post_id)
+{
+    switch ($column) {
+        case 'shortcode':
+            echo '<code class="amentum-shortcode-copy" onclick="amentumCopyShortcode(this)" style="cursor: pointer; background: #f0f0f1; padding: 4px 8px; border-radius: 3px; font-size: 12px; user-select: all;" title="Clic para copiar">[amentum_formulario id="' . $post_id . '"]</code>';
+            break;
+
+        case 'campos_count':
+            $config = get_post_meta($post_id, '_amentum_formulario_config', true);
+            $campos = isset($config['campos']) ? $config['campos'] : array();
+            $count = count($campos);
+
+            if ($count === 0) {
+                echo '<span style="color: #d63638;">Sin campos</span>';
+            } else {
+                echo '<span style="color: #00a32a;"><strong>' . $count . '</strong> campos</span>';
+            }
+            break;
+
+        case 'status':
+            $config = get_post_meta($post_id, '_amentum_formulario_config', true);
+            $campos = isset($config['campos']) ? $config['campos'] : array();
+            $email_destino = isset($config['email_destino']) ? $config['email_destino'] : '';
+
+            if (empty($campos)) {
+                echo '<span style="color: #d63638;">⚠️ Sin configurar</span>';
+            } elseif (empty($email_destino)) {
+                echo '<span style="color: #dba617;">⚠️ Sin email</span>';
+            } else {
+                echo '<span style="color: #00a32a;">✅ Listo</span>';
+            }
+            break;
+    }
+}
+add_action('manage_formularios_posts_custom_column', 'amentum_formularios_column_content', 10, 2);
+
+/**
+ * Hacer que algunas columnas sean ordenables
+ */
+function amentum_formularios_sortable_columns($columns)
+{
+    $columns['campos_count'] = 'campos_count';
+    return $columns;
+}
+add_filter('manage_edit-formularios_sortable_columns', 'amentum_formularios_sortable_columns');
+
+/**
+ * JavaScript para copiar shortcode al clipboard
+ */
+function amentum_formularios_admin_scripts($hook)
+{
+    global $post_type;
+
+    if ($hook === 'edit.php' && $post_type === 'formularios') {
+        ?>
+        <script type="text/javascript">
+        function amentumCopyShortcode(element) {
+            const text = element.textContent;
+
+            // Usar la API moderna de clipboard si está disponible
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(function() {
+                    amentumShowCopyMessage(element, '¡Copiado!');
+                }).catch(function() {
+                    amentumFallbackCopy(text, element);
+                });
+            } else {
+                amentumFallbackCopy(text, element);
+            }
+        }
+
+        function amentumFallbackCopy(text, element) {
+            // Método de respaldo para navegadores más antiguos
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                document.execCommand('copy');
+                amentumShowCopyMessage(element, '¡Copiado!');
+            } catch (err) {
+                amentumShowCopyMessage(element, 'Error al copiar');
+            } finally {
+                document.body.removeChild(textArea);
+            }
+        }
+
+        function amentumShowCopyMessage(element, message) {
+            const originalText = element.textContent;
+            const originalStyle = element.style.backgroundColor;
+
+            element.textContent = message;
+            element.style.backgroundColor = '#00a32a';
+            element.style.color = 'white';
+
+            setTimeout(function() {
+                element.textContent = originalText;
+                element.style.backgroundColor = originalStyle;
+                element.style.color = '';
+            }, 1500);
+        }
+        </script>
+
+        <style type="text/css">
+        .amentum-shortcode-copy:hover {
+            background: #2271b1 !important;
+            color: white !important;
+        }
+
+        .column-shortcode {
+            width: 280px;
+        }
+
+        .column-campos_count {
+            width: 80px;
+            text-align: center;
+        }
+
+        .column-status {
+            width: 100px;
+            text-align: center;
+        }
+        </style>
+        <?php
+    }
+}
+add_action('admin_footer', 'amentum_formularios_admin_scripts');
