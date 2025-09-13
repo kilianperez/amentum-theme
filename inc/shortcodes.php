@@ -240,7 +240,7 @@ function amentum_formulario_shortcode($atts)
             </div>
 
             <div class="amentum-formulario-submit">
-                <button type="submit" class="amentum-boton-enviar">
+                <button type="submit" class="btn btn--white">
                     <span class="amentum-boton-texto"><?php echo esc_html($boton_texto); ?></span>
                     <span class="amentum-boton-loading" style="display: none;">Enviando...</span>
                 </button>

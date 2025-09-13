@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../../assets/sass/base/variables';
 
 /**
@@ -54,8 +55,8 @@
 		transition: all 0.3s ease;
 
 		&:hover {
-			color: lighten($cor-gray, 20%);
-			border-bottom-color: lighten($cor-gray, 20%);
+			color: color.adjust($cor-gray, $lightness: 20%);
+			border-bottom-color: color.adjust($cor-gray, $lightness: 20%);
 		}
 	}
 }

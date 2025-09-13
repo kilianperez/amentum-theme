@@ -5,6 +5,8 @@
  * Adaptado para la identidad visual de Amentum
  */
 
+@use 'sass:color';
+
 // === VARIABLES ADAPTADAS DE AVELLANA ===
 $form-primary-color: #2c3e50;          // Azul principal Amentum (vs negro Avellana)
 $form-accent-color: #667eea;           // Azul accent Amentum
@@ -484,7 +486,7 @@ body:not(.wp-core-ui) form,
             }
 
             &:hover {
-                background-color: lighten($form-accent-color, 40%);
+                background-color: color.adjust($form-accent-color, $lightness: 40%);
             }
         }
 
@@ -496,69 +498,18 @@ body:not(.wp-core-ui) form,
     }
 }
 
-// === BOTONES SUBMIT ESTILO AVELLANA ===
-.amentum-boton-enviar,
-.amentum-formulario-container button[type='submit'],
-.amentum-formulario-container input[type='submit'] {
-    border: 1px solid $form-primary-color;
-    background: transparent;
-    color: $form-primary-color;
-    font-size: max(16px, 4vw);
-    padding: 0.8rem 2rem;
-    border-radius: 50px;
-    font-family: $form-font-family;
-    font-weight: 500;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.8rem;
-    margin: 1rem 0;
-    width: auto;
-    min-width: auto;
+// === BOTONES SUBMIT - Los formularios usan .btn directamente ===
+// Float a la derecha para botones submit en formularios
+.amentum-formulario-submit,
+.amentum-formulario {
+    button[type="submit"].btn,
+    input[type="submit"].btn {
+        margin: 1rem 0;
 
-    @media (min-width: $tablet-xl) {
-        font-size: 1vw;
-        margin: 0;
-        float: right;
-    }
-
-    // Hover effect
-    &:hover:not(:disabled) {
-        background-color: $form-primary-color;
-        color: $form-background;
-
-        .btn-arrow {
-            transform: translateX(5px);
+        @media (min-width: $tablet-xl) {
+            float: right !important;
+            margin: 0;
         }
-    }
-
-    &:active:not(:disabled) {
-        transform: translateY(1px);
-    }
-
-    &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-
-        &:hover {
-            background: transparent;
-            color: $form-primary-color;
-
-            .btn-arrow {
-                transform: none;
-            }
-        }
-    }
-
-    // Flecha animada
-    .btn-arrow {
-        font-size: 1.2em;
-        line-height: 1;
-        font-weight: 400;
-        transition: transform 0.3s ease;
-        display: inline-block;
     }
 }
 
