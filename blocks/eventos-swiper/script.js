@@ -76,27 +76,23 @@ function inicializarEventosSwiper() {
                 prevEl: swiperContainer.querySelector('.swiper-button-prev')
             },
             
-            // Efecto fade
-            effect: 'fade',
-            fadeEffect: {
-                crossFade: true
-            },
-            
-            // Eventos personalizados
+            // Fade personalizado sin movimiento físico
+            virtualTranslate: true,
+
+            // Permitir interacciones hover y click dentro de slides
+            preventClicks: false,
+            preventClicksPropagation: false,
+            allowTouchMove: true,
+
+            // Eventos personalizados para fade manual + animaciones
             on: {
-                slideChangeTransitionStart: function () {
-                    // Reiniciar animaciones en el slide activo
-                    const activeSlide = this.slides[this.activeIndex];
-                    if (activeSlide) {
-                        const slideInner = activeSlide.querySelector('.slide-inner');
-                        if (slideInner) {
-                            slideInner.style.animation = 'none';
-                            slideInner.offsetHeight; // Force reflow
-                            slideInner.style.animation = 'slideInUp 1s ease-out';
-                        }
-                    }
-                },
                 init: function() {
+                    // Configurar opacidad inicial de todos los slides
+                    this.slides.forEach((slide, index) => {
+                        slide.style.transition = 'opacity 0.8s ease';
+                        slide.style.opacity = index === this.activeIndex ? '1' : '0';
+                    });
+
                     // Animar el primer slide al inicializar
                     const firstSlide = this.slides[this.activeIndex];
                     if (firstSlide) {
@@ -105,6 +101,46 @@ function inicializarEventosSwiper() {
                             slideInner.style.animation = 'slideInUp 1s ease-out';
                         }
                     }
+                },
+                slideChangeTransitionStart: function () {
+                    // Crossfade perfecto sin flash
+                    const currentSlide = this.slides[this.activeIndex];
+                    const previousSlide = this.previousIndex !== undefined ? this.slides[this.previousIndex] : null;
+
+                    // Configurar el slide actual inmediatamente
+                    currentSlide.style.opacity = '1';
+                    currentSlide.style.zIndex = '3';
+
+                    // Si hay slide anterior, mantener ambos visibles durante crossfade
+                    if (previousSlide) {
+                        previousSlide.style.opacity = '1'; // Mantener visible durante el crossfade
+                        previousSlide.style.zIndex = '2';
+
+                        // Iniciar fade out del anterior solo después de que el nuevo esté completamente visible
+                        setTimeout(() => {
+                            previousSlide.style.opacity = '0';
+                        }, 50); // Delay mínimo para evitar gap
+
+                        // Limpiar z-index después de que termine la transición CSS
+                        setTimeout(() => {
+                            previousSlide.style.zIndex = '1';
+                            currentSlide.style.zIndex = '2';
+                        }, 650); // Ligeramente más que la duración CSS (600ms)
+                    }
+
+                    // Reiniciar animaciones en el slide activo
+                    const slideInner = currentSlide.querySelector('.slide-inner');
+                    if (slideInner) {
+                        slideInner.style.animation = 'none';
+                        slideInner.offsetHeight; // Force reflow
+                        slideInner.style.animation = 'slideInUp 1s ease-out';
+                    }
+                },
+                slideChangeTransitionEnd: function() {
+                    // Asegurar que solo el slide activo esté visible
+                    this.slides.forEach((slide, index) => {
+                        slide.style.opacity = index === this.activeIndex ? '1' : '0';
+                    });
                 }
             }
         };
