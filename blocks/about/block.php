@@ -97,7 +97,7 @@ function amentum_render_about_block($attributes) {
                     </p>
                     <?php if ($show_button && $button_link && $button_text) : ?>
                         <div class="about-actions">
-                            <a href="<?php echo $button_link; ?>" class="btn btn-outline">
+                            <a href="<?php echo $button_link; ?>" class="btn btn--white">
                                 <?php echo $button_text; ?>
                             </a>
                         </div>

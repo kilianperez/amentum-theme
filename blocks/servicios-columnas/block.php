@@ -108,7 +108,7 @@ function amentum_render_servicios_columnas_block($attributes) {
 
                         <?php if (!empty($cta_boton)) : ?>
                             <div class="cta-boton">
-                                <a href="<?php echo $cta_url; ?>" class="btn-cta"><?php echo $cta_boton; ?></a>
+                                <a href="<?php echo $cta_url; ?>" class="btn btn--white"><?php echo $cta_boton; ?></a>
                             </div>
                         <?php endif; ?>
                     </div>

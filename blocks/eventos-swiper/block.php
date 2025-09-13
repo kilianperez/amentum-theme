@@ -143,7 +143,7 @@ function amentum_render_eventos_swiper_block($attributes) {
                         <div class="slide-inner">
                             <h2 class="slide-title"><?php echo $texto_inicial; ?></h2>
                             <?php if (!empty($primer_evento_enlace)): ?>
-                                <a href="<?php echo esc_url($primer_evento_enlace); ?>" class="slide-link slide-description"><?php echo $descripcion_inicial; ?></a>
+                                <a href="<?php echo esc_url($primer_evento_enlace); ?>" class="btn btn--white"><?php echo $descripcion_inicial; ?></a>
                             <?php else: ?>
                                 <p class="slide-description"><?php echo $descripcion_inicial; ?></p>
                             <?php endif; ?>
@@ -162,7 +162,7 @@ function amentum_render_eventos_swiper_block($attributes) {
                                 <div class="slide-inner">
                                     <h2 class="slide-title"><?php echo esc_html($evento['titulo']); ?></h2>
                                     <p class="slide-date"><?php echo esc_html($evento['fecha']); ?></p>
-                                    <a href="<?php echo esc_url($evento['enlace']); ?>" class="slide-link">Ver evento</a>
+                                    <a href="<?php echo esc_url($evento['enlace']); ?>" class="btn btn--white">Ver evento</a>
                                 </div>
                             </div>
                         </div>

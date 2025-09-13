@@ -225,12 +225,35 @@
 	}
 }
 
-// Estados de hover para botones
-.about-actions .btn {
-	transition: all 0.3s ease;
+// Forzar aplicación del sistema de botones con mayor especificidad
+.block-about {
+	.about-actions {
+		.btn {
+			// Forzar estilos del sistema de botones
+			position: relative;
+			border: none;
+			background-color: transparent;
 
-	&:hover {
-		transform: translateY(-2px);
+			// Asegurar que la línea animada se aplique
+			&::after {
+				content: '';
+				position: absolute;
+				bottom: calc(-1 * var(--btn-underline-spacing, 4px));
+				left: 0;
+				right: 0;
+				width: 100%;
+				height: var(--btn-underline-height, 2px);
+				background-color: #000;
+				transition: none;
+			}
+
+			&:hover,
+			&:focus {
+				&::after {
+					animation: lineRegenerate 0.5s ease;
+				}
+			}
+		}
 	}
 }
 

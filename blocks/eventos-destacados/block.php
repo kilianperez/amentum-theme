@@ -65,8 +65,8 @@ function amentum_render_eventos_destacados_block($attributes) {
             <div class="eventos-destacados-header">
                 <h2><?php echo $titulo; ?></h2>
                 <p><?php echo nl2br($descripcion); ?></p>
-                <div class="eventos-link">
-                    <a href="<?php echo get_post_type_archive_link('eventos'); ?>">Nuestros eventos</a>
+                <div class="">
+                    <a href="<?php echo get_post_type_archive_link('eventos'); ?>" class="btn btn--white">Nuestros eventos</a>
                 </div>
             </div>
             <div class="eventos-destacados-grid">

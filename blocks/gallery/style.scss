@@ -240,25 +240,7 @@
     }
 
     .gallery-editor-content {
-        .button {
-            background: $cor-black;
-            color: $cor-white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 6px;
-            font-family: $cor-text;
-            font-weight: 400;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-
-            &:hover {
-                background: $cor-gray;
-                color: $cor-white;
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            }
-        }
+        // Los botones usan el sistema de diseño .btn directamente
     }
 
     // Indicador de tipo
