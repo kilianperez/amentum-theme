@@ -17,6 +17,7 @@ blocks/
 └── README.md                 # Este archivo
 
 ```text
+
 ### 🚀 Sistema CSS Optimizado
 
 **ANTES:** Cada bloque cargaba su CSS individual (múltiples peticiones HTTP)
@@ -61,6 +62,7 @@ npx gulp blocksCss
 npx gulp
 
 ```text
+
 El CSS se registra una sola vez en `inc/template-enqueued.php`:
 
 ```php
