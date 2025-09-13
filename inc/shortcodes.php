@@ -173,7 +173,7 @@ function amentum_formulario_shortcode($atts)
                                             class="amentum-campo-select"
                                             <?php echo $requerido ? 'required' : ''; ?>
                                         >
-                                            <option value="">Selecciona una opción</option>
+                                            <option value=""><?php echo esc_html($placeholder ? $placeholder : 'Selecciona una opción'); ?></option>
                                             <?php foreach ($opciones as $opcion):
                                                 $opcion_valor = !empty($opcion['valor']) ? $opcion['valor'] : $opcion['nombre']; ?>
                                                 <option value="<?php echo esc_attr($opcion_valor); ?>">

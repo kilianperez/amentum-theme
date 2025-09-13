@@ -694,8 +694,8 @@ function amentum_render_campo_editor($index, $campo = array())
             </div>
             
             
-            <div class="campo-placeholder-container campo-full" 
-                 <?php echo in_array($campo['tipo'], ['text', 'email', 'phone', 'url', 'textarea']) ? '' : 'style="display:none;"'; ?>>
+            <div class="campo-placeholder-container campo-full"
+                 <?php echo in_array($campo['tipo'], ['text', 'email', 'phone', 'url', 'textarea', 'select']) ? '' : 'style="display:none;"'; ?>>
                 <label><strong>Placeholder</strong></label>
                 <input type="text" name="formulario_config[campos][<?php echo esc_attr($index); ?>][placeholder]" 
                        value="<?php echo esc_attr($campo['placeholder']); ?>" 

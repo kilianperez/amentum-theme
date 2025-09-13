@@ -188,12 +188,22 @@ function updateCampoType(select) {
             break;
             
         case 'select':
-        case 'tags':
+            placeholderContainer.style.display = 'block';
             opcionesContainer.style.display = 'block';
             if (compactToggle) compactToggle.style.display = 'flex';
             // Asegurar que hay al menos una opción
             const opcionesList = campo.querySelector('.opciones-list');
             if (opcionesList.children.length === 0) {
+                añadirOpcion(opcionesContainer.querySelector('button'));
+            }
+            break;
+
+        case 'tags':
+            opcionesContainer.style.display = 'block';
+            if (compactToggle) compactToggle.style.display = 'flex';
+            // Asegurar que hay al menos una opción
+            const opcionsListTags = campo.querySelector('.opciones-list');
+            if (opcionsListTags.children.length === 0) {
                 añadirOpcion(opcionesContainer.querySelector('button'));
             }
             break;

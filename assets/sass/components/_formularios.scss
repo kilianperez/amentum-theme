@@ -721,6 +721,63 @@ body:not(.wp-core-ui) form,
     }
 }
 
+// === FIELDSETS ESPECÍFICOS DE AMENTUM ===
+.amentum-formulario-fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    position: relative;
+
+    // Sistema de columnas para fieldsets
+    &.col-3 { @media (min-width: $tablet-xl) { grid-column: span 3; } }
+    &.col-4 { @media (min-width: $tablet-xl) { grid-column: span 4; } }
+    &.col-6 { @media (min-width: $tablet-xl) { grid-column: span 6; } }
+    &.col-8 { @media (min-width: $tablet-xl) { grid-column: span 8; } }
+    &.col-9 { @media (min-width: $tablet-xl) { grid-column: span 9; } }
+    &.col-12 {
+        grid-column: 1 / -1; // Forzar 100% del ancho
+        width: 100%;
+
+        @media (min-width: $tablet-xl) {
+            grid-column: span 12;
+        }
+    }
+
+    // En móvil, todos los fieldsets ocupan el 100%
+    @media (max-width: #{$tablet-xl - 1px}) {
+        &.col-3,
+        &.col-4,
+        &.col-6,
+        &.col-8,
+        &.col-9,
+        &.col-12 {
+            grid-column: span 12;
+            width: 100%;
+        }
+    }
+}
+
+// === LEGEND DE FIELDSETS ===
+.amentum-formulario-legend {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 1.5rem 0 0 0;
+    border: none;
+    font-family: $form-font-family;
+    font-style: normal;
+    font-weight: 600;
+    font-size: max(18px, 4vw);
+    line-height: 120%;
+    color: $form-text-color;
+    display: block;
+
+    @media (min-width: $tablet-xl) {
+        font-size: 1.2vw;
+        margin-bottom: 1rem;
+    }
+}
+
 // === ESTADOS DE LOADING ===
 .amentum-formulario.enviando {
     .amentum-campo-input,
